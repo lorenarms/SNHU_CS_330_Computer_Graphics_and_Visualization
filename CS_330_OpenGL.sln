@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice004", "OpenGL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice005_Hello-Triangle", "OpenGLPractice005_Hello-Triangle\OpenGLPractice005_Hello-Triangle.vcxproj", "{A94C8E42-D8F5-4E8F-BA90-C5F770E11DA1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice006_Hello-Triangle-02", "OpenGLPractice006_Hello-Triangle-2\OpenGLPractice006_Hello-Triangle-02.vcxproj", "{163A46D1-08DE-4D07-9091-4E8E636CFEB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{A94C8E42-D8F5-4E8F-BA90-C5F770E11DA1}.Release|x64.Build.0 = Release|x64
 		{A94C8E42-D8F5-4E8F-BA90-C5F770E11DA1}.Release|x86.ActiveCfg = Release|Win32
 		{A94C8E42-D8F5-4E8F-BA90-C5F770E11DA1}.Release|x86.Build.0 = Release|Win32
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Debug|x64.ActiveCfg = Debug|x64
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Debug|x64.Build.0 = Debug|x64
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Debug|x86.ActiveCfg = Debug|Win32
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Debug|x86.Build.0 = Debug|Win32
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Release|x64.ActiveCfg = Release|x64
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Release|x64.Build.0 = Release|x64
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Release|x86.ActiveCfg = Release|Win32
+		{163A46D1-08DE-4D07-9091-4E8E636CFEB3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,17 +18,20 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+
 // GLM Math Header inclusions
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-using namespace std;
 
-// shader program macro
+// shader program macros
 #ifndef GLSL
 #define GLSL(Version, Source) "#version " #Version " core \n" #Source
 #endif
+
+
+using namespace std;
 
 //window title
 const char* const WINDOW_TITLE = "Module 3 Assignment: Pyramid";
@@ -74,8 +77,7 @@ void UDestroyShaderProgram(GLuint programId);
 
 
 
-
-/* Vertex Shader Source Code*/
+// Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
 	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
 	layout(location = 1) in vec4 color;  // Color data from Vertex Attrib Pointer 1
@@ -91,7 +93,7 @@ const GLchar* vertex_shader_source = GLSL(440,
 	}
 );
 
-/* Fragment Shader Source Code*/
+// Fragment Shader Source Code
 const GLchar* fragment_shader_source = GLSL(440,
 	in vec4 vertexColor; // Variable to hold incoming color data from vertex shader
 
@@ -102,7 +104,6 @@ const GLchar* fragment_shader_source = GLSL(440,
 		fragmentColor = vec4(vertexColor);
 	}
 );
-
 
 
 
@@ -190,64 +191,19 @@ void UCreateMesh(GLMesh& mesh)
 {
 	//coordinates and colors for triangles
 	//normalized to window
-	// was supposed to make two triangles
-	// wanted a challenge, hope it's okay that I made four
-	GLfloat verts[] = {
-		//index 0
-		0.0f, 0.0f, 0.0f,		//top left t, lower right v
-		1.0f, 0.0f, 0.0f, 1.0f, //red
-
-		//index 1
-		-0.8f, 0.0f, 0.0f,		//top left t, lower left v
-		1.0f, 0.5f, 0.0f, 1.0f, //red
-
-		//index 2
-		-0.8f, 0.8f, 0.0f,		//top left t, upper left v
-		1.0f, 1.0f, 0.0f, 1.0f, //red
-
-		//index 3
-		0.0f, 0.0f, 0.0f,		//top right t, lower left v
-		0.0f, 0.0f, 1.0f, 1.0f, //blue
-
-		//index 4
-		0.0f, 0.8f, 0.0f,		//top right t, upper left v
-		0.0f, 0.5f, 1.0f, 1.0f, //blue
-
-		//index 5
-		0.8f, 0.8f, 0.0f,		//top right t, upper right v
-		0.0f, 1.0f, 1.0f, 1.0f, //blue
-
-		//index 6
-		0.0f, 0.0f, 0.0f,		//lower right t, upper left v
-		0.0f, 1.0f, 0.0f, 1.0f, //green
-
-		//index 7
-		0.8f, 0.0f, 0.0f,		//lower right t, lower left v
-		0.0f, 1.0f, 0.5f, 1.0f, //green
-
-		//index 8
-		0.8f, -0.8f, 0.0f,		//lower right t, upper right v
-		0.0f, 1.0f, 1.0f, 1.0f, //green
-
-		//index 9
-		0.0f, 0.0f, 0.0f,		//lower left t, upper right v
-		1.0f, 0.0f, 0.8f, 1.0f,	//purple?
-
-		//index 10
-		0.0f, -0.8f, 0.0f,		//lower left t, lower right v
-		0.7f, 0.0f, 0.8f, 1.0f,	//purple?
-
-		//index 11
-		-0.8f, -0.8f, 0.0f,		//lower left t, lower left v
-		0.8f, 0.8f, 0.8f, 1.0f,	//purple?
+	// Specifies normalized device coordinates (x,y,z) and color for square vertices
+	GLfloat verts[] =
+	{
+		// Vertex Positions    // Colors
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // Top Right Vertex 0
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f, // Bottom Right Vertex 1
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f, // Bottom Left Vertex 2
+		-0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 1.0f, 1.0f  // Top Left Vertex 3
 	};
 
-	const GLushort indices[] = {  
-		// triangles share a vertex, but its dif colors for each, so re-render
-		0, 1, 2,	//red triangle
-		3, 4, 5,	//blue triangle
-		6, 7, 8,	//green triangle
-		9, 10, 11,	//purple triangle
+	const GLushort indices[] = {
+		0, 1, 3,  // Triangle 1
+		1, 2, 3   // Triangle 2
 	};
 
 	glGenVertexArrays(1, &mesh.vao);
@@ -366,7 +322,23 @@ void URender()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	// 1. Scales the shape down by half of its original size in all 3 dimensions
+	glm::mat4 scale = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
+
+	// 2. Rotates shape by 45 degrees on the z axis
+	glm::mat4 rotation = glm::rotate(45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	// 3. Translates by 0.5 in the y axis
+	glm::mat4 translation = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
+
+	// Transformations are applied right-to-left order
+	glm::mat4 transformation = translation * rotation * scale;
+
 	glUseProgram(gShaderProgram);
+
+	// Sends transform information to the Vertex shader
+	GLuint transformLocation = glGetUniformLocation(gShaderProgram, "shaderTransform");
+	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(transformation));
 
 	glBindVertexArray(gMesh.vao);
 

@@ -2,7 +2,7 @@
 //
 // Lawrence Artl
 // CS-330 Comp Graphic and Viz
-// Assignment 3-5
+// Assignment 4-5
 //
 // 3D SCENE
 //
@@ -49,6 +49,8 @@ struct GLMesh
 
 	
 
+	
+
 	glm::mat4 scale;
 	glm::mat4 rotation;
 	glm::mat4 translation;
@@ -74,7 +76,7 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(0.0f, 0.5f, 3.0f));
+Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;
@@ -164,7 +166,7 @@ int main(int argc, char* argv[])
 		 0.5f,  0.0f,  0.8f,  1.0f,
 		 2.0f,  2.0f,  2.0f,
 		 0.8f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  1.0f,  -4.5
+		-0.5f,  1.0f,  -2.0
 	};
 	UBuildPyramid(gMesh01, properties);
 	scene.push_back(gMesh01);
@@ -174,9 +176,9 @@ int main(int argc, char* argv[])
 	properties.clear();
 	properties = {
 		 0.0f,  1.0f,  1.0f,  1.0f,		// color
-		 2.0f,  2.0f,  2.0f,			// scale
+		 1.5f,  1.5f,  1.5f,			// scale
 		 0.8f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		 -2.5f,  1.0f,  -3.5				// translate x, y, z axis
+		 -2.5f,  0.75f,  -1.0				// translate x, y, z axis
 	};
 	UBuildPyramid(gMesh02, properties);
 	scene.push_back(gMesh02);
@@ -187,8 +189,8 @@ int main(int argc, char* argv[])
 	properties = {
 		  1.0f,  0.0f,  1.0f,  1.0f,		// color
 		  1.0f,  1.0f,  1.0f,			// scale
-		  -0.8f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		  0.0f,  0.4f,  0.0				// translate x, y, z axis
+		  -1.6f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
+		  -1.4f,  0.4f,  2.0				// translate x, y, z axis
 	};
 	UBuildCylinder(gMesh03, properties, 0.4f, 6.0f);
 	scene.push_back(gMesh03);
@@ -197,10 +199,10 @@ int main(int argc, char* argv[])
 	GLMesh gMesh04;
 	properties.clear();
 	properties = {
-		  1.0f,  0.0f,  1.0f,  1.0f,		// color
+		  1.0f,  0.2f,  1.0f,  1.0f,		// color
 		  1.0f,  1.0f,  1.0f,			// scale
-		  -4.0f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		  -0.0f,  0.4f,  0.0				// translate x, y, z axis
+		  -4.8f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
+		  -1.4f,  0.4f,  2.0				// translate x, y, z axis
 	};
 	UBuildCone(gMesh04, properties, 0.4f, 1.0f);
 	scene.push_back(gMesh04);
@@ -216,6 +218,18 @@ int main(int argc, char* argv[])
 	};
 	UBuildPlane(gMesh05, properties);
 	scene.push_back(gMesh05);
+
+	// build green cone to top of cylinder
+	GLMesh gMesh06;
+	properties.clear();
+	properties = {
+		  0.1f,  1.0f,  0.4f,  1.0f,		// color
+		  1.0f,  1.0f,  1.0f,			// scale
+		  1.6f,  1.0f,  0.0f,  0.0f,		// angle - x, y, z axis rotate
+		  2.3f,  0.0f,  -1.6				// translate x, y, z axis
+	};
+	UBuildCone(gMesh06, properties, 0.7f, 2.8f);
+	scene.push_back(gMesh06);
 
 
 	//build shader programs
@@ -427,10 +441,24 @@ void UProcessInput(GLFWwindow* window)
 
 
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-		gCamera.MovementSpeed += 0.5f;
+	{
+		if (gCamera.MovementSpeed < 10.0f)
+		{
+			gCamera.MovementSpeed += 0.01f;
+		}
+		else
+			gCamera.MovementSpeed = 10.0f;
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-		gCamera.MovementSpeed -= 0.5f;
+	{
+		if (gCamera.MovementSpeed > 0.01f)
+		{
+			gCamera.MovementSpeed -= 0.01f;
+		}
+		else
+			gCamera.MovementSpeed = 0.01f;
+	}
 		
 }
 void UResizeWindow(GLFWwindow* window, int width, int height)
@@ -772,6 +800,7 @@ void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float 
 	}
 
 	// compile all that nonesense
+	
 
 	glGenVertexArrays(1, &mesh.vao);
 	glBindVertexArray(mesh.vao);
@@ -779,6 +808,8 @@ void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float 
 	//create 2 buffers
 	glGenBuffers(2, mesh.vbos);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
+
+	
 
 	// can this function take any other type of input? array's aren't very good imo
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);

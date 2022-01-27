@@ -484,11 +484,11 @@ void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 }
 void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
+	//gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
 
 	//gCamera.ProcessMouseScroll(gDeltaTime--);
 	
-	
+	gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
 }
 void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {

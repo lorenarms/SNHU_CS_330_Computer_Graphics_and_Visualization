@@ -2,9 +2,9 @@
 //
 // Lawrence Artl
 // CS-330 Comp Graphic and Viz
-// Assignment 5-3
+// Assignment 4-5
 //
-// TEXTURE A PYRAMID
+// 3D SCENE
 //
 //---------------------------------------------------
 

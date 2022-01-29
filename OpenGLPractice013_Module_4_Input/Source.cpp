@@ -9,18 +9,21 @@
 //---------------------------------------------------
 
 
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>      // Image loading Utility functions
 
 
 // GLM Math Header inclusions
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <camera.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 // shader program macros
 #ifndef GLSL
@@ -44,19 +47,15 @@ struct GLMesh
 	GLuint vao;
 	//vertex buffer
 	GLuint vbos[2];
+	GLuint vbo;
 	//indices of the mesh
 	GLuint nIndices;
 
 	
-
-	
-
 	glm::mat4 scale;
 	glm::mat4 rotation;
 	glm::mat4 translation;
 	glm::mat4 model;
-
-	
 	
 };
 
@@ -65,9 +64,18 @@ GLFWwindow* gWindow = nullptr;
 //triangle mesh data
 //GLMesh gMesh;
 GLMesh pMesh;
-GLMesh bMesh;
 //shader program
 GLuint gShaderProgram;
+//texture object
+GLuint gTextureId;
+//set scale of texture
+glm::vec2 gUVScale(5.0f, 5.0f);
+//texture wrapping mode: repeat texture
+//also can use:
+	//GL_MIRRORED_REPEAT
+	//GL_CLAMP_TO_EDGE
+	//GL_CLAMP_TO_BORDER
+GLint gTexWrapMode = GL_REPEAT;
 
 // scene vector for drawing shapes
 vector<GLMesh> scene;
@@ -102,12 +110,17 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 //free up memory on close
 void UDestroyMesh(GLMesh& mesh);
 void UDestroyShaderProgram(GLuint programId);
+void UDestroyTexture(GLuint textureId);
 
 // build shapes
 void UBuildPyramid(GLMesh& mesh, vector<float> properties);
+void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties);
 void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildPlane(GLMesh& mesh, vector<float> properties);
+
+// create textures
+bool UCreateTexture(const char* filename, GLuint& textureId);
 
 
 // keyboard and mouse input functions
@@ -148,6 +161,25 @@ const GLchar* fragment_shader_source = GLSL(440,
 );
 
 
+// flips the image to be right-side-up
+void flipImage(unsigned char *image, int width, int height, int channels)
+{
+	for (int j = 0; j < height / 2; ++j)
+	{
+		int index1 = j * width * channels;
+		int index2 = (height - 1 - j) * width * channels;
+
+		for (int i = width * channels; i > 0; --i)
+		{
+			unsigned char temp = image[index1];
+			image[index1] = image[index2];
+			image[index2] = temp;
+			++index1;
+			++index2;
+		}
+	}
+}
+
 
 //main
 int main(int argc, char* argv[])
@@ -156,81 +188,19 @@ int main(int argc, char* argv[])
 	if (!UInitialize(argc, argv, &gWindow))
 		return EXIT_FAILURE;
 
-	//create mesh, create vbo
+	// load the texture
+	const char* texFilename = "C:/Users/dayar/source/repos/CS_330_Projects/Project_00_Sample/OpenGLPractice014_Module_5_Texture-a-Pyramid/smiley.png";
+	if (!UCreateTexture(texFilename, gTextureId))
+	{
+		cout << "Failed to load texture " << texFilename << endl;
+		return EXIT_FAILURE;
+	}
+	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+	glUseProgram(gShaderProgram);
+	// We set the texture as texture unit 0
+	glUniform1i(glGetUniformLocation(gShaderProgram, "uTexture"), 0);
 
 	
-	// build shape meshes
-	// build purple pyramid
-	GLMesh gMesh01;
-	vector<float> properties = {
-		 0.5f,  0.0f,  0.8f,  1.0f,
-		 2.0f,  2.0f,  2.0f,
-		 0.8f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  1.0f,  -2.0
-	};
-	UBuildPyramid(gMesh01, properties);
-	scene.push_back(gMesh01);
-
-	// build aqua pyramid
-	GLMesh gMesh02;
-	properties.clear();
-	properties = {
-		 0.0f,  1.0f,  1.0f,  1.0f,		// color
-		 1.5f,  1.5f,  1.5f,			// scale
-		 0.8f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		 -2.5f,  0.75f,  -1.0				// translate x, y, z axis
-	};
-	UBuildPyramid(gMesh02, properties);
-	scene.push_back(gMesh02);
-
-	// build pink cylinder
-	GLMesh gMesh03;
-	properties.clear();
-	properties = {
-		  1.0f,  0.0f,  1.0f,  1.0f,		// color
-		  1.0f,  1.0f,  1.0f,			// scale
-		  -1.6f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		  -1.4f,  0.4f,  2.0				// translate x, y, z axis
-	};
-	UBuildCylinder(gMesh03, properties, 0.4f, 6.0f);
-	scene.push_back(gMesh03);
-
-	// build pink cone to top of cylinder
-	GLMesh gMesh04;
-	properties.clear();
-	properties = {
-		  1.0f,  0.2f,  1.0f,  1.0f,		// color
-		  1.0f,  1.0f,  1.0f,			// scale
-		  -4.8f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		  -1.4f,  0.4f,  2.0				// translate x, y, z axis
-	};
-	UBuildCone(gMesh04, properties, 0.4f, 1.0f);
-	scene.push_back(gMesh04);
-
-	// build plane for objects
-	GLMesh gMesh05;
-	properties.clear();
-	properties = {
-		 0.2f,  0.6f,  0.2f,  1.0f,		// color
-		 1.0f,  1.0f,  1.0f,			// scale
-		 0.0f,  0.0f,  1.0f,  0.0f,		// angle - x, y, z axis rotate
-		 0.0f,  0.0f,  0.0				// translate x, y, z axis
-	};
-	UBuildPlane(gMesh05, properties);
-	scene.push_back(gMesh05);
-
-	// build green cone to top of cylinder
-	GLMesh gMesh06;
-	properties.clear();
-	properties = {
-		  0.1f,  1.0f,  0.4f,  1.0f,		// color
-		  1.0f,  1.0f,  1.0f,			// scale
-		  1.6f,  1.0f,  0.0f,  0.0f,		// angle - x, y, z axis rotate
-		  2.3f,  0.0f,  -1.6				// translate x, y, z axis
-	};
-	UBuildCone(gMesh06, properties, 0.7f, 2.8f);
-	scene.push_back(gMesh06);
-
 
 	//build shader programs
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
@@ -239,6 +209,23 @@ int main(int argc, char* argv[])
 
 	//bg color of window
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//create mesh, create vbo
+	// build shape meshes
+	// build purple pyramid
+	GLMesh gMesh01;
+	vector<float> properties = {
+		 0.5f,  0.0f,  0.8f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 0.8f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  1.0f,  -2.0
+	};
+	UBuildPyramid(gMesh01, properties);
+	//scene.push_back(gMesh01);
+
+	GLMesh gMesh02;
+	UBuildPyramidWithTexture(gMesh02, properties);
+	scene.push_back(gMesh02);
 
 	//rendering loop
 	//keep checking if window has closed
@@ -265,12 +252,6 @@ int main(int argc, char* argv[])
 	properties.clear();
 
 	UDestroyMesh(gMesh01);
-	UDestroyMesh(gMesh02);
-	UDestroyMesh(gMesh03);
-	UDestroyMesh(gMesh04);
-
-
-	
 
 	UDestroyShaderProgram(gShaderProgram);
 
@@ -569,11 +550,19 @@ void URender(vector<GLMesh> scene)
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
+		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
+		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(gUVScale));
+
 		// activate vbo's within mesh's vao
 		glBindVertexArray(mesh.vao);
 
+		// bind textures
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, gTextureId);
+
 		//draw the triangles
-		glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
+		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
+		//glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
 
 	}
 
@@ -1056,4 +1045,138 @@ void UBuildPlane(GLMesh& mesh, vector<float> properties)
 
 	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
 
+}
+
+void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties)
+{
+
+	//coordinates and colors for triangles
+	//normalized to window
+	// Specifies normalized device coordinates (x,y,z) and color for square vertices
+	GLfloat verts[] =
+	{
+		// Vertex Positions    // Texture coords
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f, 
+		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,   
+		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+
+		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+
+		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+	};
+
+	const GLushort indices[] = {
+		0, 1, 2,
+		0, 1, 3,
+		0, 3, 4,
+		0, 2, 4,
+		1, 2, 3,
+		2, 3, 4
+	};
+
+	//tells how many values for a vertex
+	const GLuint floatsPerVertex = 3;
+	//tells how many values for a color
+	const GLuint floatsPerUV = 2;
+
+	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
+
+	glGenVertexArrays(1, &mesh.vao);
+	glBindVertexArray(mesh.vao);
+
+	//create 2 buffers
+	/*glGenBuffers(2, mesh.vbos);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);*/
+
+	glGenBuffers(1, &mesh.vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
+
+
+	//tells program that it'll need to hit 6 numbers before starting to draw the
+	//next vertex
+	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
+
+	//mesh.nIndices = std::size(indices);
+
+	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
+
+	
+	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
+	glEnableVertexAttribArray(1);
+
+
+
+	// scale the object
+	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
+
+	// rotate the object (x, y, z) (0 - 6.4, to the right)
+	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
+
+	// move the object (x, y, z)
+	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
+
+	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
+
+}
+
+bool UCreateTexture(const char* filename, GLuint& textureId)
+{
+	int width, height, channels;
+	unsigned char* image = stbi_load(filename, &width, &height, &channels, 0);
+	if (image)
+	{
+		flipImage(image, width, height, channels);
+
+		glGenTextures(1, &textureId);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+
+		// set the texture wrapping parameters
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// set texture filtering parameters
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		if (channels == 3)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+		else if (channels == 4)
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+		else
+		{
+			cout << "Not implemented to handle image with " << channels << " channels" << endl;
+			return false;
+		}
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		stbi_image_free(image);
+		glBindTexture(GL_TEXTURE_2D, 0); // Unbind the texture
+
+		return true;
+	}
+
+	// Error loading the image
+	return false;
 }

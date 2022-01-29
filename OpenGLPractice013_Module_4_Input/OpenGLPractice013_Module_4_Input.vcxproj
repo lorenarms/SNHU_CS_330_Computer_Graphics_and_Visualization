@@ -152,6 +152,9 @@
     <ClInclude Include="cylinder.h" />
     <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\OpenGLPractice014_Module_5_Texture-a-Pyramid\smiley.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

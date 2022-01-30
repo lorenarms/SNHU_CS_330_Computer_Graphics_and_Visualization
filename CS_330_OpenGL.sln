@@ -29,11 +29,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice012_Module_3_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLSample2", "..\..\..\..\Downloads\CylinderExample\OpenGLSample\OpenGLSample2.vcxproj", "{108069AE-660A-4E2B-ADE5-58BBDD518D1F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice013_Module_4_Input", "OpenGLPractice013_Module_4_Input\OpenGLPractice013_Module_4_Input.vcxproj", "{F4E7F862-F5C1-490F-91D1-56A2C8E15C6A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice014_Module_5_Texture-a-Pyramid", "OpenGLPractice013_Module_4_Input\OpenGLPractice013_Module_4_Input.vcxproj", "{F4E7F862-F5C1-490F-91D1-56A2C8E15C6A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial_04_04", "..\..\CS_330_Class_Resources\module04\tutorial_04_04\tutorial_04_04.vcxproj", "{26E306C3-CB62-4A61-BDDF-8AD35883AC79}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice013_Module_4_Input", "OpenGLPractice014_Module_5_Texture-a-Pyramid\OpenGLPractice014_Module_5_Texture-a-Pyramid.vcxproj", "{14A89E1D-2B80-4D9A-B0C8-B5D47EE977D8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLPractice013_Module_4_Input", "OpenGLPractice015_Module_4_Assignement-4-3\OpenGLPractice015_Module_4_Assignement-4-3.vcxproj", "{4BD3B6E9-EBB6-4239-9740-12129187AE12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +173,14 @@ Global
 		{14A89E1D-2B80-4D9A-B0C8-B5D47EE977D8}.Release|x64.Build.0 = Release|x64
 		{14A89E1D-2B80-4D9A-B0C8-B5D47EE977D8}.Release|x86.ActiveCfg = Release|Win32
 		{14A89E1D-2B80-4D9A-B0C8-B5D47EE977D8}.Release|x86.Build.0 = Release|Win32
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Debug|x64.ActiveCfg = Debug|x64
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Debug|x64.Build.0 = Debug|x64
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Debug|x86.ActiveCfg = Debug|Win32
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Debug|x86.Build.0 = Debug|Win32
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Release|x64.ActiveCfg = Release|x64
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Release|x64.Build.0 = Release|x64
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Release|x86.ActiveCfg = Release|Win32
+		{4BD3B6E9-EBB6-4239-9740-12129187AE12}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

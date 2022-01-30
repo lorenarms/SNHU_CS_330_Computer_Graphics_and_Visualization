@@ -4,26 +4,23 @@
 // CS-330 Comp Graphic and Viz
 // Assignment 4-3
 //
-// BASIC MOVEMENT AROUND A PYRAMID
+// INPUT WITH A PYRAMID
 //
 //---------------------------------------------------
 
 
-#include <cstdlib>
 #include <iostream>
-#include <vector>
+#include <cstdlib>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>      // Image loading Utility functions
+#include <vector>
 
 
 // GLM Math Header inclusions
-#include <camera.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <camera.h>
 
 // shader program macros
 #ifndef GLSL
@@ -47,11 +44,10 @@ struct GLMesh
 	GLuint vao;
 	//vertex buffer
 	GLuint vbos[2];
-	GLuint vbo;
 	//indices of the mesh
 	GLuint nIndices;
 
-	
+	// each shape gets a matrix object
 	glm::mat4 scale;
 	glm::mat4 rotation;
 	glm::mat4 translation;
@@ -61,25 +57,14 @@ struct GLMesh
 
 //main window
 GLFWwindow* gWindow = nullptr;
-//triangle mesh data
-//GLMesh gMesh;
-GLMesh pMesh;
+
 //shader program
 GLuint gShaderProgram;
-//texture object
-GLuint gTextureId;
-//set scale of texture
-glm::vec2 gUVScale(5.0f, 5.0f);
-//texture wrapping mode: repeat texture
-//also can use:
-	//GL_MIRRORED_REPEAT
-	//GL_CLAMP_TO_EDGE
-	//GL_CLAMP_TO_BORDER
-GLint gTexWrapMode = GL_REPEAT;
 
 // scene vector for drawing shapes
 vector<GLMesh> scene;
 
+// variable to handle ortho change
 bool perspective = false;
 
 
@@ -110,17 +95,12 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 //free up memory on close
 void UDestroyMesh(GLMesh& mesh);
 void UDestroyShaderProgram(GLuint programId);
-void UDestroyTexture(GLuint textureId);
 
 // build shapes
 void UBuildPyramid(GLMesh& mesh, vector<float> properties);
-void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties);
 void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildPlane(GLMesh& mesh, vector<float> properties);
-
-// create textures
-bool UCreateTexture(const char* filename, GLuint& textureId);
 
 
 // keyboard and mouse input functions
@@ -161,25 +141,6 @@ const GLchar* fragment_shader_source = GLSL(440,
 );
 
 
-// flips the image to be right-side-up
-void flipImage(unsigned char *image, int width, int height, int channels)
-{
-	for (int j = 0; j < height / 2; ++j)
-	{
-		int index1 = j * width * channels;
-		int index2 = (height - 1 - j) * width * channels;
-
-		for (int i = width * channels; i > 0; --i)
-		{
-			unsigned char temp = image[index1];
-			image[index1] = image[index2];
-			image[index2] = temp;
-			++index1;
-			++index2;
-		}
-	}
-}
-
 
 //main
 int main(int argc, char* argv[])
@@ -187,21 +148,22 @@ int main(int argc, char* argv[])
 	//check if initialized correctly
 	if (!UInitialize(argc, argv, &gWindow))
 		return EXIT_FAILURE;
-
-	// load the texture
-	const char* texFilename = "C:/Users/dayar/source/repos/CS_330_Projects/Project_00_Sample/OpenGLPractice014_Module_5_Texture-a-Pyramid/smiley.png";
-	if (!UCreateTexture(texFilename, gTextureId))
-	{
-		cout << "Failed to load texture " << texFilename << endl;
-		return EXIT_FAILURE;
-	}
-	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
-	glUseProgram(gShaderProgram);
-	// We set the texture as texture unit 0
-	glUniform1i(glGetUniformLocation(gShaderProgram, "uTexture"), 0);
-
 	
+	// build shape meshes
+	// build pyramid
+	GLMesh gMesh01;
+	vector<float> properties = {
+		 0.5f,  0.0f,  0.8f,  1.0f,
+		 2.0f,  2.0f,  2.0f,
+		 0.8f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  1.0f,  -2.0
+	};
+	// build shape
+	UBuildPyramid(gMesh01, properties);
 
+	// add shape to scene vectore
+	scene.push_back(gMesh01);
+	
 	//build shader programs
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 		gShaderProgram))
@@ -209,23 +171,6 @@ int main(int argc, char* argv[])
 
 	//bg color of window
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-	//create mesh, create vbo
-	// build shape meshes
-	// build purple pyramid
-	GLMesh gMesh01;
-	vector<float> properties = {
-		 0.5f,  0.0f,  0.8f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 0.8f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  1.0f,  -2.0
-	};
-	UBuildPyramid(gMesh01, properties);
-	scene.push_back(gMesh01);
-
-	GLMesh gMesh02;
-	UBuildPyramidWithTexture(gMesh02, properties);
-	//scene.push_back(gMesh02);
 
 	//rendering loop
 	//keep checking if window has closed
@@ -252,6 +197,7 @@ int main(int argc, char* argv[])
 	properties.clear();
 
 	UDestroyMesh(gMesh01);
+	
 
 	UDestroyShaderProgram(gShaderProgram);
 
@@ -420,7 +366,7 @@ void UProcessInput(GLFWwindow* window)
 	}*/
 
 
-
+	// deprecated way to change speed of camera
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
 		if (gCamera.MovementSpeed < 10.0f)
@@ -465,40 +411,38 @@ void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 }
 void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	//gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
-
-	//gCamera.ProcessMouseScroll(gDeltaTime--);
-	
-	gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
+	// change camera speed by mouse scroll
+	gCamera.ProcessMouseScroll(yoffset);
 }
 void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_LEFT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Left mouse button pressed" << endl;
+			cout << "LP" << endl;
 		else
-			cout << "Left mouse button released" << endl;
+			cout << "LR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_MIDDLE:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Middle mouse button pressed" << endl;
+			cout << "MP" << endl;
 		else
-			cout << "Middle mouse button released" << endl;
+			cout << "MR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_RIGHT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Right mouse button pressed" << endl;
+			cout << "RP" << endl;
 		else
-			cout << "Right mouse button released" << endl;
+			cout << "RR" << endl;
 	}
 	break;
 
@@ -525,14 +469,14 @@ void URender(vector<GLMesh> scene)
 	glm::mat4 projection;
 	if (!perspective)
 	{
+		// p for perspective (default)
 		projection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
 	}
 	else
+		// o for ortho
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
-	/*glm::mat4 projection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);*/
-
+	
 	// set shader
 	glUseProgram(gShaderProgram);
 
@@ -541,7 +485,7 @@ void URender(vector<GLMesh> scene)
 	GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
-
+	// loop to draw each shape individually
 	for(auto i = 0; i < scene.size(); ++i)
 	{
 		auto mesh = scene[i];
@@ -550,19 +494,11 @@ void URender(vector<GLMesh> scene)
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
-		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(gUVScale));
-
 		// activate vbo's within mesh's vao
 		glBindVertexArray(mesh.vao);
 
-		// bind textures
-		/*glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, gTextureId);*/
-
 		//draw the triangles
-		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-		//glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
+		glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
 
 	}
 
@@ -597,12 +533,12 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	GLfloat verts[] =
 	{
 		// Vertex Positions    // Colors
-		 0.0f,  0.5f,  0.0f,   properties[0], properties[1], properties[2], properties[3], // top of pyramid, red
-		-0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left front
-		 0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right front
+		 0.0f,  0.5f,  0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // top of pyramid, red
+		-0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f, // bottom left front
+		 0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f, // bottom right front
 
-		-0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left back
-		 0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right back
+		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f, // bottom left back
+		 0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f, 1.0f, // bottom right back
 
 	};
 
@@ -1045,138 +981,4 @@ void UBuildPlane(GLMesh& mesh, vector<float> properties)
 
 	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
 
-}
-
-void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties)
-{
-
-	//coordinates and colors for triangles
-	//normalized to window
-	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-	GLfloat verts[] =
-	{
-		// Vertex Positions    // Texture coords
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f, 
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,   
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-	};
-
-	const GLushort indices[] = {
-		0, 1, 2,
-		0, 1, 3,
-		0, 3, 4,
-		0, 2, 4,
-		1, 2, 3,
-		2, 3, 4
-	};
-
-	//tells how many values for a vertex
-	const GLuint floatsPerVertex = 3;
-	//tells how many values for a color
-	const GLuint floatsPerUV = 2;
-
-	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
-
-	glGenVertexArrays(1, &mesh.vao);
-	glBindVertexArray(mesh.vao);
-
-	//create 2 buffers
-	/*glGenBuffers(2, mesh.vbos);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);*/
-
-	glGenBuffers(1, &mesh.vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
-
-
-	//tells program that it'll need to hit 6 numbers before starting to draw the
-	//next vertex
-	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
-
-	//mesh.nIndices = std::size(indices);
-
-	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
-
-	
-	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-	glEnableVertexAttribArray(1);
-
-
-
-	// scale the object
-	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-
-	// rotate the object (x, y, z) (0 - 6.4, to the right)
-	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-
-	// move the object (x, y, z)
-	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-
-}
-
-bool UCreateTexture(const char* filename, GLuint& textureId)
-{
-	int width, height, channels;
-	unsigned char* image = stbi_load(filename, &width, &height, &channels, 0);
-	if (image)
-	{
-		flipImage(image, width, height, channels);
-
-		glGenTextures(1, &textureId);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-
-		// set the texture wrapping parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		// set texture filtering parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		if (channels == 3)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-		else if (channels == 4)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-		else
-		{
-			cout << "Not implemented to handle image with " << channels << " channels" << endl;
-			return false;
-		}
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		stbi_image_free(image);
-		glBindTexture(GL_TEXTURE_2D, 0); // Unbind the texture
-
-		return true;
-	}
-
-	// Error loading the image
-	return false;
 }

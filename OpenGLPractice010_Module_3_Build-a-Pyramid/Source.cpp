@@ -2,9 +2,9 @@
 //
 // Lawrence Artl
 // CS-330 Comp Graphic and Viz
-// Assignment 3-3
+// Assignment 4-3
 //
-// BUILD A PYRAMID
+// USING INPUT WITH A PYRAMID
 //
 //---------------------------------------------------
 
@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <camera.h>
 
 
 // GLM Math Header inclusions
@@ -54,6 +55,21 @@ GLMesh gMesh;
 //shader program
 GLuint gShaderProgram;
 
+bool perspective = false;
+
+
+// camera
+Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+float gLastX = WINDOW_WIDTH / 2.0f;
+float gLastY = WINDOW_HEIGHT / 2.0f;
+bool gFirstMouse = true;
+
+
+// timing
+float gDeltaTime = 0.0f; // time between current frame and last frame
+float gLastFrame = 0.0f;
+
+
 
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
@@ -70,6 +86,11 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 //free up memory on close
 void UDestroyMesh(GLMesh& mesh);
 void UDestroyShaderProgram(GLuint programId);
+
+// keyboard and mouse input functions
+void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos);
+void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 
 
@@ -128,6 +149,12 @@ int main(int argc, char* argv[])
 	//keep checking if window has closed
 	while(!glfwWindowShouldClose(gWindow))
 	{
+		float currentFrame = glfwGetTime();
+		gDeltaTime = currentFrame - gLastFrame;
+		gLastFrame = currentFrame;
+
+
+
 		//process user input
 		UProcessInput(gWindow);
 
@@ -311,18 +338,140 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 
 void UProcessInput(GLFWwindow* window)
 {
-	// 
+	// exit program
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	// draw lines
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// fill shapes
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// fill lines
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(BACKWARD, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(LEFT, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(RIGHT, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(UP, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(DOWN, gDeltaTime);
+
+
+	// I originally had this as a single key (P) toggle, but the key press registers
+	// so quickly that it took several presses to get it to land on the desired output
+	// separating the statement allowed me to toggle when I wanted
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+		perspective = false;
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		perspective = true;
+
+	// original statement below 
+	/*if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		if (!perspective)
+		{
+			perspective = true;
+		}
+		else
+			perspective = false;
+	}*/
+
+
+
+	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+	{
+		if (gCamera.MovementSpeed < 10.0f)
+		{
+			gCamera.MovementSpeed += 0.01f;
+		}
+		else
+			gCamera.MovementSpeed = 10.0f;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+	{
+		if (gCamera.MovementSpeed > 0.01f)
+		{
+			gCamera.MovementSpeed -= 0.01f;
+		}
+		else
+			gCamera.MovementSpeed = 0.01f;
+	}
 }
+
+void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (gFirstMouse)
+	{
+		gLastX = xpos;
+		gLastY = ypos;
+		gFirstMouse = false;
+	}
+
+	float xoffset = xpos - gLastX;
+	float yoffset = gLastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	gLastX = xpos;
+	gLastY = ypos;
+
+	gCamera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	//gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
+
+	//gCamera.ProcessMouseScroll(gDeltaTime--);
+
+	gCamera.ProcessMouseScroll(yoffset);
+}
+
+void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+	{
+		if (action == GLFW_PRESS)
+			cout << "Left mouse button pressed" << endl;
+		else
+			cout << "Left mouse button released" << endl;
+	}
+	break;
+
+	case GLFW_MOUSE_BUTTON_MIDDLE:
+	{
+		if (action == GLFW_PRESS)
+			cout << "Middle mouse button pressed" << endl;
+		else
+			cout << "Middle mouse button released" << endl;
+	}
+	break;
+
+	case GLFW_MOUSE_BUTTON_RIGHT:
+	{
+		if (action == GLFW_PRESS)
+			cout << "Right mouse button pressed" << endl;
+		else
+			cout << "Right mouse button released" << endl;
+	}
+	break;
+
+	default:
+		cout << "Unhandled mouse button event" << endl;
+		break;
+	}
+}
+
 
 void URender()
 {

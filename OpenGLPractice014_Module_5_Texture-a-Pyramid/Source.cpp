@@ -4,7 +4,7 @@
 // CS-330 Comp Graphic and Viz
 // Assignment 4-5
 //
-// 3D SCENE
+// 3D SCENE WITH A PLANE
 //
 //---------------------------------------------------
 
@@ -48,24 +48,16 @@ struct GLMesh
 	GLuint nIndices;
 
 	
-
-	
-
 	glm::mat4 scale;
 	glm::mat4 rotation;
 	glm::mat4 translation;
 	glm::mat4 model;
-
-	
 	
 };
 
 //main window
 GLFWwindow* gWindow = nullptr;
-//triangle mesh data
-//GLMesh gMesh;
-GLMesh pMesh;
-GLMesh bMesh;
+
 //shader program
 GLuint gShaderProgram;
 
@@ -247,9 +239,7 @@ int main(int argc, char* argv[])
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;
 		gLastFrame = currentFrame;
-
-
-
+		
 		//process user input
 		UProcessInput(gWindow);
 
@@ -390,7 +380,6 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 void UProcessInput(GLFWwindow* window)
 {
 	
-
 	// exit program
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -403,8 +392,9 @@ void UProcessInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	
 
+	//
+	// key presses for movement
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -439,7 +429,7 @@ void UProcessInput(GLFWwindow* window)
 	}*/
 
 
-
+	// change speed of camera with z and x keys
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
 		if (gCamera.MovementSpeed < 10.0f)
@@ -484,9 +474,7 @@ void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 }
 void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	//gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
-
-	//gCamera.ProcessMouseScroll(gDeltaTime--);
+	// change camera speed with mouse scroll
 	
 	gCamera.ProcessMouseScroll(yoffset);
 }
@@ -497,27 +485,27 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	case GLFW_MOUSE_BUTTON_LEFT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Left mouse button pressed" << endl;
+			cout << "LP" << endl;
 		else
-			cout << "Left mouse button released" << endl;
+			cout << "LR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_MIDDLE:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Middle mouse button pressed" << endl;
+			cout << "MP" << endl;
 		else
-			cout << "Middle mouse button released" << endl;
+			cout << "MR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_RIGHT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Right mouse button pressed" << endl;
+			cout << "RP" << endl;
 		else
-			cout << "Right mouse button released" << endl;
+			cout << "RR" << endl;
 	}
 	break;
 
@@ -549,9 +537,7 @@ void URender(vector<GLMesh> scene)
 	else
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
-	/*glm::mat4 projection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);*/
-
+	
 	// set shader
 	glUseProgram(gShaderProgram);
 
@@ -560,7 +546,7 @@ void URender(vector<GLMesh> scene)
 	GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
-
+	// loop for each shape, draw
 	for(auto i = 0; i < scene.size(); ++i)
 	{
 		auto mesh = scene[i];

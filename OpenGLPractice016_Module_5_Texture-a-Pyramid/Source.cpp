@@ -64,7 +64,7 @@ struct GLMesh
 	GLuint textureId;
 	glm::vec2 textureScale;
 	GLint gTextWrapMode = GL_REPEAT;
-	
+
 };
 
 //main window
@@ -129,35 +129,35 @@ bool UCreateTexture(const char* filename, GLuint& textureId);
 // Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
 	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
-	layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
+layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
 
-	out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
+out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
 
-	//uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
-	uniform mat4 model;
-	uniform mat4 view;
-	uniform mat4 projection;
+//uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-	void main()
-	{
-		gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
-		vertexTextureCoordinate = textureCoordinate;
-	}
+void main()
+{
+	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
+	vertexTextureCoordinate = textureCoordinate;
+}
 );
 
 // Fragment Shader Source Code
 const GLchar* fragment_shader_source = GLSL(440,
 	in vec2 vertexTextureCoordinate; // for texture coordinates, not color
 
-	out vec4 fragmentColor;
+out vec4 fragmentColor;
 
-	uniform sampler2D uTexture;
-	uniform vec2 uvScale;
+uniform sampler2D uTexture;
+uniform vec2 uvScale;
 
-	void main()
-	{
-		fragmentColor = texture(uTexture, vertexTextureCoordinate * uvScale);
-	}
+void main()
+{
+	fragmentColor = texture(uTexture, vertexTextureCoordinate * uvScale);
+}
 );
 
 void flipImageVertically(unsigned char* image, int width, int height, int channels)
@@ -186,7 +186,7 @@ int main(int argc, char* argv[])
 	//check if initialized correctly
 	if (!UInitialize(argc, argv, &gWindow))
 		return EXIT_FAILURE;
-	
+
 	// build shape meshes
 	// build pyramid
 	GLMesh gMesh01;
@@ -201,7 +201,7 @@ int main(int argc, char* argv[])
 
 	// add shape to scene vector
 	scene.push_back(gMesh01);
-	
+
 	//build shader programs
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 		gShaderProgram))
@@ -248,7 +248,7 @@ int main(int argc, char* argv[])
 	properties.clear();
 
 	UDestroyMesh(gMesh01);
-	
+
 
 	UDestroyShaderProgram(gShaderProgram);
 
@@ -367,7 +367,7 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 // process user input and windows changes
 void UProcessInput(GLFWwindow* window)
 {
-	
+
 
 	// exit program
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -381,7 +381,7 @@ void UProcessInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	
+
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
@@ -437,7 +437,7 @@ void UProcessInput(GLFWwindow* window)
 		else
 			gCamera.MovementSpeed = 0.01f;
 	}
-		
+
 }
 void UResizeWindow(GLFWwindow* window, int width, int height)
 {
@@ -527,7 +527,7 @@ void URender(vector<GLMesh> scene)
 		// o for ortho
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
-	
+
 	// set shader
 	glUseProgram(gShaderProgram);
 
@@ -537,7 +537,7 @@ void URender(vector<GLMesh> scene)
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
 	// loop to draw each shape individually
-	for(auto i = 0; i < scene.size(); ++i)
+	for (auto i = 0; i < scene.size(); ++i)
 	{
 		auto mesh = scene[i];
 
@@ -1094,7 +1094,7 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 
 	//***************************************
 
-	
+
 	// scale the object
 	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
 

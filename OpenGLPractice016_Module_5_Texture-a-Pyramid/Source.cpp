@@ -60,12 +60,20 @@ struct GLMesh
 	glm::mat4 rotation;
 	glm::mat4 translation;
 	glm::mat4 model;
+	glm::vec2 gUVScale;
 
 	GLuint textureId;
-	glm::vec2 textureScale;
-	GLint gTextWrapMode = GL_REPEAT;
+	
+	//GLint gTextWrapMode = GL_REPEAT;
+	//texture wrapping mode: repeat texture
+	//also can use:
+	GLint gTextWrapMode = GL_MIRRORED_REPEAT;
+	//GLint gTextWrapMode = GL_CLAMP_TO_EDGE;
+	//GLint gTextWrapMode = GL_CLAMP_TO_BORDER;
 
 };
+
+
 
 //main window
 GLFWwindow* gWindow = nullptr;
@@ -200,20 +208,22 @@ int main(int argc, char* argv[])
 	UBuildPyramid(gMesh01, properties);
 
 	// add shape to scene vector
-	scene.push_back(gMesh01);
+	
 
 	//build shader programs
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 		gShaderProgram))
 		return EXIT_FAILURE;
 
-	const char* texFilename = "../../smiley.png";
+	const char* texFilename = "bricks.png";
 
 	if (!UCreateTexture(texFilename, gMesh01.textureId))
 	{
 		cout << "Failed to load texture " << texFilename << endl;
 		return EXIT_FAILURE;
 	}
+
+	scene.push_back(gMesh01);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
@@ -438,6 +448,10 @@ void UProcessInput(GLFWwindow* window)
 			gCamera.MovementSpeed = 0.01f;
 	}
 
+
+	
+
+
 }
 void UResizeWindow(GLFWwindow* window, int width, int height)
 {
@@ -541,16 +555,23 @@ void URender(vector<GLMesh> scene)
 	{
 		auto mesh = scene[i];
 
+		
+
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
+		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
+		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
+
 		// activate vbo's within mesh's vao
 		glBindVertexArray(mesh.vao);
 
-		//draw the triangles
-		glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
+		// Draws the triangles
+		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
 	}
 
 	// deactivate vao
@@ -1044,29 +1065,47 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	GLfloat verts[] =
 	{
 		// Vertex Positions    // Texture coords
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//back side
+		-1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f, -1.0f,	0.0f, 2.0f,
 
 		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+		 1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f, -1.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+		-1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		-1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
 
 		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		-1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//front
+		-1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f,  1.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f,  1.0f,	0.0f, 2.0f,
+
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+		 1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+		-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,		//bottom
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+
+		 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
 		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
 		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
 	};
 
 	const GLuint floatsPerVertex = 3;
@@ -1104,7 +1143,9 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	// move the object (x, y, z)
 	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
 
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
+	mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
+
+	mesh.gUVScale = glm::vec2(1.0f, 1.0f);
 
 }
 

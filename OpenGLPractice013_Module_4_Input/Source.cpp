@@ -2,28 +2,33 @@
 //
 // Lawrence Artl
 // CS-330 Comp Graphic and Viz
-// Assignment 4-3
+// Assignment 5-3
 //
-// BASIC MOVEMENT AROUND A PYRAMID
+// TEXTURE A PYRAMID
 //
 //---------------------------------------------------
 
 
-#include <cstdlib>
 #include <iostream>
-#include <vector>
+#include <cstdlib>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>      // Image loading Utility functions
+#include <vector>
 
 
 // GLM Math Header inclusions
-#include <camera.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// camera
+#include <camera.h>
+
+// image
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h> 
+
+
 
 // shader program macros
 #ifndef GLSL
@@ -50,20 +55,25 @@ struct GLMesh
 	//indices of the mesh
 	GLuint nIndices;
 
-	
+	// each shape gets a matrix object
 	glm::mat4 scale;
 	glm::mat4 rotation;
 	glm::mat4 translation;
 	glm::mat4 model;
 	glm::vec2 gUVScale;
 
-
 	GLuint textureId;
 
 	GLint gTextWrapMode = GL_REPEAT;
-
+	//texture wrapping mode: repeat texture
+	//also can use:
+	//GLint gTextWrapMode = GL_MIRRORED_REPEAT;
+	//GLint gTextWrapMode = GL_CLAMP_TO_EDGE;
+	//GLint gTextWrapMode = GL_CLAMP_TO_BORDER;
 
 };
+
+
 
 //main window
 GLFWwindow* gWindow = nullptr;
@@ -71,18 +81,10 @@ GLFWwindow* gWindow = nullptr;
 //shader program
 GLuint gShaderProgram;
 
-//set scale of texture
-
-//texture wrapping mode: repeat texture
-//also can use:
-	//GL_MIRRORED_REPEAT
-	//GL_CLAMP_TO_EDGE
-	//GL_CLAMP_TO_BORDER
-GLint gTexWrapMode = GL_REPEAT;
-
 // scene vector for drawing shapes
 vector<GLMesh> scene;
 
+// variable to handle ortho change
 bool perspective = false;
 
 
@@ -117,13 +119,8 @@ void UDestroyTexture(GLuint textureId);
 
 // build shapes
 void UBuildPyramid(GLMesh& mesh, vector<float> properties);
-void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties);
 void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float length);
-void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildPlane(GLMesh& mesh, vector<float> properties);
-
-// create textures
-bool UCreateTexture(const char* filename, GLuint& textureId);
 
 
 // keyboard and mouse input functions
@@ -131,29 +128,33 @@ void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos);
 void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
+// texture create
+bool UCreateTexture(const char* filename, GLuint& textureId);
+
+
 
 // Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
 	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
-	layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
+layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
 
-	out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
+out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
 
-	//uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
-	uniform mat4 model;
-	uniform mat4 view;
-	uniform mat4 projection;
+//uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
-	{
-		gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
-		vertexTextureCoordinate = textureCoordinate;
-	}
+{
+	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
+	vertexTextureCoordinate = textureCoordinate;
+}
 );
 
-/* Fragment Shader Source Code*/
-const GLchar* fragmentShaderSource = GLSL(440,
-	in vec2 vertexTextureCoordinate;
+// Fragment Shader Source Code
+const GLchar* fragment_shader_source = GLSL(440,
+	in vec2 vertexTextureCoordinate; // for texture coordinates, not color
 
 out vec4 fragmentColor;
 
@@ -166,9 +167,7 @@ void main()
 }
 );
 
-
-// flips the image to be right-side-up
-void flipImage(unsigned char *image, int width, int height, int channels)
+void flipImageVertically(unsigned char* image, int width, int height, int channels)
 {
 	for (int j = 0; j < height / 2; ++j)
 	{
@@ -177,14 +176,15 @@ void flipImage(unsigned char *image, int width, int height, int channels)
 
 		for (int i = width * channels; i > 0; --i)
 		{
-			unsigned char temp = image[index1];
+			unsigned char tmp = image[index1];
 			image[index1] = image[index2];
-			image[index2] = temp;
+			image[index2] = tmp;
 			++index1;
 			++index2;
 		}
 	}
 }
+
 
 
 //main
@@ -195,46 +195,40 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 
 	// build shape meshes
-	// build purple pyramid
+	// build pyramid
+	GLMesh gMesh01;
 	vector<float> properties = {
 		 0.5f,  0.0f,  0.8f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
+		 2.0f,  2.0f,  2.0f,
 		 0.8f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  1.0f,  -2.0
 	};
-	
-	GLMesh gMesh02;
-	UBuildPyramidWithTexture(gMesh02, properties);
-	scene.push_back(gMesh02);
-
+	// build shape
+	UBuildPyramid(gMesh01, properties);
 
 	//build shader programs
-	if (!UCreateShaderProgram(vertex_shader_source, fragmentShaderSource,
+	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 		gShaderProgram))
 		return EXIT_FAILURE;
 
-	
-	// load the texture
-	const char* texFilename = "C:/Users/dayar/source/repos/CS_330_Projects/Project_00_Sample/OpenGLPractice014_Module_5_Texture-a-Pyramid/smiley.png";
-	if (!UCreateTexture(texFilename, gMesh02.textureId))
+	const char* texFilename = "bricks.png";
+
+	if (!UCreateTexture(texFilename, gMesh01.textureId))
 	{
 		cout << "Failed to load texture " << texFilename << endl;
 		return EXIT_FAILURE;
 	}
-	else
-		cout << "TEXTURE LOADED WITHOUT ERROR" << endl;
 
+	
+	scene.push_back(gMesh01);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
 	// We set the texture as texture unit 0
 	glUniform1i(glGetUniformLocation(gShaderProgram, "uTexture"), 0);
 
-	
 	//bg color of window
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	
-	
 
 	//rendering loop
 	//keep checking if window has closed
@@ -260,7 +254,8 @@ int main(int argc, char* argv[])
 	scene.clear();
 	properties.clear();
 
-	UDestroyMesh(gMesh02);
+	UDestroyMesh(gMesh01);
+
 
 	UDestroyShaderProgram(gShaderProgram);
 
@@ -379,7 +374,7 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 // process user input and windows changes
 void UProcessInput(GLFWwindow* window)
 {
-	
+
 
 	// exit program
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -393,7 +388,7 @@ void UProcessInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	
+
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
@@ -429,7 +424,7 @@ void UProcessInput(GLFWwindow* window)
 	}*/
 
 
-
+	// deprecated way to change speed of camera
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
 		if (gCamera.MovementSpeed < 10.0f)
@@ -449,7 +444,11 @@ void UProcessInput(GLFWwindow* window)
 		else
 			gCamera.MovementSpeed = 0.01f;
 	}
-		
+
+
+
+
+
 }
 void UResizeWindow(GLFWwindow* window, int width, int height)
 {
@@ -474,40 +473,38 @@ void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 }
 void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	//gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
-
-	//gCamera.ProcessMouseScroll(gDeltaTime--);
-	
-	gCamera.ProcessMouseScroll(gCamera.MovementSpeed);
+	// change camera speed by mouse scroll
+	gCamera.ProcessMouseScroll(yoffset);
 }
 void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_LEFT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Left mouse button pressed" << endl;
+			cout << "LP" << endl;
 		else
-			cout << "Left mouse button released" << endl;
+			cout << "LR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_MIDDLE:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Middle mouse button pressed" << endl;
+			cout << "MP" << endl;
 		else
-			cout << "Middle mouse button released" << endl;
+			cout << "MR" << endl;
 	}
 	break;
 
 	case GLFW_MOUSE_BUTTON_RIGHT:
 	{
 		if (action == GLFW_PRESS)
-			cout << "Right mouse button pressed" << endl;
+			cout << "RP" << endl;
 		else
-			cout << "Right mouse button released" << endl;
+			cout << "RR" << endl;
 	}
 	break;
 
@@ -534,13 +531,13 @@ void URender(vector<GLMesh> scene)
 	glm::mat4 projection;
 	if (!perspective)
 	{
+		// p for perspective (default)
 		projection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
 	}
 	else
+		// o for ortho
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
-	/*glm::mat4 projection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);*/
 
 	// set shader
 	glUseProgram(gShaderProgram);
@@ -550,12 +547,12 @@ void URender(vector<GLMesh> scene)
 	GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
-
-	for(auto i = 0; i < scene.size(); ++i)
+	// loop to draw each shape individually
+	for (auto i = 0; i < scene.size(); ++i)
 	{
-		
-
 		auto mesh = scene[i];
+
+
 
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
@@ -567,14 +564,11 @@ void URender(vector<GLMesh> scene)
 		// activate vbo's within mesh's vao
 		glBindVertexArray(mesh.vao);
 
-		// bind textures
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
-		//draw the triangles
+		// Draws the triangles
 		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-		//glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT, NULL);
-
 	}
 
 	// deactivate vao
@@ -608,12 +602,12 @@ void UDestroyShaderProgram(GLuint programId)
 //	GLfloat verts[] =
 //	{
 //		// Vertex Positions    // Colors
-//		 0.0f,  0.5f,  0.0f,   properties[0], properties[1], properties[2], properties[3], // top of pyramid, red
-//		-0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left front
-//		 0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right front
+//		 0.0f,  0.5f,  0.0f,   1.0f, 0.0f, 0.0f, 1.0f, // top of pyramid, red
+//		-0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f, // bottom left front
+//		 0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f, // bottom right front
 //
-//		-0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left back
-//		 0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right back
+//		-0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f, // bottom left back
+//		 0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f, 1.0f, // bottom right back
 //
 //	};
 //
@@ -1058,7 +1052,8 @@ void UDestroyShaderProgram(GLuint programId)
 //
 //}
 
-void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties)
+
+void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 {
 
 	//coordinates and colors for triangles
@@ -1067,76 +1062,75 @@ void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties)
 	GLfloat verts[] =
 	{
 		// Vertex Positions    // Texture coords
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f, 
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,   
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//back side
+		-1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f, -1.0f,	0.0f, 2.0f,
 
 		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+		 1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f, -1.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+		-1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		-1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
 
 		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		-1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//front
+		-1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f,  1.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 0.0f, -1.0f,  1.0f,	0.0f, 2.0f,
+
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+		 1.0f, -1.0f, -1.0f,	2.0f, 2.0f,
+		 1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	2.0f, 2.0f,
+		 1.0f, -1.0f,  0.0f,	0.0f, 2.0f,
+
+		-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,		//bottom
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+
+		 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
 		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
 		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
 	};
 
-	const GLushort indices[] = {
-		0, 1, 2,
-		0, 1, 3,
-		0, 3, 4,
-		0, 2, 4,
-		1, 2, 3,
-		2, 3, 4
-	};
 
-	//tells how many values for a vertex
+
 	const GLuint floatsPerVertex = 3;
-	//tells how many values for a color
 	const GLuint floatsPerUV = 2;
 
 	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
 
-	glGenVertexArrays(1, &mesh.vao);
+	glGenVertexArrays(1, &mesh.vao); // we can also generate multiple VAOs or buffers at the same time
 	glBindVertexArray(mesh.vao);
 
-	//create 2 buffers
-	/*glGenBuffers(2, mesh.vbos);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);*/
-
+	// Create VBO
 	glGenBuffers(1, &mesh.vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
 
-
-	//tells program that it'll need to hit 6 numbers before starting to draw the
-	//next vertex
+	// Strides between vertex coordinates
 	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
 
-	//mesh.nIndices = std::size(indices);
-
-	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
-
-	
+	// Create Vertex Attribute Pointers
 	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
+	glEnableVertexAttribArray(2);
 
+	//***************************************
 
 
 	// scale the object
@@ -1148,9 +1142,9 @@ void UBuildPyramidWithTexture(GLMesh& mesh, vector<float> properties)
 	// move the object (x, y, z)
 	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
 
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
+	mesh.model = mesh.translation * mesh.rotation * mesh.scale; \
 
-	mesh.gUVScale = glm::vec2(5.0f, 5.0f);
+		mesh.gUVScale = glm::vec2(2.0f, 2.0f);
 
 }
 
@@ -1160,7 +1154,7 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 	unsigned char* image = stbi_load(filename, &width, &height, &channels, 0);
 	if (image)
 	{
-		flipImage(image, width, height, channels);
+		flipImageVertically(image, width, height, channels);
 
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
@@ -1192,4 +1186,9 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 
 	// Error loading the image
 	return false;
+}
+
+void UDestroyTexture(GLuint textureId)
+{
+	glGenTextures(1, &textureId);
 }

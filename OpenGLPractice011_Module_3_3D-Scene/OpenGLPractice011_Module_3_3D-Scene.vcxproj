@@ -24,7 +24,7 @@
     <ProjectGuid>{716EAEA4-2F8A-418D-A256-F5D476FA3BA3}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>OpenGLPractice011_Module_3D-Scene</ProjectName>
+    <ProjectName>3-5 Beginning a 3D Scene</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

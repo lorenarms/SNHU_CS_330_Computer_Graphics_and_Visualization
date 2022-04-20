@@ -24,7 +24,7 @@
     <ProjectGuid>{8E4283BD-C2F6-4F2B-882E-BB6792A16DDB}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>OpenGLPractice010_Module_3_Build-a-Pyramid</ProjectName>
+    <ProjectName>3-3 Building a 3D Pyramid</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

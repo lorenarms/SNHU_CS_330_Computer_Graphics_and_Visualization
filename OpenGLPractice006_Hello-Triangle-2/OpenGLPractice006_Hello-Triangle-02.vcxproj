@@ -24,7 +24,7 @@
     <ProjectGuid>{163A46D1-08DE-4D07-9091-4E8E636CFEB3}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>OpenGLPractice006_Assignment_Module_2</ProjectName>
+    <ProjectName>2-2 2D Triangles</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -24,7 +24,7 @@
     <ProjectGuid>{D0C4AEC1-D6DE-4A22-B52B-956754F7B33F}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>OpenGLPractice007_Assignment_Module_3</ProjectName>
+    <ProjectName>CS330_Module_3_Assignment_01</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

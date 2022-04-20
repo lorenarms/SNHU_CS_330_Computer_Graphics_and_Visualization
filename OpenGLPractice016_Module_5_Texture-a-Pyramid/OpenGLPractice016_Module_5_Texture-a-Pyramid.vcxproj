@@ -24,7 +24,7 @@
     <ProjectGuid>{DE36718E-795A-41F9-8B62-F410FCD859BF}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>OpenGLPractice016_Module_5_Texture-a-Pyramid</ProjectName>
+    <ProjectName>5-3 Texturing a Pyramid</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

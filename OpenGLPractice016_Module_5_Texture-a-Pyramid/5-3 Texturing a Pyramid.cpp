@@ -551,6 +551,20 @@ void URender(vector<GLMesh> scene)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+	// 1. Scales the object by 2
+	glm::mat4 scale = glm::scale(glm::vec3(2.0f, 2.0f, 2.0f));
+	// 2. Rotates shape by 15 degrees in the x axis
+	glm::mat4 rotation = glm::rotate(45.0f, glm::vec3(1.0, 1.0f, 1.0f));
+	// 3. Place object at the origin
+	glm::mat4 translation = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
+	// Model matrix: transformations are applied right-to-left order
+	glm::mat4 model = translation * rotation * scale;
+	
+
+
+
+
 	// transform the camera (x, y, z)
 	glm::mat4 view = gCamera.GetViewMatrix();
 
@@ -1086,50 +1100,95 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	//coordinates and colors for triangles
 	//normalized to window
 	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-	GLfloat verts[] =
-	{
-		// Vertex Positions    // Texture coords
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//back side
-		-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
+	//GLfloat verts[] =
+	//{
+	//	// Vertex Positions    // Texture coords
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//back side
+	//	-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+	//	 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
 
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+	//	 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
 
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
-		-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+	//	-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+	//	-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
 
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
-
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//front
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-		 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
-
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-		 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+	//	-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
 
 
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//front
+	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+	//	 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
 
-		 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-		 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+	//	 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+	//	 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
 
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//bottom
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
 
-		 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
+	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+	//	 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+
+	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
+	//	 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+	//	 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+
+	//	-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//bottom
+	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+	//	-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+
+	//	 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
+	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
+	//	 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
+	//};
+
+	GLfloat verts[] = {
+		//Positions          //Texture Coordinates
+	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	
@@ -1160,18 +1219,18 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	//***************************************
 
 
-	// scale the object
-	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
+	//// scale the object
+	//mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
 
-	// rotate the object (x, y, z) (0 - 6.4, to the right)
-	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
+	//// rotate the object (x, y, z) (0 - 6.4, to the right)
+	//mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
 
-	// move the object (x, y, z)
-	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
+	//// move the object (x, y, z)
+	//mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
 
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
+	//mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
 
-	mesh.gUVScale = glm::vec2(2.0f, 2.0f);
+	//mesh.gUVScale = glm::vec2(2.0f, 2.0f);
 
 }
 void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {

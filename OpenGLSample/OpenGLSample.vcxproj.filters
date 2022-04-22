@@ -21,7 +21,7 @@
     <ClCompile Include="shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="1-1 OpenGl Sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

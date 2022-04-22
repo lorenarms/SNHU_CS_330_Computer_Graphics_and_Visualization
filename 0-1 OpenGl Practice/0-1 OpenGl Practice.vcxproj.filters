@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="2-2 Hello Triangles.cpp">
+    <ClCompile Include="0-1 OpenGl Practice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

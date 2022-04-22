@@ -4,10 +4,9 @@
 //---------------------------------------------------
 //
 // Lawrence Artl
-// CS-330 Comp Graphic and Viz
+// CS-330 Computer Graphics and Visualization
 // Assignment 2-3
-//
-// **RUN IN x86 MODE
+// 2D Triangles
 //
 //---------------------------------------------------
 
@@ -18,14 +17,25 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+// GLM Math Header inclusions
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <camera.h>
+
+// shader program macros
+#ifndef GLSL
+#define GLSL(Version, Source) "#version " #Version " core \n" #Source
+#endif
+
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 2 Assignment";
+const char* const WINDOW_TITLE = "Module 2 Assignment: 2D Triangles | Lorenarms";
 
 //window width, height
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
 
 //GL data for mesh
 struct GLMesh
@@ -36,14 +46,32 @@ struct GLMesh
 	GLuint vbos[2];
 	//indices of the mesh
 	GLuint nIndices;
+
+	glm::mat4 scale;
+	glm::mat4 rotation;
+	glm::mat4 translation;
+	glm::mat4 model;
 };
 
 //main window
 GLFWwindow* gWindow = nullptr;
+
 //triangle mesh data
 GLMesh gMesh;
+
 //shader program
 GLuint gShaderProgram;
+
+// camera
+Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+float gLastX = WINDOW_WIDTH / 2.0f;
+float gLastY = WINDOW_HEIGHT / 2.0f;
+bool gFirstMouse = true;
+
+
+// timing
+float gDeltaTime = 0.0f; // time between current frame and last frame
+float gLastFrame = 0.0f;
 
 
 //initialize program
@@ -61,6 +89,13 @@ bool UCreateShaderProgram(const char* vtxShaderSource, const char* fragShaderSou
 //free up memory on close
 void UDestroyMesh(GLMesh& mesh);
 void UDestroyShaderProgram(GLuint programId);
+
+
+// keyboard and mouse input functions
+void UMousePositionCallback(GLFWwindow* window, double xpos, double ypos);
+void UMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+
 
 //shaders
 //vertex shader program (location)
@@ -82,6 +117,40 @@ const char *fragment_shader_source = "#version 330 core\n"
 "{\n"
 "   FragColor = colorFromVS;\n"
 "}\n\0";
+
+
+//// Vertex Shader Source Code
+//const GLchar* vertex_shader_source = GLSL(440,
+//	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
+//layout(location = 1) in vec4 color;  // Color data from Vertex Attrib Pointer 1
+//
+//out vec4 vertexColor; // variable to transfer color data to the fragment shader
+//
+////uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
+//uniform mat4 model;
+//uniform mat4 view;
+//uniform mat4 projection;
+//
+//void main()
+//{
+//	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertex data using matrix
+//	vertexColor = color; // references incoming color data
+//}
+//);
+//
+//// Fragment Shader Source Code
+//const GLchar* fragment_shader_source = GLSL(440,
+//	in vec4 vertexColor; // Variable to hold incoming color data from vertex shader
+//
+//out vec4 fragmentColor;
+//
+//void main()
+//{
+//	fragmentColor = vec4(vertexColor);
+//}
+//);
+
+
 
 //main
 int main(int argc, char* argv[])

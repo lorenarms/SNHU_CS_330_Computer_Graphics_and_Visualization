@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLSample", "OpenGLSample\OpenGLSample.vcxproj", "{22239802-6F08-4A9A-9FF6-DD4D2D7CB8BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1-1 OpenGl Sample", "OpenGLSample\OpenGLSample.vcxproj", "{22239802-6F08-4A9A-9FF6-DD4D2D7CB8BD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2-2 Hello Triangles", "OpenGLPractice005_Hello-Triangle\OpenGLPractice005_Hello-Triangle.vcxproj", "{A94C8E42-D8F5-4E8F-BA90-C5F770E11DA1}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-5 Interactivity in a 3D Scene", "OpenGLPractice014_Module_5_Texture-a-Pyramid\OpenGLPractice014_Module_5_Texture-a-Pyramid.vcxproj", "{14A89E1D-2B80-4D9A-B0C8-B5D47EE977D8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-3 Texturing a Pyramid", "OpenGLPractice016_Module_5_Texture-a-Pyramid\OpenGLPractice016_Module_5_Texture-a-Pyramid.vcxproj", "{DE36718E-795A-41F9-8B62-F410FCD859BF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-1 OpenGl Practice", "0-1 OpenGl Practice\0-1 OpenGl Practice.vcxproj", "{106A23CD-0327-4444-9C69-F1B6B9AF4472}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-2 OpenGL Practice - Triangle Fan", "0-2 OpenGL Practice - Triangle Fan\0-2 OpenGL Practice - Triangle Fan.vcxproj", "{6F8A17C3-B75B-499A-AA62-0316168B3997}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,22 @@ Global
 		{DE36718E-795A-41F9-8B62-F410FCD859BF}.Release|x64.Build.0 = Release|x64
 		{DE36718E-795A-41F9-8B62-F410FCD859BF}.Release|x86.ActiveCfg = Release|Win32
 		{DE36718E-795A-41F9-8B62-F410FCD859BF}.Release|x86.Build.0 = Release|Win32
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Debug|x64.ActiveCfg = Debug|x64
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Debug|x64.Build.0 = Debug|x64
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Debug|x86.ActiveCfg = Debug|Win32
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Debug|x86.Build.0 = Debug|Win32
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Release|x64.ActiveCfg = Release|x64
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Release|x64.Build.0 = Release|x64
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Release|x86.ActiveCfg = Release|Win32
+		{106A23CD-0327-4444-9C69-F1B6B9AF4472}.Release|x86.Build.0 = Release|Win32
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Debug|x64.ActiveCfg = Debug|x64
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Debug|x64.Build.0 = Debug|x64
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Debug|x86.ActiveCfg = Debug|Win32
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Debug|x86.Build.0 = Debug|Win32
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x64.ActiveCfg = Release|x64
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x64.Build.0 = Release|x64
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.ActiveCfg = Release|Win32
+		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

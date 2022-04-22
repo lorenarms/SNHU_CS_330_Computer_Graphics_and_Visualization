@@ -18,7 +18,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Assignment_Module_2.cpp">
+    <ClCompile Include="2-2 2D Triangles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

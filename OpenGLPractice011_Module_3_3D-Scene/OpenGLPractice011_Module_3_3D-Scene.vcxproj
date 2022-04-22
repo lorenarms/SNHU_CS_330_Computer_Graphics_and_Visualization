@@ -146,7 +146,7 @@
   <ItemGroup>
     <ClCompile Include="cylinder.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="3-5 Beginning a 3D Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cylinder.h" />

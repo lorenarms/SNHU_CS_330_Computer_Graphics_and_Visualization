@@ -208,14 +208,14 @@ int main(int argc, char* argv[])
 	// build shape
 	UBuildPyramid(gMesh01, properties);
 
-	GLMesh gMesh02;
+	/*GLMesh gMesh02;
 	properties = {
 		0.0f, 0.0f, 0.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f, 1.0f,
 		1.0f, 0.0f, 0.0f
 	};
-	UBuildCone(gMesh02, properties, 1.0f, 1.0f);
+	UBuildCone(gMesh02, properties, 1.0f, 1.0f);*/
 
 
 	// add shape to scene vector
@@ -240,14 +240,14 @@ int main(int argc, char* argv[])
 
 	texFilename = "smiley.png";
 
-	if (!UCreateTexture(texFilename, gMesh02.textureId))
+	/*if (!UCreateTexture(texFilename, gMesh02.textureId))
 	{
 		cout << "Failed to load texture " << texFilename << endl;
 		return EXIT_FAILURE;
-	}
+	}*/
 
 	scene.push_back(gMesh01);
-	scene.push_back(gMesh02);
+	//scene.push_back(gMesh02);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
@@ -589,28 +589,48 @@ void URender(vector<GLMesh> scene)
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
 	// loop to draw each shape individually
-	for (auto i = 0; i < scene.size(); ++i)
-	{
-		auto mesh = scene[i];
+	//for (auto i = 0; i < scene.size(); ++i)
+	//{
+	//	auto mesh = scene[i];
 
-		
+	//	
 
-		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
-		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
+	//	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+	//	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+	//	glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
-		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
+	//	/*GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
+	//	glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));*/
 
-		// activate vbo's within mesh's vao
-		glBindVertexArray(mesh.vao);
+	//	// activate vbo's within mesh's vao
+	//	glBindVertexArray(mesh.vao);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
+	//	glActiveTexture(GL_TEXTURE0);
+	//	glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
-		// Draws the triangles
-		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-	}
+	//	// Draws the triangles
+	//	glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
+	//}
+
+	// Retrieves and passes transform matrices to the Shader program
+	GLint modelLoc = glGetUniformLocation(gShaderProgram, "model");
+	GLint viewLoc = glGetUniformLocation(gShaderProgram, "view");
+	GLint projLoc = glGetUniformLocation(gShaderProgram, "projection");
+
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+	// Activate the VBOs contained within the mesh's VAO
+	glBindVertexArray(scene[0].vao);
+
+	// bind textures on corresponding texture units
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, scene[0].textureId);
+
+	// Draws the triangles
+	glDrawArrays(GL_TRIANGLES, 0, scene[0].nIndices);
+
 
 	// deactivate vao
 	glBindVertexArray(0);

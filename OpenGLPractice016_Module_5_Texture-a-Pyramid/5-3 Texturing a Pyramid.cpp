@@ -202,7 +202,7 @@ int main(int argc, char* argv[])
 	vector<float> properties = {
 		 0.5f,  0.0f,  0.8f,  1.0f,
 		 2.0f,  2.0f,  2.0f,
-		 0.8f,  0.0f,  1.0f,  0.0f,
+		 0.0f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  1.0f,  -2.0
 	};
 	// build shape
@@ -551,20 +551,7 @@ void URender(vector<GLMesh> scene)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	// 1. Scales the object by 2
-	glm::mat4 scale = glm::scale(glm::vec3(2.0f, 2.0f, 2.0f));
-	// 2. Rotates shape by 15 degrees in the x axis
-	glm::mat4 rotation = glm::rotate(45.0f, glm::vec3(1.0, 1.0f, 1.0f));
-	// 3. Place object at the origin
-	glm::mat4 translation = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
-	// Model matrix: transformations are applied right-to-left order
-	glm::mat4 model = translation * rotation * scale;
 	
-
-
-
-
 	// transform the camera (x, y, z)
 	glm::mat4 view = gCamera.GetViewMatrix();
 
@@ -589,49 +576,30 @@ void URender(vector<GLMesh> scene)
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
 	// loop to draw each shape individually
-	//for (auto i = 0; i < scene.size(); ++i)
-	//{
-	//	auto mesh = scene[i];
+	for (auto i = 0; i < scene.size(); ++i)
+	{
+		auto mesh = scene[i];
 
-	//	
+		
 
-	//	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-	//	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
-	//	glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
+		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-	//	/*GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
-	//	glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));*/
+		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
+		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
 
-	//	// activate vbo's within mesh's vao
-	//	glBindVertexArray(mesh.vao);
+		// activate vbo's within mesh's vao
+		glBindVertexArray(mesh.vao);
 
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, mesh.textureId);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
-	//	// Draws the triangles
-	//	glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-	//}
+		// Draws the triangles
+		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
+	}
 
-	// Retrieves and passes transform matrices to the Shader program
-	GLint modelLoc = glGetUniformLocation(gShaderProgram, "model");
-	GLint viewLoc = glGetUniformLocation(gShaderProgram, "view");
-	GLint projLoc = glGetUniformLocation(gShaderProgram, "projection");
-
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-	// Activate the VBOs contained within the mesh's VAO
-	glBindVertexArray(scene[0].vao);
-
-	// bind textures on corresponding texture units
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, scene[0].textureId);
-
-	// Draws the triangles
-	glDrawArrays(GL_TRIANGLES, 0, scene[0].nIndices);
-
-
+	
 	// deactivate vao
 	glBindVertexArray(0);
 
@@ -1120,96 +1088,35 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	//coordinates and colors for triangles
 	//normalized to window
 	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-	//GLfloat verts[] =
-	//{
-	//	// Vertex Positions    // Texture coords
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//back side
-	//	-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-	//	 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
+	GLfloat verts[] =
+	{
+		// Vertex Positions    // Texture coords
+		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//back side
+		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
 
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-	//	 0.0f, -1.0f, -1.0f,	0.0f, 1.0f,
+		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//left side
+		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
+		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
 
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
-	//	-1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-	//	-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//front
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
 
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-	//	-1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
+		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//right side
+		 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
 
+		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//bottom back
+		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
 
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//front
-	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-	//	 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
-
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-	//	 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-	//	 0.0f, -1.0f,  1.0f,	0.0f, 1.0f,
-
-
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,		//side
-	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-	//	 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
-
-	//	 0.0f,  1.0f,  0.0f,	0.0f, 0.0f,
-	//	 1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-	//	 1.0f, -1.0f,  0.0f,	0.0f, 1.0f,
-
-	//	-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//bottom
-	//	 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-	//	-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-
-	//	 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-	//	-1.0f, -1.0f,  1.0f,	1.0f, 1.0f,
-	//	 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-	//};
-
-	GLfloat verts[] = {
-		//Positions          //Texture Coordinates
-	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	   -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	   -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	   -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,		//bottom front
+		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,	0.0f, 1.0f,
 	};
+
+	
 
 	
 
@@ -1239,18 +1146,18 @@ void UBuildPyramid(GLMesh& mesh, vector<float> properties)
 	//***************************************
 
 
-	//// scale the object
-	//mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
+	// scale the object
+	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
 
-	//// rotate the object (x, y, z) (0 - 6.4, to the right)
-	//mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
+	// rotate the object (x, y, z) (0 - 6.4, to the right)
+	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
 
-	//// move the object (x, y, z)
-	//mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
+	// move the object (x, y, z)
+	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
 
-	//mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
+	mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
 
-	//mesh.gUVScale = glm::vec2(2.0f, 2.0f);
+	mesh.gUVScale = glm::vec2(3.0f, 3.0f);		// use this to scale the texture to be larger
 
 }
 void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {

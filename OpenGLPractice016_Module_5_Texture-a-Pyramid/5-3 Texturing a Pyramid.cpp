@@ -181,14 +181,14 @@ int main(int argc, char* argv[])
 	glUseProgram(gShaderProgram);
 	// We set the texture as texture unit 0
 	glUniform1i(glGetUniformLocation(gShaderProgram, "uTexture"), 0);
-
-	//bg color of window
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+	
 	//rendering loop
 	//keep checking if window has closed
 	while (!glfwWindowShouldClose(gWindow))
 	{
+		//bg color of window
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;
 		gLastFrame = currentFrame;
@@ -478,8 +478,6 @@ void URender(vector<GLMesh> scene)
 	// Enable z-depth
 	glEnable(GL_DEPTH_TEST);
 
-	//clear background
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	

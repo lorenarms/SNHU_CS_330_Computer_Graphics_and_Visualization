@@ -20,6 +20,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	float height = 1.7f;
 	gMesh01.texFilename = "bricks.png";
 	ShapeBuilder::UBuildPyramid(gMesh01, properties, height);
+	scene.push_back(gMesh01);
 		
 
 	// SHAPE 2: CONE
@@ -36,9 +37,9 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 	gMesh02.texFilename = "pyramid_tex.jpg";
 	ShapeBuilder::UBuildCone(gMesh02, properties, 1.0f, 1.7f, 12.0);
-
-
-	scene.push_back(gMesh01);
 	scene.push_back(gMesh02);
+
+
+
 }
 

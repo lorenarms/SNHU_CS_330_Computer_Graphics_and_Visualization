@@ -9,25 +9,12 @@
 //---------------------------------------------------
 
 
-#include <iostream>
-#include <cstdlib>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <vector>
-
-
-// GLM Math Header inclusions
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-// camera
-#include <camera.h>
+#include "ShapeBuilder.h"
+#include "Mesh.h"
 
 // image
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h> 
-
 
 
 // shader program macros
@@ -45,35 +32,7 @@ const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 
-//GL data for mesh
-struct GLMesh
-{
-	//vertex array
-	GLuint vao;
-	//vertex buffer
-	GLuint vbo;
-	//indices of the mesh
-	GLuint nIndices;
-
-	// each shape gets a matrix object
-	glm::mat4 scale;
-	glm::mat4 rotation;
-	glm::mat4 translation;
-	glm::mat4 model;
-	glm::vec2 gUVScale;
-
-	GLuint textureId;
-	
-	GLint gTextWrapMode = GL_REPEAT;
-	//texture wrapping mode: repeat texture
-	//also can use:
-	//GLint gTextWrapMode = GL_MIRRORED_REPEAT;
-	//GLint gTextWrapMode = GL_CLAMP_TO_EDGE;
-	//GLint gTextWrapMode = GL_CLAMP_TO_BORDER;
-
-};
-
-
+ShapeBuilder builder;
 
 //main window
 GLFWwindow* gWindow = nullptr;
@@ -100,7 +59,6 @@ float gDeltaTime = 0.0f; // time between current frame and last frame
 float gLastFrame = 0.0f;
 
 
-
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
 //set window size
@@ -118,7 +76,6 @@ void UDestroyShaderProgram(GLuint programId);
 void UDestroyTexture(GLuint textureId);
 
 // build shapes
-void UBuildPyramid(GLMesh& mesh, vector<float> properties);
 void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length);
 void UBuildPlane(GLMesh& mesh, vector<float> properties);
@@ -132,7 +89,6 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 // texture create
 bool UCreateTexture(const char* filename, GLuint& textureId);
-
 
 
 // Vertex Shader Source Code
@@ -206,8 +162,8 @@ int main(int argc, char* argv[])
 		-0.5f,  1.0f,  -2.0
 	};
 	// build shape
-	UBuildPyramid(gMesh01, properties);
-
+	ShapeBuilder::UBuildPyramid(gMesh01, properties);
+	
 	/*GLMesh gMesh02;
 	properties = {
 		0.0f, 0.0f, 0.0f, 1.0f,
@@ -217,9 +173,6 @@ int main(int argc, char* argv[])
 	};
 	UBuildCone(gMesh02, properties, 1.0f, 1.0f);*/
 
-
-	// add shape to scene vector
-	
 
 	//build shader programs
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
@@ -1082,84 +1035,7 @@ void UDestroyShaderProgram(GLuint programId)
 //}
 
 
-void UBuildPyramid(GLMesh& mesh, vector<float> properties)
-{
 
-	//coordinates and colors for triangles
-	//normalized to window
-	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-	GLfloat verts[] =
-	{
-		// Vertex Positions    // Texture coords
-		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//back side
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-
-		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//left side
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		-1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-
-		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//front
-		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-
-		 0.0f,  0.7f,  0.0f,	0.5f, 1.0f,		//right side
-		 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//bottom back
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-
-		 1.0f, -1.0f, -1.0f,	1.0f, 1.0f,		//bottom front
-		-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,	0.0f, 1.0f,
-	};
-
-	
-
-	
-
-	const GLuint floatsPerVertex = 3;
-	const GLuint floatsPerUV = 2;
-
-	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
-
-	glGenVertexArrays(1, &mesh.vao); // we can also generate multiple VAOs or buffers at the same time
-	glBindVertexArray(mesh.vao);
-
-	// Create VBO
-	glGenBuffers(1, &mesh.vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
-
-	// Strides between vertex coordinates
-	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
-
-	// Create Vertex Attribute Pointers
-	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
-	glEnableVertexAttribArray(2);
-
-	//***************************************
-
-
-	// scale the object
-	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-
-	// rotate the object (x, y, z) (0 - 6.4, to the right)
-	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-
-	// move the object (x, y, z)
-	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;\
-
-	mesh.gUVScale = glm::vec2(3.0f, 3.0f);		// use this to scale the texture to be larger
-
-}
 void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {
 	vector<float> v;
 

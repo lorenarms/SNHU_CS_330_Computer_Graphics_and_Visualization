@@ -11,6 +11,7 @@
 
 #include "ShapeBuilder.h"
 #include "Mesh.h"
+#include "SceneBuilder.h"
 
 // image
 #define STB_IMAGE_IMPLEMENTATION
@@ -29,8 +30,8 @@ using namespace std;
 const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 
 //window width, height
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_WIDTH = 1600;
+const int WINDOW_HEIGHT = 1200;
 
 ShapeBuilder builder;
 
@@ -148,59 +149,33 @@ void flipImageVertically(unsigned char* image, int width, int height, int channe
 //main
 int main(int argc, char* argv[])
 {
+
 	//check if initialized correctly
 	if (!UInitialize(argc, argv, &gWindow))
 		return EXIT_FAILURE;
 
-	// build shape meshes
-	// build pyramid
-	GLMesh gMesh01;
-	vector<float> properties = {
-		 0.5f,  0.0f,  0.8f,  1.0f,
-		 2.0f,  2.0f,  2.0f,
-		 0.0f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  1.0f,  -2.0
-	};
-	// build shape
-	ShapeBuilder::UBuildPyramid(gMesh01, properties);
+	SceneBuilder::UBuildScene(scene);
 	
-	/*GLMesh gMesh02;
-	properties = {
-		0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 0.0f, 0.0f
-	};
-	UBuildCone(gMesh02, properties, 1.0f, 1.0f);*/
-
-
-	//build shader programs
+	//build shader 
 	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 		gShaderProgram))
 		return EXIT_FAILURE;
 
-	const char* texFilename = "bricks.png";
-
-	if (!UCreateTexture(texFilename, gMesh01.textureId))
+	for (auto& m : scene)
 	{
-		cout << "Failed to load texture " << texFilename << endl;
-		return EXIT_FAILURE;
+		if (!UCreateTexture(m.texFilename, m.textureId))
+		{
+			cout << "Failed to load texture " << m.texFilename << endl;
+			return EXIT_FAILURE;
+
+		}
+
+		if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
+			gShaderProgram))
+			return EXIT_FAILURE;
 	}
-
-	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
-		gShaderProgram))
-		return EXIT_FAILURE;
-
-	texFilename = "smiley.png";
-
-	/*if (!UCreateTexture(texFilename, gMesh02.textureId))
-	{
-		cout << "Failed to load texture " << texFilename << endl;
-		return EXIT_FAILURE;
-	}*/
-
-	scene.push_back(gMesh01);
-	//scene.push_back(gMesh02);
+	
+	
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
@@ -218,8 +193,6 @@ int main(int argc, char* argv[])
 		gDeltaTime = currentFrame - gLastFrame;
 		gLastFrame = currentFrame;
 
-
-
 		//process user input
 		UProcessInput(gWindow);
 
@@ -231,18 +204,23 @@ int main(int argc, char* argv[])
 
 
 	//clean up
+	for (auto& m : scene)
+	{
+		UDestroyMesh(m);
+	}
+
 	scene.clear();
-	properties.clear();
-
-	UDestroyMesh(gMesh01);
-
-
+	
 	UDestroyShaderProgram(gShaderProgram);
 
 	//exit with success!
 	exit(EXIT_SUCCESS);
 
 }
+
+
+
+
 
 
 // functions
@@ -378,9 +356,9 @@ void UProcessInput(GLFWwindow* window)
 		gCamera.ProcessKeyboard(LEFT, gDeltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(RIGHT, gDeltaTime);
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		gCamera.ProcessKeyboard(UP, gDeltaTime);
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		gCamera.ProcessKeyboard(UP, gDeltaTime);
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(DOWN, gDeltaTime);
 
 
@@ -560,7 +538,6 @@ void URender(vector<GLMesh> scene)
 	glfwSwapBuffers(gWindow);
 
 }
-
 
 // clean-up methods
 void UDestroyMesh(GLMesh& mesh)
@@ -1034,8 +1011,6 @@ void UDestroyShaderProgram(GLuint programId)
 //
 //}
 
-
-
 void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {
 	vector<float> v;
 
@@ -1109,172 +1084,6 @@ void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {
 }
 
 
-void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length)
-{
-	// this is the same algorithm as the cylinder
-	// i plain run out of time to tweak it :(
-	// so it's a little rough and big on memory
-
-	
-
-	//int i = 0;
-	//GLfloat verts[]
-	//{
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(1 * sectorStep), radius* sin(1 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(2 * sectorStep), radius* sin(2 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(2 * sectorStep), radius* sin(2 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(3 * sectorStep), radius* sin(3 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(3 * sectorStep), radius* sin(3 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(4 * sectorStep), radius* sin(4 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(4 * sectorStep), radius* sin(4 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(5 * sectorStep), radius* sin(5 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(5 * sectorStep), radius* sin(5 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(6 * sectorStep), radius* sin(6 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(6 * sectorStep), radius* sin(6 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(7 * sectorStep), radius* sin(7 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(7 * sectorStep), radius* sin(7 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(8 * sectorStep), radius* sin(8 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(8 * sectorStep), radius* sin(8 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(9 * sectorStep), radius* sin(9 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(9 * sectorStep), radius* sin(9 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(10 * sectorStep), radius* sin(10 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(10 * sectorStep), radius* sin(10 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(11 * sectorStep), radius* sin(11 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(11 * sectorStep), radius* sin(11 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(12 * sectorStep), radius* sin(12 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-	//	0.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	radius* cos(12 * sectorStep), radius* sin(12 * sectorStep), 0.0f, 1.0f, 0.0f,
-	//	radius* cos(1 * sectorStep), radius* sin(1 * sectorStep), 0.0f, 1.0f, 1.0f,
-
-
-	//	1.0f, 0.0f, 0.0f, 0.0f, 0.0f,			// top origin
-	//	0.0f, 1.0f, 0.0f, 2.0f, 0.0f,			// top origin
-	//	0.0f, 0.0f, 1.0f, 2.0f, 2.0f			// top origin
-
-
-
-	//};
-
-	const float PI = 3.14f;
-	const float STEP = 12;
-	float sectorStep = 2.0f * PI / STEP;
-
-	vector<float> v;
-	
-	for (int i = 1; i < STEP; i++) {
-
-		// triangle top, fan
-		// point 1
-		v.push_back(0.0f); v.push_back(0.0f); v.push_back(0.0f);    // center coords
-		v.push_back(0.0f); v.push_back(0.0f);   // text
-
-		// point 2
-		v.push_back(radius * cos(i * sectorStep));    // x
-		v.push_back(radius * sin(i * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(0.0f);   // text
-
-		//point 3
-		v.push_back(radius * cos((i + 1) * sectorStep));    // x
-		v.push_back(radius * sin((i + 1) * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(1.0f);   // text
-
-
-		// side triangle
-		// point 1
-		v.push_back(radius * cos((i + 1) * sectorStep));    // x
-		v.push_back(radius * sin((i + 1) * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(1.0f);   // text
-
-		// point 2, point of cone
-		v.push_back(0.0f); v.push_back(0.0f); v.push_back(length);    // center coords
-		v.push_back(0.0f); v.push_back(0.0f);   // text
-
-		// point 3
-		v.push_back(radius * cos(i * sectorStep));    // x
-		v.push_back(radius * sin(i * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(0.0f);   // text
-
-		// ADD IN LOGIC TO HAVE LAST TRIANGLE AND SIDE WRITTEN
-
-	}
-
-	
-
-	GLfloat verts[370];
-
-	for (int i = 0; i < v.size(); i++)
-	{
-		verts[i] = v[i];
-	}
-
-	
-
-const GLuint floatsPerVertex = 3;
-const GLuint floatsPerUV = 2;
-
-mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
-
-glGenVertexArrays(1, &mesh.vao); // we can also generate multiple VAOs or buffers at the same time
-glBindVertexArray(mesh.vao);
-
-// Create VBO
-glGenBuffers(1, &mesh.vbo);
-glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
-glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
-
-// Strides between vertex coordinates
-GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
-
-// Create Vertex Attribute Pointers
-glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-glEnableVertexAttribArray(0);
-
-glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float)* floatsPerVertex));
-glEnableVertexAttribArray(2);
-
-//***************************************
-
-
-	// scale the object
-	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-
-	// rotate the object (x, y, z) (0 - 6.4, to the right)
-	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-
-	// move the object (x, y, z)
-	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-
-	mesh.gUVScale = glm::vec2(1.0f, 1.0f);
-}
-
 bool UCreateTexture(const char* filename, GLuint& textureId)
 {
 	int width, height, channels;
@@ -1314,7 +1123,6 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 	// Error loading the image
 	return false;
 }
-
 void UDestroyTexture(GLuint textureId)
 {
 	glGenTextures(1, &textureId);

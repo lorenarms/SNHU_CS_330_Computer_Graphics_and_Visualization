@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="SceneBuilder.cpp" />
     <ClCompile Include="ShapeBuilder.cpp" />
     <ClCompile Include="5-3 Texturing a Pyramid.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="cylinder.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SceneBuilder.h" />
     <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
   <ItemGroup>

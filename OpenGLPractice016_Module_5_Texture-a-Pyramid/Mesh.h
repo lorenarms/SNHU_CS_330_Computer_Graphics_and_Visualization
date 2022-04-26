@@ -28,17 +28,20 @@ struct GLMesh
 
 	// each shape gets a matrix object
 	glm::mat4 scale;
+	glm::mat4 xrotation;
+	glm::mat4 yrotation;
+	glm::mat4 zrotation;
 	glm::mat4 rotation;
 	glm::mat4 translation;
 	glm::mat4 model;
 	glm::vec2 gUVScale;
 
+	// texture information
+	const char* texFilename;
 	GLuint textureId;
 
-	GLint gTextWrapMode = GL_REPEAT;
 	//texture wrapping mode: repeat texture
-
-	//also can use:
+	GLint gTextWrapMode = GL_REPEAT;
 	//GLint gTextWrapMode = GL_MIRRORED_REPEAT;
 	//GLint gTextWrapMode = GL_CLAMP_TO_EDGE;
 	//GLint gTextWrapMode = GL_CLAMP_TO_BORDER;

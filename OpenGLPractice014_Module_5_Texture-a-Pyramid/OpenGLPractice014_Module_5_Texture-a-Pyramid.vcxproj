@@ -149,7 +149,6 @@
     <ClCompile Include="4-5 Interactivity in a 3D Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cylinder.h" />
     <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

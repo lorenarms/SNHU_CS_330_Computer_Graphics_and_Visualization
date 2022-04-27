@@ -23,6 +23,8 @@ struct GLMesh
 	GLuint vao;
 	//vertex buffer
 	GLuint vbo;
+	//vertex buffer
+	GLuint vbos[2];
 	//indices of the mesh
 	GLuint nIndices;
 

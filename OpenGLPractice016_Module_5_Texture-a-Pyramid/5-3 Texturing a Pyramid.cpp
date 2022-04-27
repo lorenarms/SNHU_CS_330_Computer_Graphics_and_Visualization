@@ -202,7 +202,6 @@ int main(int argc, char* argv[])
 		glfwPollEvents();
 	}
 
-
 	//clean up
 	for (auto& m : scene)
 	{

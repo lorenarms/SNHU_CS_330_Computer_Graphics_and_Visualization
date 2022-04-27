@@ -15,7 +15,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
-		2.0f, 2.0f							// texture scaling
+		1.0f, 1.0f							// texture scaling
 	};
 	float height = 1.7f;
 	gMesh01.texFilename = "bricks.png";
@@ -38,6 +38,23 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	gMesh02.texFilename = "pyramid_tex.jpg";
 	ShapeBuilder::UBuildCone(gMesh02, properties, 1.0f, 1.7f, 12.0);
 	scene.push_back(gMesh02);
+
+
+	// SHAPE 3: Cylinder
+	GLMesh gMesh03;
+	properties = {
+		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		1.0f, 1.0f, 1.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f,					// translate x, y, z
+		2.0f, 2.0f							// texture scaling
+	};
+	height = 1.7f;
+	gMesh03.texFilename = "bricks.png";
+	ShapeBuilder::UBuildCylinder(gMesh01, properties, 1.0f, height);
+	scene.push_back(gMesh03);
 
 
 

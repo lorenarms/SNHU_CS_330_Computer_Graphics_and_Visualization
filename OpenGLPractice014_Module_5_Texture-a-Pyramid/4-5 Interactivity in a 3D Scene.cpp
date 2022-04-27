@@ -16,6 +16,8 @@
 #include <vector>
 
 
+
+
 // GLM Math Header inclusions
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -249,6 +251,7 @@ int main(int argc, char* argv[])
 		glfwPollEvents();
 	}
 
+	
 
 	//clean up
 	scene.clear();

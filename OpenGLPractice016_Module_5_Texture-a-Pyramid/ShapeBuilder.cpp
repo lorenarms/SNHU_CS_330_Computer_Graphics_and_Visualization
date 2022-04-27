@@ -154,6 +154,195 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh, const vector<float>& p /*properties*
 	
 }
 
+void ShapeBuilder::UBuildCylinder(GLMesh& mesh, vector<float> p /*p*/,
+	float r /*r*/, float l /*l*/)
+{
+
+	// change "STEP" to increase / decrease resolution of cylinder
+	const float PI = 3.14f;
+	const float STEP = 36;
+	float sectorStep = 2.0f * PI / STEP;
+
+	// track which vertex is being added, add origin index when appropriate (every two)
+	int step = 0;
+	int vert = 2;
+
+
+	// origin vertex of top and bottom of cylinder (center point)
+	vector<float> vertices = {
+								0.0f, 0.0f, 0.0f, p[0], p[1], p[2], p[3],	// top origin
+								0.0f, 0.0f, l * -1, p[0], p[1], p[2], p[3]	// bottom origin
+	};
+
+	// vectors for indices, sides of cylinder
+	vector<int> index = { 0 };
+	vector<int> sides;
+
+	// build the top of the cylinder
+	// used vectors so I could use "pushback" and have control over where points went
+	for (int i = 0; i <= STEP * 2; ++i)
+	{
+		float sectorAngle = i * sectorStep;
+		// vertex
+		vertices.push_back(r * cos(sectorAngle)); // x
+		vertices.push_back(r * sin(sectorAngle)); // y
+		vertices.push_back(0.0f);						// z
+
+		// color
+		vertices.push_back(p[0]);
+		vertices.push_back(p[1]);
+		vertices.push_back(p[2]);
+		vertices.push_back(p[3]);
+
+		// track the vertices to draw, track the sides to draw
+		index.push_back(vert);
+		sides.push_back(vert + 1);
+
+		// some maths to keep indices in proper order
+		vert++;
+		step++;
+
+		// add in the origin index every two  vertices so that it connects them
+		if (step == 2)
+		{
+			step = 0;
+			vert--;
+			index.push_back(0);
+
+			// more maths to keep the indices in proper order
+			sides.pop_back();
+		}
+
+	}
+
+	// more maths to keep indices in proper order
+	vert *= 2;
+	step = 0;
+
+	// set origin of bottom disk triangle fan
+	index.push_back(1);
+
+	// build bottom triangle fan of cylinder
+	// same algorithm as above for top
+	for (int i = 0; i <= STEP * 2; ++i)
+	{
+		float sectorAngle = i * sectorStep;
+		vertices.push_back(r * cos(sectorAngle)); // x
+		vertices.push_back(r * sin(sectorAngle)); // y
+		vertices.push_back(l * -1);						// z
+
+		// color
+		vertices.push_back(p[0]);
+		vertices.push_back(p[1]);
+		vertices.push_back(p[2]);
+		vertices.push_back(p[3]);
+		index.push_back(vert);
+		sides.push_back(vert - 1);
+
+		// maths
+		vert++;
+		step++;
+		if (step == 2)
+		{
+			step = 0;
+			vert--;
+			index.push_back(1);
+			sides.pop_back();
+		}
+	}
+
+	// remove the very last entry from the index array, tis' not needed
+	index.pop_back();
+
+	// list the indexes to draw the sides
+	for (auto i = 0; i < sides.size() / 2 - 1; i++)
+	{
+		// lots of weird locations to find the given indices
+		index.push_back(sides[i]);
+		index.push_back(sides[i + 1]);
+		index.push_back(sides[sides.size() / 2 + i]);
+
+		index.push_back(sides[sides.size() / 2 + i]);
+		index.push_back(sides[sides.size() / 2 + i + 1]);
+		index.push_back(sides[i + 1]);
+
+
+	}
+
+	// okay all done! whew!
+	// make an array of vertices
+	// there doesn't seem to be an efficient way to convert from a vector to an array :(
+
+	GLfloat verts[10000];
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		verts[i] = vertices[i];
+	}
+
+	// make an array for the indices
+	GLushort indices[10000];
+	for (int i = 0; i < index.size(); i++)
+	{
+		indices[i] = index[i];
+	}
+
+
+
+
+
+
+	// compile all that nonesense
+	const GLuint floatsPerVertex = 3;
+	const GLuint floatsPerUV = 2;
+
+	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
+
+	glGenVertexArrays(1, &mesh.vao); // we can also generate multiple VAOs or buffers at the same time
+	glBindVertexArray(mesh.vao);
+
+	// Create VBO
+	glGenBuffers(1, &mesh.vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
+
+	// Strides between vertex coordinates
+	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
+
+	// Create Vertex Attribute Pointers
+	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
+	glEnableVertexAttribArray(2);
+	
+
+
+
+
+
+
+	
+
+	UTranslator(mesh, p);
+
+
+
+
+
+
+	// scale the object
+	mesh.scale = glm::scale(glm::vec3(p[4], p[5], p[6]));
+
+	// rotate the object (x, y, z) (0 - 6.4, to the right)
+	mesh.rotation = glm::rotate(p[7], glm::vec3(p[8], p[9], p[10]));
+
+	// move the object (x, y, z)
+	mesh.translation = glm::translate(glm::vec3(p[11], p[12], p[13]));
+
+	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
+}
+
+
 
 void ShapeBuilder::UTranslator(GLMesh& mesh, const vector<float>& p)
 {

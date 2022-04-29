@@ -11,6 +11,9 @@
 using namespace std;
 
 
+
+
+
 void ShapeBuilder::UBuildPyramid(GLMesh& mesh, const vector<float>& p /*properties*/, float h /*height*/)
 {
 	GLfloat verts[] =
@@ -285,6 +288,41 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh, vector<float> p /*p*/,
 	{
 		indices[i] = index[i];
 	}
+
+
+
+
+
+	//struct each_pole {
+	//	GLfloat x, z, y_start, y_end;
+	//}; // struct
+
+
+	//std::vector<each_pole> each_pole_vector; // vector of structs
+
+	////Cylinder with y axis up
+	//GLfloat cylinder_height = 1.0f,
+	//	cylinder_radius = 0.5f,
+	//	nr_of_points_cylinder = 360.f;
+
+	//for (int i = 0; i < nr_of_points_cylinder; ++i)
+	//{
+	//	GLfloat u = i / (GLfloat)nr_of_points_cylinder;
+
+	//	//Where the cylinder is in the x and z positions (3D space) 
+	//	each_pole.x = center.x
+	//		+ cylinder_radius * cos(2 * M_PI * u);
+	//	each_pole.z = center.z
+	//		+ cylinder_radius * sin(2 * M_PI * u);
+
+	//	each_pole.y_start = 0.0f;
+	//	each_pole.y_end = cylinder_height;
+
+	//	each_pole_vector.push_back(each_pole);
+
+	//}
+
+
 
 
 

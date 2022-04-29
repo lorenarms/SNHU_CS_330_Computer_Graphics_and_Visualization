@@ -21,7 +21,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-3 Texturing a Pyramid", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-1 OpenGl Practice", "0-1 OpenGl Practice\0-1 OpenGl Practice.vcxproj", "{106A23CD-0327-4444-9C69-F1B6B9AF4472}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-2 OpenGL Practice - Triangle Fan", "0-2 OpenGL Practice - Triangle Fan\0-2 OpenGL Practice - Triangle Fan.vcxproj", "{6F8A17C3-B75B-499A-AA62-0316168B3997}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-2 OpenGL Quick Practice", "0-2 OpenGL Practice - Triangle Fan\0-2 OpenGL Practice - Triangle Fan.vcxproj", "{6F8A17C3-B75B-499A-AA62-0316168B3997}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-3 OpenGl Practice Cylinder", "0-3 OpenGl Practice Cylinder\0-3 OpenGl Practice Cylinder.vcxproj", "{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,14 @@ Global
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x64.Build.0 = Release|x64
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.ActiveCfg = Release|Win32
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.Build.0 = Release|Win32
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x64.ActiveCfg = Debug|x64
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x64.Build.0 = Debug|x64
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x86.ActiveCfg = Debug|Win32
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x86.Build.0 = Debug|Win32
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x64.ActiveCfg = Release|x64
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x64.Build.0 = Release|x64
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x86.ActiveCfg = Release|Win32
+		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

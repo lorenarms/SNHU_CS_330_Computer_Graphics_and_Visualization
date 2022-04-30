@@ -28,6 +28,17 @@ struct GLMesh
 	//indices of the mesh
 	GLuint nIndices;
 
+	//indices to draw
+	std::vector<float> v;
+	//translation properties of the shape
+	std::vector<float> p;
+
+	//physical properties of the shape
+	float height;
+	float length;
+	float radius;
+	float number_of_sides;
+	
 	// each shape gets a matrix object
 	glm::mat4 scale;
 	glm::mat4 xrotation;

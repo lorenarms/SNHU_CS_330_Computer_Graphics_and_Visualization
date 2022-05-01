@@ -65,7 +65,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	GLMesh gMesh04;
 	gMesh04.p = {
 		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
-		1.0f, 1.0f, 1.0f,					// scale x, y, z
+		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		270.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z

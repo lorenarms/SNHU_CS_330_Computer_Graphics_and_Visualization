@@ -86,6 +86,7 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	float l = mesh.length;
 	float s = mesh.number_of_sides;
 	float h = mesh.height;
+	
 
 	constexpr float PI = 3.14f;
 	const float sectorStep = 2.0f * PI / s;
@@ -124,40 +125,43 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 										0.5f + (r * sin((i + 1) * sectorStep)) });
 	}
 
+	float j = 1.0f / (s / 3.0f);
+	float k = 0.0f;
 	// sides
 	for (auto i = 1; i < s + 1; i++)
 	{
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
-										0.5f + (r * cos((i)*sectorStep)) ,
-										0.5f + (r * sin((i)*sectorStep)) });
+										k ,
+										0 });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										l ,
-										0.5f + (r * cos((i)*sectorStep)) ,
-										0.5f + (r * sin((i)*sectorStep)) });
+										k ,
+										1.0f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										k + j ,
+										1.0f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										k + j ,
+										1.0f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										k + j ,
+										0.0f });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
-										0.5f + (r * cos((i)*sectorStep)) ,
-										0.5f + (r * sin((i)*sectorStep)) });
+										k,
+										0.0f });
+		k += j;
 	}
 
 	mesh.v = v;

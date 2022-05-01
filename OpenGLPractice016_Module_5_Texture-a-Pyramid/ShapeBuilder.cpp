@@ -95,41 +95,73 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, 0.5f, 0.5f });		// center point
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 0.5f + r * sin(i * sectorStep) , 0.0f , 0.5f + (r * cos((i)*sectorStep)) , 0.5f + (r * sin((i)*sectorStep))  });
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 0.5f + r * sin((i + 1) * sectorStep) , 0.0f , 0.5f + (r * cos((i + 1) * sectorStep)) , 0.5f + (r * sin((i + 1) * sectorStep))  });
-		std::cout << 0.5f +  r * cos(i * sectorStep) << ", " << 0.5f + r * sin(i * sectorStep) << endl;
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep))  });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep))  });
 	}
 
 	for (auto i = 1; i < s + 1; i++)
 	{
-		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, l, 0.5f, 0.5f });		// center point
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 0.5f + r * sin(i * sectorStep) , l , 0.5f + (r * cos((i)*sectorStep)) , 0.5f + (r * sin((i)*sectorStep)) });
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 0.5f + r * sin((i + 1) * sectorStep) , l , 0.5f + (r * cos((i + 1) * sectorStep)) , 0.5f + (r * sin((i + 1) * sectorStep)) });
-		std::cout << 0.5f + r * cos(i * sectorStep) << ", " << 0.5f + r * sin(i * sectorStep) << endl;
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, 0.5f, l, 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
+										0.5f + r * sin(i * sectorStep) ,
+										l ,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
 	}
 
+	// sides
 	for (auto i = 1; i < s + 1; i++)
 	{
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 0.5f + r * sin(i * sectorStep) , 0.0f , 0.5f + (r * cos((i)*sectorStep)) , 0.5f + (r * sin((i)*sectorStep)) });
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 0.5f + r * sin(i * sectorStep) , l , 0.5f + (r * cos((i)*sectorStep)) , 0.5f + (r * sin((i)*sectorStep)) });
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 0.5f + r * sin((i + 1) * sectorStep) , l , 0.5f + (r * cos((i + 1) * sectorStep)) , 0.5f + (r * sin((i + 1) * sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
+										0.5f + r * sin(i * sectorStep) ,
+										l ,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
 
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 0.5f + r * sin((i + 1) * sectorStep) , l , 0.5f + (r * cos((i + 1) * sectorStep)) , 0.5f + (r * sin((i + 1) * sectorStep)) });
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 0.5f + r * sin((i + 1) * sectorStep) , 0.0f , 0.5f + (r * cos((i + 1) * sectorStep)) , 0.5f + (r * sin((i + 1) * sectorStep)) });
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 0.5f + r * sin(i * sectorStep) , 0.0f , 0.5f + (r * cos((i)*sectorStep)) , 0.5f + (r * sin((i)*sectorStep)) });
-
-
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
 	}
-	
 
 	mesh.v = v;
 	v.clear();
-
-
-
-
 	UTranslator(mesh);
 	
 }

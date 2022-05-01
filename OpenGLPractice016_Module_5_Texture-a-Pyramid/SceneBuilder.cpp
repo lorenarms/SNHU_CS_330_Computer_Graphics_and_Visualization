@@ -51,14 +51,14 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		-2.0f, 0.0f, 0.0f,					// translate x, y, z
+		-1.0f, 2.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
 	gMesh03.radius = 1.0;
 	gMesh03.height = 1.7f;
 	gMesh03.texFilename = "angelina.png";
 	ShapeBuilder::UBuildTriangles(gMesh03);
-	//scene.push_back(gMesh03);
+	scene.push_back(gMesh03);
 
 
 	// SHAPE 4: CYLINDER

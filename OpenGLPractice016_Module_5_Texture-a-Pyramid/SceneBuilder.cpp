@@ -6,13 +6,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	float height;
-	float length;
-	float radius;
-	float number_of_sides;
-	vector<float> properties;
-
-
+	
 	// SHAPE 1: PYRAMID
 	GLMesh gMesh01;
 	gMesh01.p = {
@@ -64,8 +58,27 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	gMesh03.height = 1.7f;
 	gMesh03.texFilename = "angelina.png";
 	ShapeBuilder::UBuildTriangles(gMesh03);
-	scene.push_back(gMesh03);
+	//scene.push_back(gMesh03);
 
+
+	// SHAPE 4: CYLINDER
+	GLMesh gMesh04;
+	gMesh04.p = {
+		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		2.0f, 2.0f, 2.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		-3.5f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	gMesh04.radius = 0.5f;
+	gMesh04.height = 1.0f;
+	gMesh04.length = 1.0f;
+	gMesh04.number_of_sides = 24.0f;
+	gMesh04.texFilename = "angelina.png";
+	ShapeBuilder::UBuildCylinder(gMesh04);
+	scene.push_back(gMesh04);
 
 
 }

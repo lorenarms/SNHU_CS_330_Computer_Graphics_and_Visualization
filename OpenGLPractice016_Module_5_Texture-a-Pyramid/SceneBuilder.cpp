@@ -10,7 +10,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// SHAPE 1: PYRAMID
 	GLMesh gMesh01;
 	gMesh01.p = {
-		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		1.0f, 0.5f, 1.0f, 1.0f,				// color r, g, b a
 		1.0f, 1.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -27,7 +27,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// SHAPE 2: CONE
 	GLMesh gMesh02;
 	gMesh02.p = {
-		0.0f,	0.0f,	0.0f,	1.0f,		// color r, g, b, a
+		0.0f,	1.0f,	0.0f,	1.0f,		// color r, g, b, a
 		1.0f,	1.0f,	1.0f,				// scale x, y z
 		270.0f,	1.0f,	0.0f,	0.0f,		// x amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		0.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
@@ -46,7 +46,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// SHAPE 3: Triangle Trial
 	GLMesh gMesh03;
 	gMesh03.p = {
-		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		0.2f, 0.8f, 0.8f, 1.0f,				// color r, g, b a	
 		1.0f, 2.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -70,7 +70,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		-3.5f, 0.0f, 1.0f,					// translate x, y, z
-		1.0f, 1.0f
+		2.0f, 2.0f
 	};
 	gMesh04.radius = 0.5f;
 	gMesh04.height = 1.0f;
@@ -79,6 +79,26 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	gMesh04.texFilename = "angelina.png";
 	ShapeBuilder::UBuildCylinder(gMesh04);
 	scene.push_back(gMesh04);
+
+
+	// SHAPE 5: CIRCLE
+	GLMesh gMesh05;
+	gMesh05.p = {
+		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		2.0f, 2.0f, 2.0f,					// scale x, y, z
+		270.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.1f, 1.0f,				// z amount of rotation, rotate x, y, z
+		-3.5f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	gMesh05.radius = 0.5f;
+	gMesh05.height = 1.0f;
+	gMesh05.length = 1.0f;
+	gMesh05.number_of_sides = 24.0f;
+	gMesh05.texFilename = "angelina.png";
+	ShapeBuilder::UBuildCircle(gMesh05);
+	scene.push_back(gMesh05);
 
 
 }

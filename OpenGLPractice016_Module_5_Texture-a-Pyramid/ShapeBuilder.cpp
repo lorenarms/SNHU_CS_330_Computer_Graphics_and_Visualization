@@ -11,38 +11,36 @@
 
 using namespace std;
 
-
-
-
-
 void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 {
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
 	float h = mesh.height;
 	mesh.v = {
-		// Vertex Positions    // Texture coords
-		 0.0f,	h,		0.0f,	0.5f, 1.0f,		//back side
-		-1.0f, -0.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f, -1.0f,	1.0f, 0.0f,
+		// Vertex Positions    // color coords					// Texture coords
+		 0.0f,	h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//back side
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
 
-		 0.0f,  h,		0.0f,	0.5f, 1.0f,		//left side
-		-1.0f, -0.0f, -1.0f,	0.0f, 0.0f,
-		-1.0f, -0.0f,  1.0f,	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//left side
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
 
-		 0.0f,  h,		0.0f,	0.5f, 1.0f,		//front
-		-1.0f, -0.0f,  1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//front
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
 
-		 0.0f,  h,		0.0f,	0.5f, 1.0f,		//right side
-		 1.0f, -0.0f, -1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//right side
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
 
-		-1.0f, -0.0f, -1.0f,	1.0f, 0.0f,		//bottom back
-		 1.0f, -0.0f, -1.0f,	1.0f, 1.0f,
-		-1.0f, -0.0f,  1.0f,	0.0f, 0.0f,
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,		//bottom back
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
 
-		 1.0f, -0.0f, -1.0f,	1.0f, 1.0f,		//bottom front
-		-1.0f, -0.0f,  1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	0.0f, 1.0f
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom front
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 1.0f
 	};
 		
 	UTranslator(mesh);
@@ -51,6 +49,8 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 
 void ShapeBuilder::UBuildCone(GLMesh& mesh)
 {
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
 	float r = mesh.radius;
 	float l = mesh.length;
 	float s = mesh.number_of_sides;
@@ -63,14 +63,14 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++) {
 
 		// triangle fan, bottom
-		v.insert(v.end(), {0.0f, 0.0f, 0.0f, 0.5f, 0.0f});		// center point
-		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , 1.0f , 0.0f });
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , 1.0f , 1.0f });
-
+		v.insert(v.end(), {0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f});		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 0.0f });				// first outer point
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 1.0f });	// second outer point
+		
 		// side triangle + point
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , 0.0f , 0.0f});
-		v.insert(v.end(), {0.0f , 0.0f , l , 0.5f , 1.0f});
-		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , 1.0f , 0.0f});
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 0.0f , 0.0f});
+		v.insert(v.end(), {0.0f , 0.0f , l , c[0], c[1], c[2], c[3], 0.5f , 1.0f});
+		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 0.0f});
 		
 	}
 
@@ -80,8 +80,48 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 	UTranslator(mesh);
 }
 
+void ShapeBuilder::UBuildCircle(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+	float h = mesh.height;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,		// x
+										0.5f + r * sin(i * sectorStep) ,		// y
+										0.0f ,									// z
+										c[0],	c[1], c[2],	c[3],				// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1], c[2],	c[3],				// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+}
+
+
 void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 {
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+	
 	float r = mesh.radius;
 	float l = mesh.length;
 	float s = mesh.number_of_sides;
@@ -96,15 +136,17 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
-										0.5f + r * sin(i * sectorStep) ,
-										0.0f ,
-										0.5f + (r * cos((i)*sectorStep)) ,
-										0.5f + (r * sin((i)*sectorStep))  });
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
+										0.5f + r * sin(i * sectorStep) ,			// y
+										0.0f ,										// z
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep))  });	// texture y
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.5f + (r * sin((i + 1) * sectorStep))  });
 	}
@@ -112,53 +154,66 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, top
-		v.insert(v.end(), { 0.5f, 0.5f, l, 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
-										l ,
+										l ,										// build this fan the 'l' value away from the other fan
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										0.5f + (r * cos((i)*sectorStep)) ,
 										0.5f + (r * sin((i)*sectorStep)) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.5f + (r * sin((i + 1) * sectorStep)) });
 	}
 
-	float j = 1.0f / (s / 3.0f);
-	float k = 0.0f;
+	// since all side triangles have the same points as the fans above, the same calculations are used
+	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
+	// the texture to clamp to the corresponding point.
+	constexpr float x = 3.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
 	// sides
 	for (auto i = 1; i < s + 1; i++)
 	{
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k ,
 										0 });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k ,
 										1.0f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
 										1.0f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
 										1.0f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) , 
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
 										0.0f });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) , 
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
 										k,
 										0.0f });
 		k += j;
@@ -170,25 +225,26 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	
 }
 
-
 void ShapeBuilder::UBuildTriangles(GLMesh& mesh)
 {
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
 	mesh.v = {
-		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,	// 0
-		-1.0f, 0.0f, 0.0f, 0.0f, 0.0f,	// 1
-		 0.0f, 0.0f, 0.0f, 0.5f, 0.0f,	// 2
+		-1.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
+		-1.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.0f, 0.0f,	// 1
+		 0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
 
-		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,	// 0
-		 0.0f, 0.0f, 0.0f, 0.5f, 0.0f,	// 2
-		 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,	// 3
+		-1.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
+		 0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
+		 0.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
 
-		 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,	// 3
-		 0.0f, 0.0f, 0.0f, 0.5f, 0.0f,	// 2
-		 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	// 5
+		 0.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
+		 0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
+		 1.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
 
-		 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,	// 3
-		 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,	// 5
-		 1.0f, 1.0f, 0.0f, 1.0f, 1.0f,	// 4
+		 0.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
+		 1.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
+		 1.0f, 1.0f, 0.0f, c[0], c[1], c[2], c[3], 1.0f, 1.0f,	// 4
 
 	};
 	
@@ -196,11 +252,10 @@ void ShapeBuilder::UBuildTriangles(GLMesh& mesh)
 	
 }
 
-
 void ShapeBuilder::UTranslator(GLMesh& mesh)
 {
 	constexpr GLuint floatsPerVertex = 3;
-	constexpr GLuint floatsPerColor = 0;
+	constexpr GLuint floatsPerColor = 4;
 	constexpr GLuint floatsPerUV = 2;
 
 	mesh.nIndices = mesh.v.size() / (floatsPerVertex + floatsPerUV + floatsPerColor);
@@ -220,13 +275,16 @@ void ShapeBuilder::UTranslator(GLMesh& mesh)
 	); // Sends vertex or coordinate data to the GPU
 
 	// Strides between vertex coordinates
-	constexpr GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
+	constexpr GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV + floatsPerColor);
 
 	// Create Vertex Attribute Pointers
-	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, nullptr);
+	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
+	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(7 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
 

@@ -11,9 +11,10 @@ public:
 	static void UBuildCone(GLMesh& mesh);
 	static void UBuildTriangles(GLMesh& mesh);
 	static void UBuildCylinder(GLMesh& mesh);
+	static void UTranslator(GLMesh& mesh);
+	static void UBuildCircle(GLMesh& mesh);
 
 	static void UBuildPlane(GLMesh& mesh, vector<float> properties);
-	static void UTranslator(GLMesh& mesh);
 
 };
 

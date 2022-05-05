@@ -30,8 +30,8 @@ using namespace std;
 const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 
 //window width, height
-const int WINDOW_WIDTH = 1600;
-const int WINDOW_HEIGHT = 1200;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
 
 ShapeBuilder builder;
 
@@ -160,6 +160,7 @@ int main(int argc, char* argv[])
 	if (!UInitialize(argc, argv, &gWindow))
 		return EXIT_FAILURE;
 
+
 	SceneBuilder::UBuildScene(scene);
 	
 	//build shader 
@@ -167,20 +168,23 @@ int main(int argc, char* argv[])
 		gShaderProgram))
 		return EXIT_FAILURE;
 
+
 	for (auto& m : scene)
 	{
 		if (!UCreateTexture(m.texFilename, m.textureId))
 		{
 			cout << "Failed to load texture " << m.texFilename << endl;
+			//cin.get();
 			return EXIT_FAILURE;
 
 		}
 
 		if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 			gShaderProgram))
+			//cout << "Fail 2" << endl;	cin.get();
+
 			return EXIT_FAILURE;
 	}
-	
 	
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)

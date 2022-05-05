@@ -50,7 +50,9 @@ END
 // PNG
 //
 
-IDB_PNG1                PNG                     "smiley.png"
+IDB_PNG1                PNG                     "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\OpenGLPractice016_Module_5_Texture-a-Pyramid\\smiley.png"
+
+IDB_PNG2                PNG                     "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\OpenGLPractice016_Module_5_Texture-a-Pyramid\\textures\\bricks.png"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

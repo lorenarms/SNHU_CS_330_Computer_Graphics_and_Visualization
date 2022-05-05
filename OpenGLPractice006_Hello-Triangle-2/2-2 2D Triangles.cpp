@@ -1,9 +1,6 @@
-
-
-
 //---------------------------------------------------
 //
-// Lawrence Artl
+// Lawrence Artl | Lorenarms - GitHub
 // CS-330 Computer Graphics and Visualization
 // Assignment 2-3
 // 2D Triangles
@@ -34,8 +31,8 @@ using namespace std;
 const char* const WINDOW_TITLE = "Module 2 Assignment: 2D Triangles | Lorenarms";
 
 //window width, height
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
 
 //GL data for mesh
 struct GLMesh
@@ -118,37 +115,6 @@ const char *fragment_shader_source = "#version 330 core\n"
 "   FragColor = colorFromVS;\n"
 "}\n\0";
 
-
-//// Vertex Shader Source Code
-//const GLchar* vertex_shader_source = GLSL(440,
-//	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
-//layout(location = 1) in vec4 color;  // Color data from Vertex Attrib Pointer 1
-//
-//out vec4 vertexColor; // variable to transfer color data to the fragment shader
-//
-////uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
-//uniform mat4 model;
-//uniform mat4 view;
-//uniform mat4 projection;
-//
-//void main()
-//{
-//	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertex data using matrix
-//	vertexColor = color; // references incoming color data
-//}
-//);
-//
-//// Fragment Shader Source Code
-//const GLchar* fragment_shader_source = GLSL(440,
-//	in vec4 vertexColor; // Variable to hold incoming color data from vertex shader
-//
-//out vec4 fragmentColor;
-//
-//void main()
-//{
-//	fragmentColor = vec4(vertexColor);
-//}
-//);
 
 
 

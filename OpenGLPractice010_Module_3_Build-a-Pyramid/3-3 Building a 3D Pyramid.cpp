@@ -1,10 +1,10 @@
 //---------------------------------------------------
 //
-// Lawrence Artl
+// Lawrence Artl | Lorenarms
 // CS-330 Comp Graphic and Viz
-// Assignment 4-3
+// Assignment 3-3
 //
-// USING INPUT WITH A PYRAMID
+// Building a 3D Pyramid
 //
 //---------------------------------------------------
 
@@ -152,8 +152,7 @@ int main(int argc, char* argv[])
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;
 		gLastFrame = currentFrame;
-
-
+		
 
 		//process user input
 		UProcessInput(gWindow);

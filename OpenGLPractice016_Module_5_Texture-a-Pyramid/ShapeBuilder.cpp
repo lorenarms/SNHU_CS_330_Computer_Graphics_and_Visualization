@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <cmath>
+#include <time.h> 
 
 #include "ShapeBuilder.h"
 
@@ -14,7 +15,7 @@ using namespace std;
 void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 {
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
-
+	
 	float h = mesh.height;
 	mesh.v = {
 		// Vertex Positions    // color coords					// Texture coords
@@ -46,6 +47,51 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 	UTranslator(mesh);
 
 }
+void ShapeBuilder::UBuildRainbowPyramid(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+	float r;
+
+	srand(time(NULL));
+	//r = rand() % 10 + 1;	
+	r = 3.0;
+
+	(rand() % 10 + 1) * 1.0f;
+
+	
+
+	float h = mesh.height;
+	mesh.v = {
+		// Vertex Positions    // color coords					// Texture coords
+		 0.0f,	h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.5f, 1.0f,		//back side
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.5f, 1.0f,		//left side
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.5f, 1.0f,		//front
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.5f, 1.0f,		//right side
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 0.0f,
+
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 0.0f,		//bottom back
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 1.0f,
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	1.0f, 1.0f,		//bottom front
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	c[3],	0.0f, 1.0f
+	};
+
+	UTranslator(mesh);
+
+}
+
 
 void ShapeBuilder::UBuildCone(GLMesh& mesh)
 {

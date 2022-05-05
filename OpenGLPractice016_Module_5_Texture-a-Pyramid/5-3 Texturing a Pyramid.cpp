@@ -126,6 +126,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 
 void main()
 {
+	//fragmentColor = vec4(vertexColor);
 	//fragmentColor = texture(uTexture, vertexTextureCoordinate * uvScale);
 	fragmentColor = texture(uTexture, vertexTextureCoordinate) * vec4(shapeColor, 1.0);
 

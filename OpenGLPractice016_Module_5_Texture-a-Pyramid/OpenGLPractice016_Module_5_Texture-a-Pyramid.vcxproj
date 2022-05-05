@@ -147,7 +147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="SceneBuilder.cpp" />
     <ClCompile Include="ShapeBuilder.cpp" />
     <ClCompile Include="5-3 Texturing a Pyramid.cpp" />

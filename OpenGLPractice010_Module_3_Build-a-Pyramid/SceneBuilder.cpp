@@ -38,7 +38,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		1.0f, 1.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		35.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
@@ -58,7 +58,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f,	1.0f,	1.0f,	1.0f,		// color r, g, b, a
 		1.0f,	1.0f,	1.0f,				// scale x, y z
 		0.0f,	1.0f,	0.0f,	0.0f,		// x amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
-		0.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
+		35.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		0.0f,	0.0f,	0.0f,	1.0f,		// z amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		2.0f,	0.0f,	1.0f,				// translate x, y, z
 		1.0f,	1.0f						// texture scaling
@@ -78,7 +78,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f,	1.0f,	1.0f,	1.0f,		// color r, g, b, a
 		1.0f,	1.0f,	1.0f,				// scale x, y z
 		0.0f,	1.0f,	0.0f,	0.0f,		// x amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
-		0.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
+		35.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		0.0f,	0.0f,	0.0f,	1.0f,		// z amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		-2.0f,	0.0f,	-1.0f,				// translate x, y, z
 		1.0f,	1.0f						// texture scaling

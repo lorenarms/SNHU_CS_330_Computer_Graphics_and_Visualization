@@ -1,3 +1,10 @@
+/*
+ * This class handles all mesh data and algorithms to build shapes
+ * It is called from the SceneBuilder class where properties for the
+ * shape's location are passed as well as texture data using the
+ * GMesh class struct
+ */
+
 #include <cstdlib>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -6,7 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <cmath>
-#include <time.h>
+
 
 #include "ShapeBuilder.h"
 
@@ -54,11 +61,14 @@ void ShapeBuilder::UBuildRainbowPyramid(GLMesh& mesh, float seed)
 	// build a multi-colored pyramid with random colors
 	// use the seed that is passed in to re-seed rand()
 
+	// seed the srand function
 	srand(seed);
 	
 	
 	float h = mesh.height;
 
+	// generate a random value for each color coordinate;
+	// find a random value between 0.1 and 1.0
 	mesh.v = {
 		// Vertex Positions		// color coords																				// Texture coords
 		 0.0f,	h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//back side

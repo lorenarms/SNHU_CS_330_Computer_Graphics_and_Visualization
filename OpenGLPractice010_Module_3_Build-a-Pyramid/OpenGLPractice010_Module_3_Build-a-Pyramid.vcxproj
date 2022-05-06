@@ -146,6 +146,14 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="3-3 Building a 3D Pyramid.cpp" />
+    <ClCompile Include="SceneBuilder.cpp" />
+    <ClCompile Include="ShapeBuilder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\OpenGLPractice016_Module_5_Texture-a-Pyramid\Mesh.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="SceneBuilder.h" />
+    <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

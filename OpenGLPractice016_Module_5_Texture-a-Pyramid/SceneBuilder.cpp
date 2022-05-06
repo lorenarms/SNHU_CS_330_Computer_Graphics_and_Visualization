@@ -17,25 +17,27 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// SHAPE 1: PYRAMID
 	GLMesh gMesh01;
 	gMesh01.p = {
-		0.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		1.0f, 1.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		35.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
 	gMesh01.height = 1.7f;
-	#define texture "white.bmp"
+	//#define texture "white.bmp"
+	#define texture "bricks.png"
 	gMesh01.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildRainbowPyramid(gMesh01);
+	ShapeBuilder::UBuildPyramid(gMesh01);
+	//ShapeBuilder::UBuildRainbowPyramid(gMesh01);
 	scene.push_back(gMesh01);
 		
 
 	// SHAPE 2: CONE
 	GLMesh gMesh02;
 	gMesh02.p = {
-		0.0f,	1.0f,	0.0f,	1.0f,		// color r, g, b, a
+		1.0f,	1.0f,	1.0f,	1.0f,		// color r, g, b, a
 		1.0f,	1.0f,	1.0f,				// scale x, y z
 		270.0f,	1.0f,	0.0f,	0.0f,		// x amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
 		0.0f,	0.0f,	1.0f,	0.0f,		// y amount of rotation, rotate x, y, z, (0 - 6.4, to the right)
@@ -49,13 +51,13 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	#define texture "pyramid_tex.jpg"
 	gMesh02.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCone(gMesh02);
-	//scene.push_back(gMesh02);
+	scene.push_back(gMesh02);
 
 
 	// SHAPE 3: Triangle Trial
 	GLMesh gMesh03;
 	gMesh03.p = {
-		0.2f, 0.8f, 0.8f, 1.0f,				// color r, g, b a	
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a	
 		1.0f, 2.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -68,13 +70,13 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	#define texture "angelina.png"
 	gMesh03.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildTriangles(gMesh03);
-	//scene.push_back(gMesh03);
+	scene.push_back(gMesh03);
 
 
 	// SHAPE 4: CYLINDER
 	GLMesh gMesh04;
 	gMesh04.p = {
-		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a	
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		270.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -89,18 +91,18 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	#define texture "angelina.png"
 	gMesh04.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCylinder(gMesh04);
-	//scene.push_back(gMesh04);
+	scene.push_back(gMesh04);
 
 
 	// SHAPE 5: CIRCLE
 	GLMesh gMesh05;
 	gMesh05.p = {
-		0.5f, 0.0f, 0.8f, 1.0f,				// color r, g, b a	
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a	
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
-		270.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		-45.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.1f, 1.0f,				// z amount of rotation, rotate x, y, z
-		-3.5f, 0.0f, 0.0f,					// translate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		-4.5f, 0.0f, 2.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
 	gMesh05.radius = 0.5f;
@@ -110,7 +112,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	#define texture "angelina.png"
 	gMesh05.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCircle(gMesh05);
-	//scene.push_back(gMesh05);
+	scene.push_back(gMesh05);
 
 
 }

@@ -32,7 +32,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// seed the rand() function once
 	srand(time(nullptr));
 	
-	// SHAPE 1: Colored Pyramid
+	// SHAPE 1: Colored Cube
 	GLMesh gMesh01;
 	gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
@@ -40,16 +40,33 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f,					// translate x, y, z
+		-1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
 	gMesh01.height = 1.7f;
 	//#define texture "white.bmp"
-	#define texture "angelina.png"
+	#define texture "white.bmp"
 	gMesh01.texFilename = concat(textureFolderLocation, texture);		// create the texture file location name
 	ShapeBuilder::UBuildRainbowCube(gMesh01, (rand() % 100 + 1));		
 	scene.push_back(gMesh01);
 	// END SHAPE 1
+
+
+	// SHAPE 2: Cube
+	GLMesh gMesh02;
+	gMesh02.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		2.0f, 2.0f, 2.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		-45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		1.5f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f							// texture scaling
+	};
+	#define texture "angelina.png"
+	gMesh02.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildCube(gMesh02);
+	scene.push_back(gMesh02);
 		
 }
 

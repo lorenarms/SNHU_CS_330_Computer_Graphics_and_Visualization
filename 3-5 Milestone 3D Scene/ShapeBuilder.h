@@ -9,6 +9,7 @@ class ShapeBuilder
 public:
 	static void UBuildPyramid(GLMesh& mesh);
 	static void UBuildRainbowPyramid(GLMesh& mesh, float seed);
+	static void UBuildCube(GLMesh& mesh);
 	static void UBuildRainbowCube(GLMesh&, float seed);
 	static void UBuildCone(GLMesh& mesh);
 	static void UBuildTriangles(GLMesh& mesh);

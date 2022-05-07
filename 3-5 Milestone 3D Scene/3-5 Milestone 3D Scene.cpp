@@ -2,9 +2,9 @@
 //
 // Lawrence Artl | Lorenarms
 // CS-330 Comp Graphic and Viz
-// Assignment 3-3
+// Assignment 3-5
 //
-// Building a 3D Pyramid
+// Beginning a 3D scene
 //
 //---------------------------------------------------
 
@@ -34,8 +34,6 @@ const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 //window width, height
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
-
-ShapeBuilder builder;
 
 //main window
 GLFWwindow* gWindow = nullptr;
@@ -200,7 +198,7 @@ int main(int argc, char* argv[])
 	while (!glfwWindowShouldClose(gWindow))
 	{
 		//bg color of window
-		glClearColor(0.2f, 0.5f, 0.7f, 1.0f);
+		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;

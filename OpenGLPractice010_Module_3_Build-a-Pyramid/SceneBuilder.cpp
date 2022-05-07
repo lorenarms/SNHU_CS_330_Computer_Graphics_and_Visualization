@@ -29,7 +29,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// define a concat function that takes the above location and concatenates the texture name together
 	#define concat(first, second) first second
 
-
+	// seed the rand() function once
 	srand(time(nullptr));
 	
 	// SHAPE 1: Colored Pyramid

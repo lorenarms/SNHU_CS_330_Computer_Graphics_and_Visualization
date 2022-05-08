@@ -101,6 +101,22 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	cyl_gMesh.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCylinder(cyl_gMesh);
 	scene.push_back(cyl_gMesh);
+
+
+	GLMesh plan_gMesh;
+	plan_gMesh.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		4.0f, 8.0f, 4.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	#define texture "rocks.png"
+	plan_gMesh.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildTriangles(plan_gMesh);
+	scene.push_back(plan_gMesh);
 	
 		
 }

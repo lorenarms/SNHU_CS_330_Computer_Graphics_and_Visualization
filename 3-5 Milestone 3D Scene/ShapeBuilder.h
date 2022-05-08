@@ -16,12 +16,14 @@ public:
 	static void UBuildCone(GLMesh& mesh);
 	static void UBuildRainbowCone(GLMesh& mesh, float seed);
 
-	static void UBuildTriangles(GLMesh& mesh);
 	static void UBuildCylinder(GLMesh& mesh);
-	static void UTranslator(GLMesh& mesh);
-	static void UBuildCircle(GLMesh& mesh);
+	static void UBuildRainbowCylinder(GLMesh& mesh, float seed);
 
+	static void UBuildTriangles(GLMesh& mesh);
+
+	static void UBuildCircle(GLMesh& mesh);
 	static void UBuildPlane(GLMesh& mesh, vector<float> properties);
 
+	static void UTranslator(GLMesh& mesh);
 };
 

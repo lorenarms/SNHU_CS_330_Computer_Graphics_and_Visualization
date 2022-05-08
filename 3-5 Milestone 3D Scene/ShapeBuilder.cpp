@@ -28,29 +28,29 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 	float h = mesh.height;
 	mesh.v = {
 		// Vertex Positions    // color coords					// Texture coords
-		 0.0f,	h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//back side
-		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
-		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+		 0.0f,	h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.625f, 1.0f,		//back side
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.50f, 0.0f,
+		-0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f, 0.0f,
 
-		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//left side
-		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
-		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.875f, 1.0f,		//left side
+		-0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f, 0.0f,
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
 
-		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//front
-		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.125f, 1.0f,		//front
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 0.0f,
 
-		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//right side
-		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.375f, 1.0f,		//right side
+		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 0.0f,
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.50f, 0.0f,
 
-		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,		//bottom back
-		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
-		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		-0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom back
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
 
-		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom front
-		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 1.0f
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom front
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
+		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f
 	};
 		
 	UTranslator(mesh);
@@ -106,53 +106,59 @@ void ShapeBuilder::UBuildCube(GLMesh& mesh)
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
 
 	mesh.v = {
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// front left
-		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// front left
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
 		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
 
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// front right
-		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// front right
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	1.0f,
 		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
 
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// right front
-		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
-		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
 
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// right back
-		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,
-		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// right front
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	1.0f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
 
-		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// left front
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// right back
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
+
+
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,	// back left
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	0.5f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,	// back right
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.5f,	// left back
 		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
 
-		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// left back
-		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.5f,	// left front
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	0.5f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
 
-		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// front left
-		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
 
-		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,	// front right
-		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
+
 
 		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// top left
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
-		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
 
-		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,	// top right
-		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,
-		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,	// top right
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,
 
 		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// bottom left
-		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
 
-		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,	// bottom right
-		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.0f,
-		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,	// bottom right
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,
 
 
 
@@ -232,26 +238,143 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 	constexpr float PI = 3.14f;
 	const float sectorStep = 2.0f * PI / s;
+	const float textStep = 1.0f / s;
+	float textureXLoc = 0.0f;
 
 	vector<float> v;
 
 	for (auto i = 1; i < s + 1; i++) {
 
+		
 		// triangle fan, bottom
-		v.insert(v.end(), {0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f});		// center point; x, y, z, r, g, b, a, texture x, texture y
-		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 0.0f });				// first outer point
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 1.0f });	// second outer point
+		v.insert(v.end(), {0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.5f});		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { r * cos(i * sectorStep) , 
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										/*textureXLoc,
+										0.0f*/
+										0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep))
+										});										// first outer point
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , 
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										/*textureXLoc + textStep,
+										0.0f*/
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep))
+										});								// second outer point
 		
 		// side triangle + point
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , r * sin((i + 1) * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 0.0f , 0.0f});
-		v.insert(v.end(), {0.0f , 0.0f , l , c[0], c[1], c[2], c[3], 0.5f , 1.0f});
-		v.insert(v.end(), { r * cos(i * sectorStep) , r * sin(i * sectorStep) , 0.0f , c[0], c[1], c[2], c[3], 1.0f , 0.0f});
+		v.insert(v.end(), { r * cos(i * sectorStep) , 
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										textureXLoc ,
+										0.0f});
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) , 
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										textureXLoc + textStep,
+										0.0f	});
+		v.insert(v.end(), {0.0f , 0.0f , l , c[0], c[1], c[2], c[3], 0.5f , 1.0f});		// origin, peak
+
+		textureXLoc += textStep;
 		
 	}
 
 	mesh.v = v;
 	v.clear();	// clear the local vector
 	
+	UTranslator(mesh);
+}
+void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+	const float textStep = 1.0f / s;
+	float textureXLoc = 0.0f;
+
+
+
+	vector<float> c;
+	c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++) {
+
+
+		// triangle fan, bottom
+		// center point
+		v.insert(v.end(), { 0.0f,	0.0f,	0.0f,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	0.5f });
+
+		// first outer point
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+			// generate random colors for vertex
+			c[0],	c[1],	c[2],	1.0f,
+			0.5f + (r * cos((i)*sectorStep)) ,
+			0.5f + (r * sin((i)*sectorStep))
+			});
+
+		// second outer point
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2], 1.0f,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep))
+			});
+
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+
+		// side triangle + point
+		// center of bottom
+		v.insert(v.end(), { 0.0f,	0.0f,	l,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	1.0f });		// origin, peak
+
+		// outer point
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc ,
+										0.0f });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		// outer point
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc + textStep,
+										0.0f });
+
+		textureXLoc += textStep;
+
+	}
+
+
+	mesh.v = v;
+	v.clear();	// clear the local vector
+	c.clear();	// clear color vector
+
 	UTranslator(mesh);
 }
 

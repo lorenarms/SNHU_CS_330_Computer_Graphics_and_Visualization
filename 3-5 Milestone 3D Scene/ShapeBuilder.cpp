@@ -280,7 +280,7 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 										c[0], c[1], c[2], c[3],
 										textureXLoc + textStep,
 										0.0f	});
-		v.insert(v.end(), {0.0f , 0.0f , l , c[0], c[1], c[2], c[3], 0.5f , 1.0f});		// origin, peak
+		v.insert(v.end(), {0.0f , 0.0f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f});		// origin, peak
 
 		textureXLoc += textStep;
 		

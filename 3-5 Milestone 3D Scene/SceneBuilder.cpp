@@ -75,7 +75,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;
-	#define texture "pyramid_tex.jpg"
+	#define texture "bricks.png"
 	//#define texture "rocks.png"
 	gMesh01.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCone(gMesh01);

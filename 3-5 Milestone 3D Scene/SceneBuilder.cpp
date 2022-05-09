@@ -42,8 +42,8 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		-1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	gMesh03.height = 0.7f;
-	#define texture "pyramid01.png"
+	gMesh03.height = 0.8f;
+	#define texture "bricks.png"
 	gMesh03.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildPyramid(gMesh03);
 	scene.push_back(gMesh03);
@@ -59,7 +59,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
-	#define texture "rubik-g.png"
+	#define texture "rubiks.png"
 	gMesh02.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCube(gMesh02);
 	scene.push_back(gMesh02);
@@ -75,7 +75,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;
-	#define texture "bricks.png"
+	#define texture "pyramid01.png"
 	//#define texture "rocks.png"
 	gMesh01.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildCone(gMesh01);
@@ -93,11 +93,11 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		30.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		1.5f, 0.0f, -1.5f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	#define texture "bricks.png"
+	#define texture "rocks.png"
 	//#define texture "white.bmp"
 
 	cyl_gMesh.texFilename = concat(textureFolderLocation, texture);
@@ -115,7 +115,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	#define texture "rocks.png"
+	#define texture "walltexture.png"
 
 	plan_gMesh.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildPlane(plan_gMesh);

@@ -734,6 +734,8 @@ void ShapeBuilder::UTranslator(GLMesh& mesh)
 
 	mesh.model = mesh.translation * mesh.xrotation * mesh.zrotation * mesh.yrotation * mesh.scale;
 
-	mesh.gUVScale = glm::vec2(mesh.p[22], mesh.p[23]);		// scales the texture
+	//mesh.gUVScale = glm::vec2(mesh.p[22], mesh.p[23]);		// scales the texture
+	mesh.gUVScale = glm::vec2(2.0f, 2.0f);		// scales the texture
+
 }
 

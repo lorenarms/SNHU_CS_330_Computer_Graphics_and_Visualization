@@ -19,7 +19,7 @@ public:
 	static void UBuildCylinder(GLMesh& mesh);
 	static void UBuildRainbowCylinder(GLMesh& mesh, float seed);
 
-	static void UBuildTriangles(GLMesh& mesh);
+	static void UBuildPlane(GLMesh& mesh);
 
 	static void UBuildCircle(GLMesh& mesh);
 	static void UBuildPlane(GLMesh& mesh, vector<float> properties);

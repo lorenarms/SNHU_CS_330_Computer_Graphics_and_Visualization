@@ -69,7 +69,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	gMesh03.height = 1.7f;
 	#define texture "angelina.png"
 	gMesh03.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildTriangles(gMesh03);
+	ShapeBuilder::UBuildPlane(gMesh03);
 	scene.push_back(gMesh03);
 
 

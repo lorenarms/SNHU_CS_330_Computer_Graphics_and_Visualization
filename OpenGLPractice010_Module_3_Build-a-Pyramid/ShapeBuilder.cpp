@@ -280,7 +280,7 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	
 }
 
-void ShapeBuilder::UBuildTriangles(GLMesh& mesh)
+void ShapeBuilder::UBuildPlane(GLMesh& mesh)
 {
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
 

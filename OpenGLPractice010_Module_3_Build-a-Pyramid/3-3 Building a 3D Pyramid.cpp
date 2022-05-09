@@ -259,9 +259,9 @@ bool UInitialize(int argc, char* argv[], GLFWwindow** window)
 
 	glfwMakeContextCurrent(*window);
 	glfwSetFramebufferSizeCallback(*window, UResizeWindow);
-	glfwSetCursorPosCallback(*window, UMousePositionCallback);
+	/*glfwSetCursorPosCallback(*window, UMousePositionCallback);
 	glfwSetScrollCallback(*window, UMouseScrollCallback);
-	glfwSetMouseButtonCallback(*window, UMouseButtonCallback);
+	glfwSetMouseButtonCallback(*window, UMouseButtonCallback);*/
 	glfwSetInputMode(*window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//initialize GLEW

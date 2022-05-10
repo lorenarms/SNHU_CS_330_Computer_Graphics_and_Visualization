@@ -1,13 +1,15 @@
 //---------------------------------------------------
 //
 // Lawrence Artl | Lorenarms
-// CS-330 Comp Graphic and Viz
-// Assignment 3-5
+// CS-330-T5623 Comp Graphic and Visualization 22EW5
+// 3-5 Milestone: Beginning a 3D Scene
 //
-// Beginning a 3D scene
+// In this assignment the task is to create the beginning
+// of a 3D scene. Specifically, the goal is to render
+// a complex object, i.e. an object consisting of two or
+// more simple shapes.
 //
 //---------------------------------------------------
-
 
 
 

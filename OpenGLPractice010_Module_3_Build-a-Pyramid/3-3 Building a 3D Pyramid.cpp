@@ -1,12 +1,15 @@
 //---------------------------------------------------
 //
 // Lawrence Artl | Lorenarms
-// CS-330 Comp Graphic and Viz
-// Assignment 3-3
-//
-// Building a 3D Pyramid
+// CS-330-T5623 Comp Graphic and Visualization 22EW5
+// 3-3 Assignment: Building a 3D Pyramid
 //
 //---------------------------------------------------
+
+/*
+ *This program is designed to modular, and easy to use / implement
+ *See the 'SceneBuilder' class for more information
+ */
 
 
 
@@ -259,6 +262,9 @@ bool UInitialize(int argc, char* argv[], GLFWwindow** window)
 
 	glfwMakeContextCurrent(*window);
 	glfwSetFramebufferSizeCallback(*window, UResizeWindow);
+
+	// These commands are for mouse interaction; commented out bc they are not part of the assignment
+
 	/*glfwSetCursorPosCallback(*window, UMousePositionCallback);
 	glfwSetScrollCallback(*window, UMouseScrollCallback);
 	glfwSetMouseButtonCallback(*window, UMouseButtonCallback);*/
@@ -381,17 +387,6 @@ void UProcessInput(GLFWwindow* window)
 		perspective = false;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 		perspective = true;
-
-	// original statement below 
-	/*if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-	{
-		if (!perspective)
-		{
-			perspective = true;
-		}
-		else
-			perspective = false;
-	}*/
 
 
 	// deprecated way to change speed of camera

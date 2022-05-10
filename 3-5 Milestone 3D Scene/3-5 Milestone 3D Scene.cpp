@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 	while (!glfwWindowShouldClose(gWindow))
 	{
 		//bg color of window
-		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;

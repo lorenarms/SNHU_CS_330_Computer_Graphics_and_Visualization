@@ -30,8 +30,8 @@ using namespace std;
 const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 
 //window width, height
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
 
 ShapeBuilder builder;
 

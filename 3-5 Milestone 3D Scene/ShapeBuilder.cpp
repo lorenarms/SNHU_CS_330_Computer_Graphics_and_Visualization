@@ -72,28 +72,28 @@ void ShapeBuilder::UBuildRainbowPyramid(GLMesh& mesh, float seed)
 	mesh.v = {
 		// Vertex Positions		// color coords																				// Texture coords
 		 0.0f,	h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//back side
-		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 -0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
 
 		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//left side
-		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
-		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+		-0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
 
 		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//front
-		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
 
 		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//right side
-		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
 
-		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,		//bottom back
-		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,
-		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		-0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,		//bottom back
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
 
-		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,		//bottom front
-		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
-		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 1.0f
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,		//bottom front
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 1.0f
 	};
 
 	UTranslator(mesh);
@@ -317,23 +317,23 @@ void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
 
 		// triangle fan, bottom
 		// center point
-		v.insert(v.end(), { 0.0f,	0.0f,	0.0f,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	0.5f });
+		v.insert(v.end(), { 0.5f,	0.5f,	0.0f,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	0.5f });
 
 		// first outer point
-		v.insert(v.end(), { r * cos(i * sectorStep) ,
-										r * sin(i * sectorStep) ,
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
-			// generate random colors for vertex
-			c[0],	c[1],	c[2],	1.0f,
-			0.5f + (r * cos((i)*sectorStep)) ,
-			0.5f + (r * sin((i)*sectorStep))
-			});
+										// generate random colors for vertex
+										c[0],	c[1],	c[2],	1.0f,
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep))
+										});
 
 		// second outer point
 		c.clear();
 		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
-										r * sin((i + 1) * sectorStep) ,
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
 										c[0],	c[1],	c[2], 1.0f,
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
@@ -347,11 +347,11 @@ void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
 
 		// side triangle + point
 		// center of bottom
-		v.insert(v.end(), { 0.0f,	0.0f,	l,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	1.0f });		// origin, peak
+		v.insert(v.end(), { 0.5f,	0.5f,	l,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	1.0f });		// origin, peak
 
 		// outer point
-		v.insert(v.end(), { r * cos(i * sectorStep) ,
-										r * sin(i * sectorStep) ,
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
 										c[0],	c[1],	c[2],	1.0f,
 										textureXLoc ,
@@ -359,8 +359,8 @@ void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
 		c.clear();
 		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
 		// outer point
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
-										r * sin((i + 1) * sectorStep) ,
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
 										c[0],	c[1],	c[2],	1.0f,
 										textureXLoc + textStep,
@@ -716,7 +716,8 @@ void ShapeBuilder::UTranslator(GLMesh& mesh)
 	// texture
 	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(7 * sizeof(float)));
 	glEnableVertexAttribArray(2);
-	
+
+
 
 	// scale the object
 	mesh.scale = glm::scale(glm::vec3(mesh.p[4], mesh.p[5], mesh.p[6]));

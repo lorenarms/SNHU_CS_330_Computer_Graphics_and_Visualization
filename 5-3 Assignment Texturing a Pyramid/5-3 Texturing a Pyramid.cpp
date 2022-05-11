@@ -1,6 +1,6 @@
 //---------------------------------------------------
 //
-// Lawrence Artl
+// Lawrence Artl | LorenArms
 // CS-330 Comp Graphic and Viz
 // Assignment 5-3
 //

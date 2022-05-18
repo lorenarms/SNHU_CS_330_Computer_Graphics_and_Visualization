@@ -18,25 +18,25 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 // seed the rand() function once
 	srand(time(nullptr));
 
-	GLMesh gMesh03;
-	gMesh03.p = {
+	GLMesh pyr_gMesh01;
+	pyr_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-		2.0f, 2.0f, 2.0f,					// scale x, y, z
+		1.0f, 1.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		-1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	gMesh03.height = 0.8f;
-#define texture "bricks.png"
-	gMesh03.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildPyramid(gMesh03);
-	scene.push_back(gMesh03);
+	pyr_gMesh01.height = 1.8f;
+#define texture "white.bmp"
+	pyr_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildRainbowPyramid(pyr_gMesh01, rand() % 100 + 1);
+	scene.push_back(pyr_gMesh01);
 
 	// SHAPE 2: Cube
-	GLMesh gMesh02;
-	gMesh02.p = {
+	GLMesh cub_gMesh01;
+	cub_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		1.0f, 1.0f, 1.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
@@ -45,13 +45,13 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
-#define texture "rubiks.png"
-	gMesh02.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildCube(gMesh02);
-	scene.push_back(gMesh02);
 
-	GLMesh gMesh01;
-	gMesh01.p = {
+	cub_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildRainbowCube(cub_gMesh01, rand() % 100 + 1);
+	scene.push_back(cub_gMesh01);
+
+	GLMesh con_gMesh01;
+	con_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
@@ -60,21 +60,20 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.5f, 0.0f, -1.5f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;
-#define texture "pyramid01.png"
+	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 24.0f;
 	//#define texture "rocks.png"
-	gMesh01.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildCone(gMesh01);
-	scene.push_back(gMesh01);
+	con_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildRainbowCone(con_gMesh01, rand() % 100 + 1);
+	scene.push_back(con_gMesh01);
 
 
 
-	GLMesh cyl_gMesh;
-	cyl_gMesh.height = 1.0f;
-	cyl_gMesh.radius = 0.5f;
-	cyl_gMesh.length = 1.0f;
-	cyl_gMesh.number_of_sides = 12.0f;
-	cyl_gMesh.p = {
+	GLMesh cyl_gMesh01;
+	cyl_gMesh01.height = 1.0f;
+	cyl_gMesh01.radius = 0.5f;
+	cyl_gMesh01.length = 1.0f;
+	cyl_gMesh01.number_of_sides = 24.0f;
+	cyl_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
@@ -83,16 +82,16 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.5f, 0.0f, -1.5f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-#define texture "rocks.png"
+
 	//#define texture "white.bmp"
 
-	cyl_gMesh.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildCylinder(cyl_gMesh);
-	scene.push_back(cyl_gMesh);
+	cyl_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildRainbowCylinder(cyl_gMesh01, rand() % 100 + 1);
+	scene.push_back(cyl_gMesh01);
 
 
-	GLMesh plan_gMesh;
-	plan_gMesh.p = {
+	GLMesh plan_gMesh01;
+	plan_gMesh01.p = {
 		0.2f, 0.2f, 0.2f, 1.0f,				// color r, g, b a
 		4.0f, 8.0f, 4.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
@@ -101,11 +100,10 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-#define texture "walltexture.png"
 
-	plan_gMesh.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildPlane(plan_gMesh);
-	scene.push_back(plan_gMesh);
+	plan_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	ShapeBuilder::UBuildRainbowPlane(plan_gMesh01, 0);
+	scene.push_back(plan_gMesh01);
 
 
 }

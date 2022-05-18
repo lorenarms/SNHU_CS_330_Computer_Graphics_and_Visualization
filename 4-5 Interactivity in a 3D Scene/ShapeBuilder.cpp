@@ -1,458 +1,759 @@
-//#include "ShapeBuilder.h"
-//
-//
-//void UBuildPyramid(GLMesh& mesh, vector<float> properties)
-//{
-//
-//	//coordinates and colors for triangles
-//	//normalized to window
-//	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-//	GLfloat verts[] =
-//	{
-//		// Vertex Positions    // Colors
-//		 0.0f,  0.5f,  0.0f,   properties[0], properties[1], properties[2], properties[3], // top of pyramid, red
-//		-0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left front
-//		 0.5f, -0.5f, -0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right front
-//
-//		-0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom left back
-//		 0.5f, -0.5f,  0.5f,   properties[0], properties[1], properties[2], properties[3], // bottom right back
-//
-//	};
-//
-//	const GLushort indices[] = {
-//		0, 1, 2,
-//		0, 1, 3,
-//		0, 3, 4,
-//		0, 2, 4,
-//		1, 2, 3,
-//		2, 3, 4
-//	};
-//
-//	glGenVertexArrays(1, &mesh.vao);
-//	glBindVertexArray(mesh.vao);
-//
-//	//create 2 buffers
-//	glGenBuffers(2, mesh.vbos);
-//	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-//
-//	mesh.nIndices = std::size(indices);
-//
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-//
-//	//tells how many values for a vertex
-//	const GLuint floatsPerVertex = 3;
-//	//tells how many values for a color
-//	const GLuint floatsPerColor = 4;
-//
-//	//(2 + 4) * 1 = 6 strides
-//	//tells program that it'll need to hit 6 numbers before starting to draw the
-//	//next vertex
-//	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerColor);
-//
-//	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-//	glEnableVertexAttribArray(0);
-//
-//	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-//	glEnableVertexAttribArray(1);
-//
-//
-//
-//	// scale the object
-//	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-//
-//	// rotate the object (x, y, z) (0 - 6.4, to the right)
-//	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-//
-//	// move the object (x, y, z)
-//	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-//
-//	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-//
-//}
-//void UBuildCylinder(GLMesh& mesh, vector<float> properties, float radius, float length)
-//{
-//	// change "STEP" to increase / decrease resolution of cylinder
-//	const float PI = 3.14f;
-//	const float STEP = 36;
-//	float sectorStep = 2.0f * PI / STEP;
-//
-//	// track which vertex is being added, add origin index when appropriate (every two)
-//	int step = 0;
-//	int vert = 2;
-//
-//
-//	// origin vertex of top and bottom of cylinder (center point)
-//	vector<float> vertices = {
-//								0.0f, 0.0f, 0.0f, properties[0], properties[1], properties[2], properties[3],	// top origin
-//								0.0f, 0.0f, length * -1, properties[0], properties[1], properties[2], properties[3]	// bottom origin
-//	};
-//
-//	// vectors for indices, sides of cylinder
-//	vector<int> index = { 0 };
-//	vector<int> sides;
-//
-//	// build the top of the cylinder
-//	// used vectors so I could use "pushback" and have control over where points went
-//	for (int i = 0; i <= STEP * 2; ++i)
-//	{
-//		float sectorAngle = i * sectorStep;
-//		// vertex
-//		vertices.push_back(radius * cos(sectorAngle)); // x
-//		vertices.push_back(radius * sin(sectorAngle)); // y
-//		vertices.push_back(0.0f);						// z
-//
-//		// color
-//		vertices.push_back(properties[0]);
-//		vertices.push_back(properties[1]);
-//		vertices.push_back(properties[2]);
-//		vertices.push_back(properties[3]);
-//
-//		// track the vertices to draw, track the sides to draw
-//		index.push_back(vert);
-//		sides.push_back(vert + 1);
-//
-//		// some maths to keep indices in proper order
-//		vert++;
-//		step++;
-//
-//		// add in the origin index every two  vertices so that it connects them
-//		if (step == 2)
-//		{
-//			step = 0;
-//			vert--;
-//			index.push_back(0);
-//
-//			// more maths to keep the indices in proper order
-//			sides.pop_back();
-//		}
-//
-//	}
-//
-//	// more maths to keep indices in proper order
-//	vert *= 2;
-//	step = 0;
-//
-//	// set origin of bottom disk triangle fan
-//	index.push_back(1);
-//
-//	// build bottom triangle fan of cylinder
-//	// same algorithm as above for top
-//	for (int i = 0; i <= STEP * 2; ++i)
-//	{
-//		float sectorAngle = i * sectorStep;
-//		vertices.push_back(radius * cos(sectorAngle)); // x
-//		vertices.push_back(radius * sin(sectorAngle)); // y
-//		vertices.push_back(length * -1);						// z
-//
-//		// color
-//		vertices.push_back(properties[0]);
-//		vertices.push_back(properties[1]);
-//		vertices.push_back(properties[2]);
-//		vertices.push_back(properties[3]);
-//		index.push_back(vert);
-//		sides.push_back(vert - 1);
-//
-//		// maths
-//		vert++;
-//		step++;
-//		if (step == 2)
-//		{
-//			step = 0;
-//			vert--;
-//			index.push_back(1);
-//			sides.pop_back();
-//		}
-//	}
-//
-//	// remove the very last entry from the index array, tis' not needed
-//	index.pop_back();
-//
-//	// list the indexes to draw the sides
-//	for (auto i = 0; i < sides.size() / 2 - 1; i++)
-//	{
-//		// lots of weird locations to find the given indices
-//		index.push_back(sides[i]);
-//		index.push_back(sides[i + 1]);
-//		index.push_back(sides[sides.size() / 2 + i]);
-//
-//		index.push_back(sides[sides.size() / 2 + i]);
-//		index.push_back(sides[sides.size() / 2 + i + 1]);
-//		index.push_back(sides[i + 1]);
-//
-//
-//	}
-//
-//	// okay all done! whew!
-//	// make an array of vertices
-//	// there doesn't seem to be an efficient way to convert from a vector to an array :(
-//
-//	GLfloat verts[10000];
-//	for (int i = 0; i < vertices.size(); i++)
-//	{
-//		verts[i] = vertices[i];
-//	}
-//
-//	// make an array for the indices
-//	GLushort indices[10000];
-//	for (int i = 0; i < index.size(); i++)
-//	{
-//		indices[i] = index[i];
-//	}
-//
-//	// compile all that nonesense
-//
-//	glGenVertexArrays(1, &mesh.vao);
-//	glBindVertexArray(mesh.vao);
-//
-//	//create 2 buffers
-//	glGenBuffers(2, mesh.vbos);
-//	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-//
-//	// can this function take any other type of input? array's aren't very good imo
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-//
-//	mesh.nIndices = std::size(indices);
-//
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-//
-//	//tells how many values for a vertex
-//	const GLuint floatsPerVertex = 3;
-//	//tells how many values for a color
-//	const GLuint floatsPerColor = 4;
-//
-//	//(2 + 4) * 1 = 6 strides
-//	//tells program that it'll need to hit 6 numbers before starting to draw the
-//	//next vertex
-//	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerColor);
-//
-//	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-//	glEnableVertexAttribArray(0);
-//
-//	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-//	glEnableVertexAttribArray(1);
-//
-//
-//	// scale the object
-//	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-//
-//	// rotate the object (x, y, z) (0 - 6.4, to the right)
-//	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-//
-//	// move the object (x, y, z)
-//	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-//
-//	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-//}
-//void UBuildCone(GLMesh& mesh, vector<float> properties, float radius, float length)
-//{
-//	// this is the same algorithm as the cylinder
-//	// i plain run out of time to tweak it :(
-//	// so it's a little rough and big on memory
-//
-//	const float PI = 3.14f;
-//	const float STEP = 36;
-//	float sectorStep = 2.0f * PI / STEP;
-//
-//	// track which vertex is being added, add origin index when appropriate (every two)
-//	int step = 0;
-//	int vert = 2;
-//
-//	vector<float> vertices = {
-//								0.0f, 0.0f, 0.0f, properties[0], properties[1], properties[2], properties[3],	// top origin
-//								0.0f, 0.0f, length * -1, properties[0], properties[1], properties[2], properties[3]	// bottom origin
-//	};
-//
-//	vector<int> index = { 0, 1 };
-//	vector<int> sides;
-//
-//	//build the top of the cylinder
-//	for (int i = 0; i <= STEP * 2; ++i)
-//	{
-//		float sectorAngle = i * sectorStep;
-//		// vertex
-//		vertices.push_back(radius * cos(sectorAngle)); // x
-//		vertices.push_back(radius * sin(sectorAngle)); // y
-//		vertices.push_back(0.0f);						// z
-//
-//		// color
-//		vertices.push_back(properties[0]);
-//		vertices.push_back(properties[1]);
-//		vertices.push_back(properties[2]);
-//		vertices.push_back(properties[3]);
-//		index.push_back(vert);
-//		sides.push_back(vert + 1);
-//
-//		vert++;
-//		step++;
-//		if (step == 2)
-//		{
-//			step = 0;
-//			vert--;
-//			index.push_back(0);
-//			sides.pop_back();
-//		}
-//
-//	}
-//
-//	// skip ahead to the next set of vertices
-//	vert *= 2;
-//	step = 0;
-//	// set origin of bottom disk triangle fan
-//	index.push_back(1);
-//
-//	// build bottom triangle fan of cylinder
-//	for (int i = 0; i <= STEP * 2; ++i)
-//	{
-//		float sectorAngle = i * sectorStep;
-//		vertices.push_back(radius * cos(sectorAngle)); // x
-//		vertices.push_back(radius * sin(sectorAngle)); // y
-//		vertices.push_back(0.0f);						// z
-//
-//		// color
-//		vertices.push_back(properties[0]);
-//		vertices.push_back(properties[1]);
-//		vertices.push_back(properties[2]);
-//		vertices.push_back(properties[3]);
-//		index.push_back(vert);
-//		sides.push_back(vert - 1);
-//		//sides.push_back(vert);
-//
-//		vert++;
-//		step++;
-//		if (step == 2)
-//		{
-//			step = 0;
-//			vert--;
-//			index.push_back(1);
-//			sides.pop_back();
-//		}
-//	}
-//	// remove the very last entry from the index array, tis' not needed
-//	index.pop_back();
-//
-//
-//
-//	GLfloat verts[10000];
-//
-//	for (int i = 0; i < vertices.size(); i++)
-//	{
-//		verts[i] = vertices[i];
-//	}
-//
-//	GLushort indices[10000];
-//
-//	for (int i = 0; i < index.size(); i++)
-//	{
-//		indices[i] = index[i];
-//	}
-//
-//
-//
-//	glGenVertexArrays(1, &mesh.vao);
-//	glBindVertexArray(mesh.vao);
-//
-//	//create 2 buffers
-//	glGenBuffers(2, mesh.vbos);
-//	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-//
-//	mesh.nIndices = std::size(indices);
-//
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-//
-//	//tells how many values for a vertex
-//	const GLuint floatsPerVertex = 3;
-//	//tells how many values for a color
-//	const GLuint floatsPerColor = 4;
-//
-//	//(2 + 4) * 1 = 6 strides
-//	//tells program that it'll need to hit 6 numbers before starting to draw the
-//	//next vertex
-//	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerColor);
-//
-//	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-//	glEnableVertexAttribArray(0);
-//
-//	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-//	glEnableVertexAttribArray(1);
-//
-//
-//
-//	// scale the object
-//	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-//
-//	// rotate the object (x, y, z) (0 - 6.4, to the right)
-//	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-//
-//	// move the object (x, y, z)
-//	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-//
-//	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-//}
-//void UBuildPlane(GLMesh& mesh, vector<float> properties)
-//{
-//
-//	//coordinates and colors for triangles
-//	//normalized to window
-//	// Specifies normalized device coordinates (x,y,z) and color for square vertices
-//	GLfloat verts[] =
-//	{
-//		// Vertex Positions    // Colors
-//		 5.0f,  0.0f,  5.0f,   properties[0], properties[1], properties[2], properties[3],
-//		 5.0f,  0.0f, -5.0f,   properties[0], properties[1], properties[2], properties[3],
-//		-5.0f,  0.0f,  5.0f,   properties[0], properties[1], properties[2], properties[3],
-//		-5.0f,  0.0f, -5.0f,   properties[0], properties[1], properties[2], properties[3]
-//
-//	};
-//
-//	const GLushort indices[] = {
-//		0, 1, 2, 1, 2, 3
-//	};
-//
-//	glGenVertexArrays(1, &mesh.vao);
-//	glBindVertexArray(mesh.vao);
-//
-//	//create 2 buffers
-//	glGenBuffers(2, mesh.vbos);
-//	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbos[0]);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-//
-//	mesh.nIndices = std::size(indices);
-//
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vbos[1]);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-//
-//	//tells how many values for a vertex
-//	const GLuint floatsPerVertex = 3;
-//	//tells how many values for a color
-//	const GLuint floatsPerColor = 4;
-//
-//	//(2 + 4) * 1 = 6 strides
-//	//tells program that it'll need to hit 6 numbers before starting to draw the
-//	//next vertex
-//	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerColor);
-//
-//	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-//	glEnableVertexAttribArray(0);
-//
-//	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (char*)(sizeof(float) * floatsPerVertex));
-//	glEnableVertexAttribArray(1);
-//
-//
-//
-//	// scale the object
-//	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-//
-//	// rotate the object (x, y, z) (0 - 6.4, to the right)
-//	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-//
-//	// move the object (x, y, z)
-//	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-//
-//	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-//
-//}
+#include <cstdlib>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <vector>
+#include <cmath>
+
+#include "ShapeBuilder.h"
+
+using namespace std;
+
+void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
+{
+	// build a pyramid
+
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	float h = mesh.height;
+	mesh.v = {
+		// Vertex Positions    // color coords					// Texture coords
+		 0.0f,	h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//back side
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//left side
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//front
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	c[0],	c[1],	c[2],	c[3],	0.5f, 1.0f,		//right side
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,
+
+		-1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 0.0f,		//bottom back
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+
+		 1.0f, -0.0f, -1.0f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom front
+		-1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	c[0],	c[1],	c[2],	c[3],	0.0f, 1.0f
+	};
+
+	UTranslator(mesh);
+
+}
+void ShapeBuilder::UBuildRainbowPyramid(GLMesh& mesh, float seed)
+{
+	// build a multi-colored pyramid with random colors
+	// use the seed that is passed in to re-seed rand()
+
+	// seed the srand function
+	srand(seed);
+
+
+	float h = mesh.height;
+
+	// generate a random value for each color coordinate;
+	// find a random value between 0.1 and 1.0
+	mesh.v = {
+		// Vertex Positions		// color coords																				// Texture coords
+		 0.0f,	h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//back side
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//left side
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//front
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//right side
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		-1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,		//bottom back
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+
+		 1.0f, -0.0f, -1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,		//bottom front
+		-1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 1.0f, -0.0f,  1.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 1.0f
+	};
+
+	UTranslator(mesh);
+
+
+}
+
+void ShapeBuilder::UBuildCube(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	mesh.v = {
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// front left
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
+		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// front right
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	1.0f,
+		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	1.0f,
+
+
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// right front
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	1.0f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,	// right back
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
+
+
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,	// back left
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	0.5f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	0.5f,	// back right
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.5f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.5f,	// left back
+		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f,	0.5f,	// left front
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	0.5f,
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.75f,	1.0f,
+
+
+
+
+		-0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// top left
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+
+		-0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,	// top right
+		0.5f,	1.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,
+
+		-0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.0f,	// bottom left
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+
+		-0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f,	0.5f,	// bottom right
+		0.5f,	0.0f,	0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.0f,
+		0.5f,	0.0f,	-0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f,	0.5f,
+
+
+
+
+	};
+
+	UTranslator(mesh);
+}
+void ShapeBuilder::UBuildRainbowCube(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	mesh.v = {
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front left
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front right
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// right front
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// right back
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// left front
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// left back
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front left
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front right
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// top left
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,	// top right
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// bottom left
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,	// bottom right
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+
+
+
+	};
+
+	UTranslator(mesh);
+}
+
+void ShapeBuilder::UBuildCone(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+	const float textStep = 1.0f / s;
+	float textureXLoc = 0.0f;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++) {
+
+
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.5f });		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+			/*textureXLoc,
+			0.0f*/
+			0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
+			0.5f + (r * sin((i)*sectorStep))
+			});										// first outer point
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+			/*textureXLoc + textStep,
+			0.0f*/
+			0.5f + (r * cos((i + 1) * sectorStep)) ,
+			0.5f + (r * sin((i + 1) * sectorStep))
+			});								// second outer point
+
+// side triangle + point
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										textureXLoc ,
+										0.0f });
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],
+										textureXLoc + textStep,
+										0.0f });
+		v.insert(v.end(), { 0.0f , 0.0f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
+
+		textureXLoc += textStep;
+
+	}
+
+	mesh.v = v;
+	v.clear();	// clear the local vector
+
+	UTranslator(mesh);
+}
+void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+	const float textStep = 1.0f / s;
+	float textureXLoc = 0.0f;
+
+
+
+	vector<float> c;
+	c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++) {
+
+
+		// triangle fan, bottom
+		// center point
+		v.insert(v.end(), { 0.0f,	0.0f,	0.0f,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	0.5f });
+
+		// first outer point
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+			// generate random colors for vertex
+			c[0],	c[1],	c[2],	1.0f,
+			0.5f + (r * cos((i)*sectorStep)) ,
+			0.5f + (r * sin((i)*sectorStep))
+			});
+
+		// second outer point
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2], 1.0f,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep))
+			});
+
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+
+		// side triangle + point
+		// center of bottom
+		v.insert(v.end(), { 0.0f,	0.0f,	l,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	1.0f });		// origin, peak
+
+		// outer point
+		v.insert(v.end(), { r * cos(i * sectorStep) ,
+										r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc ,
+										0.0f });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		// outer point
+		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
+										r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc + textStep,
+										0.0f });
+
+		textureXLoc += textStep;
+
+	}
+
+
+	mesh.v = v;
+	v.clear();	// clear the local vector
+	c.clear();	// clear color vector
+
+	UTranslator(mesh);
+}
+
+void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+	float h = mesh.height;
+
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
+										0.5f + r * sin(i * sectorStep) ,			// y
+										0.0f ,										// z
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,										// build this fan the 'l' value away from the other fan
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	// since all side triangles have the same points as the fans above, the same calculations are used
+	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
+	// the texture to clamp to the corresponding point.
+	constexpr float x = 3.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
+	// sides
+	for (auto i = 1; i < s + 1; i++)
+	{
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k ,
+										0 });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k ,
+										1.0f });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k + j ,
+										1.0f });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k + j ,
+										1.0f });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k + j ,
+										0.0f });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k,
+										0.0f });
+		k += j;
+	}
+
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+
+}
+void ShapeBuilder::UBuildRainbowCylinder(GLMesh& mesh, float seed)
+{
+	srand(seed);
+	vector<float> c;
+	c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+	float h = mesh.height;
+
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	1.0f, 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
+										0.5f + r * sin(i * sectorStep) ,			// y
+										0.0f ,										// z
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], 1.0f, 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,										// build this fan the 'l' value away from the other fan
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	// since all side triangles have the same points as the fans above, the same calculations are used
+	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
+	// the texture to clamp to the corresponding point.
+	constexpr float x = 3.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
+	// sides
+	for (auto i = 1; i < s + 1; i++)
+	{
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k ,
+										0 });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k ,
+										1.0f });
+
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										1.0f });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										1.0f });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										0.0f });
+
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k,
+										0.0f });
+		k += j;
+	}
+
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+
+}
+
+void ShapeBuilder::UBuildRainbowPlane(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	mesh.v = {
+		-1.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.0f, 1.0f,	// 0
+		 0.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 0.0f,	// 1
+		-1.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.0f, 0.0f,	// 2
+
+		-1.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.0f, 1.0f,	// 0
+		 0.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 0.0f,	// 2
+		 0.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 1.0f,	// 3
+
+		 0.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 1.0f,	// 3
+		 0.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 0.0f,	// 2
+		 1.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 1.0f, 0.0f,	// 5
+
+		 0.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 0.5f, 1.0f,	// 3
+		 1.0f, 0.0f, 1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 1.0f, 0.0f,	// 5
+		 1.0f, 0.0f, -1.0f, ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f, 1.0f, 1.0f,	// 4
+
+	};
+
+	UTranslator(mesh);
+
+}
+void ShapeBuilder::UBuildPlane(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	mesh.v = {
+		-1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
+		 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 1
+		-1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.0f, 0.0f,	// 2
+
+		-1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
+		 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
+		 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
+
+		 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
+		 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
+		 1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
+
+		 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
+		 1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
+		 1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 1.0f, 1.0f,	// 4
+
+	};
+
+	UTranslator(mesh);
+
+}
+
+void ShapeBuilder::UBuildCircle(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+	float h = mesh.height;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,		// x
+										0.5f + r * sin(i * sectorStep) ,		// y
+										0.0f ,									// z
+										c[0],	c[1], c[2],	c[3],				// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1], c[2],	c[3],				// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+}
+
+
+
+
+void ShapeBuilder::UTranslator(GLMesh& mesh)
+{
+	// build the mesh
+
+	constexpr GLuint floatsPerVertex = 3;
+	constexpr GLuint floatsPerColor = 4;
+	constexpr GLuint floatsPerUV = 2;
+
+	mesh.nIndices = mesh.v.size() / (floatsPerVertex + floatsPerUV + floatsPerColor);
+
+	glGenVertexArrays(1, &mesh.vao);
+	glBindVertexArray(mesh.vao);
+
+	// Create VBO
+	glGenBuffers(1, &mesh.vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
+
+	// use vector instead of array
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		mesh.v.size() * sizeof(float),
+		&mesh.v.front(),
+		GL_STATIC_DRAW
+	); // Sends vertex or coordinate data to the GPU
+
+	// Strides between vertex coordinates
+	constexpr GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV + floatsPerColor);
+
+	// Create Vertex Attribute Pointers
+	// location
+	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// color
+	glVertexAttribPointer(1, floatsPerColor, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	// texture
+	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(7 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+
+	// scale the object
+	mesh.scale = glm::scale(glm::vec3(mesh.p[4], mesh.p[5], mesh.p[6]));
+
+	const glm::mat4 rot = glm::mat4(1.0f);
+
+	// rotate the object (x, y, z) (0 - 6.4, to the right)
+	mesh.xrotation = glm::rotate(rot, glm::radians(mesh.p[7]), glm::vec3(mesh.p[8], mesh.p[9], mesh.p[10]));
+	mesh.yrotation = glm::rotate(rot, glm::radians(mesh.p[11]), glm::vec3(mesh.p[12], mesh.p[13], mesh.p[14]));
+	mesh.zrotation = glm::rotate(rot, glm::radians(mesh.p[15]), glm::vec3(mesh.p[16], mesh.p[17], mesh.p[18]));
+
+
+	// move the object (x, y, z)
+	mesh.translation = glm::translate(glm::vec3(mesh.p[19], mesh.p[20], mesh.p[21]));
+
+	mesh.model = mesh.translation * mesh.xrotation * mesh.zrotation * mesh.yrotation * mesh.scale;
+
+	//mesh.gUVScale = glm::vec2(mesh.p[22], mesh.p[23]);		// scales the texture
+	mesh.gUVScale = glm::vec2(2.0f, 2.0f);		// scales the texture
+
+}
+

@@ -146,17 +146,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="SceneBuilder.cpp" />
     <ClCompile Include="4-5 Milestone Interactivity in a 3D Scene.cpp" />
+    <ClCompile Include="ShapeBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.h" />
     <ClInclude Include="cylinder.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneBuilder.h" />
+    <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,8 +21,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1-1 OpenGl Sample", "1-1 Op
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3-3 Building a 3D Pyramid", "3-3 Building a 3D Pyramid\3-3 Building a 3D Pyramid.vcxproj", "{EC98F255-470F-4409-8945-99227386B193}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-5 Interactivity in a 3D Scene", "4-5 Interactivity in a 3D Scene\4-5 Interactivity in a 3D Scene.vcxproj", "{68D6593E-3427-47FD-B61D-BEF11D34D4D6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-3 Assignment Basic Camera Movement", "4-3 Assignment Basic Camera Movement\4-3 Assignment Basic Camera Movement.vcxproj", "{12C17023-C020-46EF-A9A5-1669BB3CFC88}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-5 Milestone Interactivity in a 3D Scene", "4-5 Milestone Interactivity in a 3D Scene\4-5 Milestone Interactivity in a 3D Scene.vcxproj", "{2F968C03-9BFB-4A50-B20A-1F755FB9BAB4}"
@@ -107,14 +105,6 @@ Global
 		{EC98F255-470F-4409-8945-99227386B193}.Release|x64.Build.0 = Release|x64
 		{EC98F255-470F-4409-8945-99227386B193}.Release|x86.ActiveCfg = Release|Win32
 		{EC98F255-470F-4409-8945-99227386B193}.Release|x86.Build.0 = Release|Win32
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Debug|x64.ActiveCfg = Debug|x64
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Debug|x64.Build.0 = Debug|x64
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Debug|x86.ActiveCfg = Debug|Win32
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Debug|x86.Build.0 = Debug|Win32
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Release|x64.ActiveCfg = Release|x64
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Release|x64.Build.0 = Release|x64
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Release|x86.ActiveCfg = Release|Win32
-		{68D6593E-3427-47FD-B61D-BEF11D34D4D6}.Release|x86.Build.0 = Release|Win32
 		{12C17023-C020-46EF-A9A5-1669BB3CFC88}.Debug|x64.ActiveCfg = Debug|x64
 		{12C17023-C020-46EF-A9A5-1669BB3CFC88}.Debug|x64.Build.0 = Debug|x64
 		{12C17023-C020-46EF-A9A5-1669BB3CFC88}.Debug|x86.ActiveCfg = Debug|Win32

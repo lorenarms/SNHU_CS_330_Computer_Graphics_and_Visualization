@@ -1,12 +1,10 @@
 //---------------------------------------------------
 //
 // Lawrence Artl | LorenArms
-// CS-330 Comp Graphic and Viz
-// Assignment 5-3
+// CS-330-T5623 Comp Graphic and Visualization 22EW5
+// 4-5 Milestone: Interactivity in a 3D scene
 //
-// TEXTURING A PYRAMID
-//
-//---------------------------------------------------
+//--------------------------------------------------
 
 
 #include "ShapeBuilder.h"
@@ -27,7 +25,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
+const char* const WINDOW_TITLE = "Module 4 Milestone: Interactivity in a 3D Scene";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;

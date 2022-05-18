@@ -1,12 +1,10 @@
 //---------------------------------------------------
 //
 // Lawrence Artl | LorenArms
-// CS-330 Comp Graphic and Viz
-// Assignment 5-3
+// CS-330-T5623 Comp Graphic and Visualization 22EW5
+// 4-3 Assignment: Basic Movement
 //
-// TEXTURING A PYRAMID
-//
-//---------------------------------------------------
+//--------------------------------------------------
 
 
 #include "ShapeBuilder.h"
@@ -27,7 +25,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
+const char* const WINDOW_TITLE = "Module 4 Assignment: Basic Movement";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;
@@ -49,7 +47,7 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+Camera gCamera(glm::vec3(0.0f, 2.5f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -30.0f);
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;

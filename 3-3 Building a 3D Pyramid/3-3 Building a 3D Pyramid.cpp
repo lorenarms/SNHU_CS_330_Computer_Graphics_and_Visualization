@@ -32,7 +32,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
+const char* const WINDOW_TITLE = "Module 3 Assignment: Building a 3D Pyramid";
 
 //window width, height
 const int WINDOW_WIDTH = 800;

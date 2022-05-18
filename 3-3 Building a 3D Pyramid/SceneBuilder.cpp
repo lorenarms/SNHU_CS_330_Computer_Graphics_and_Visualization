@@ -24,7 +24,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 	// define the folder location for all textures used
 	// make sure all textures stored in this location
-	#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\OpenGLPractice016_Module_5_Texture-a-Pyramid\\textures\\"
+	#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\3-3 Building a 3D Pyramid\\textures\\"
 
 	// define a concat function that takes the above location and concatenates the texture name together
 	#define concat(first, second) first second

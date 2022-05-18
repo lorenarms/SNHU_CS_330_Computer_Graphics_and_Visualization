@@ -51,8 +51,11 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+// set the initial position of the camera
+Camera gCamera(glm::vec3(-5.0f, 2.5f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 35.0f, -20.0f);
+
 float gLastX = WINDOW_WIDTH / 2.0f;
+
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;
 

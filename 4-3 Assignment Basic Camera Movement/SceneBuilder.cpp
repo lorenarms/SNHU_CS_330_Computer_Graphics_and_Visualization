@@ -18,6 +18,11 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 // seed the rand() function once
 	srand(time(nullptr));
 
+
+	/// <summary>
+	/// Build a pyramid on the left side of the view
+	/// </summary>
+	/// <param name="scene"></param>
 	GLMesh pyr_gMesh01;
 	pyr_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
@@ -29,12 +34,15 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	pyr_gMesh01.height = 1.8f;
-#define texture "white.bmp"
+	#define texture "white.bmp"
 	pyr_gMesh01.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildRainbowPyramid(pyr_gMesh01, rand() % 100 + 1);
 	scene.push_back(pyr_gMesh01);
 
-	// SHAPE 2: Cube
+	/// <summary>
+	/// Build a cube on the right side of the view
+	/// </summary>
+	/// <param name="scene"></param>
 	GLMesh cub_gMesh01;
 	cub_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
@@ -45,11 +53,16 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
-
 	cub_gMesh01.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildRainbowCube(cub_gMesh01, rand() % 100 + 1);
 	scene.push_back(cub_gMesh01);
 
+
+
+	/// <summary>
+	/// Build a cone behind the cube on the right side of the view
+	/// </summary>
+	/// <param name="scene"></param>
 	GLMesh con_gMesh01;
 	con_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
@@ -68,43 +81,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 
 
-	GLMesh cyl_gMesh01;
-	cyl_gMesh01.height = 1.0f;
-	cyl_gMesh01.radius = 0.5f;
-	cyl_gMesh01.length = 1.0f;
-	cyl_gMesh01.number_of_sides = 24.0f;
-	cyl_gMesh01.p = {
-		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-		2.0f, 2.0f, 2.0f,					// scale x, y, z
-		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		30.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		1.5f, 0.0f, -1.5f,					// translate x, y, z
-		1.0f, 1.0f
-	};
-
-	//#define texture "white.bmp"
-
-	cyl_gMesh01.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildRainbowCylinder(cyl_gMesh01, rand() % 100 + 1);
-	scene.push_back(cyl_gMesh01);
-
-
-	GLMesh plan_gMesh01;
-	plan_gMesh01.p = {
-		0.2f, 0.2f, 0.2f, 1.0f,				// color r, g, b a
-		4.0f, 8.0f, 4.0f,					// scale x, y, z
-		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f,					// translate x, y, z
-		1.0f, 1.0f
-	};
-
-	plan_gMesh01.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildRainbowPlane(plan_gMesh01, 0);
-	scene.push_back(plan_gMesh01);
-
+	
 
 }
 

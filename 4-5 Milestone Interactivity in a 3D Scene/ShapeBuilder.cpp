@@ -239,9 +239,9 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.0f, 0.0f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.5f });		// center point; x, y, z, r, g, b, a, texture x, texture y
-		v.insert(v.end(), { r * cos(i * sectorStep) ,
-										r * sin(i * sectorStep) ,
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.5f });		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 			/*textureXLoc,
@@ -249,8 +249,8 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 			0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
 			0.5f + (r * sin((i)*sectorStep))
 			});										// first outer point
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
-										r * sin((i + 1) * sectorStep) ,
+		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 			/*textureXLoc + textStep,
@@ -260,19 +260,19 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 			});								// second outer point
 
 // side triangle + point
-		v.insert(v.end(), { r * cos(i * sectorStep) ,
-										r * sin(i * sectorStep) ,
+		v.insert(v.end(), { 0.5f + (r * cos(i * sectorStep)) ,
+										0.5f + (r * sin(i * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc ,
 										0.0f });
-		v.insert(v.end(), { r * cos((i + 1) * sectorStep) ,
-										r * sin((i + 1) * sectorStep) ,
+		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc + textStep,
 										0.0f });
-		v.insert(v.end(), { 0.0f , 0.0f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
+		v.insert(v.end(), { 0.5f , 0.5f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
 
 		textureXLoc += textStep;
 

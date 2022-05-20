@@ -57,7 +57,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.5f, 0.0f, -1.5f,					// translate x, y, z
+		-0.5f, 0.0f, -0.5f,					// translate x, y, z
 		1.0f, 1.0f
 	};
 	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;

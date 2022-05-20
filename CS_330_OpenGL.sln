@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-1 OpenGl Practice", "0-1 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-2 OpenGL Quick Practice", "0-2 OpenGL Practice - Triangle Fan\0-2 OpenGL Practice - Triangle Fan.vcxproj", "{6F8A17C3-B75B-499A-AA62-0316168B3997}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-3 OpenGl Practice Cylinder", "0-3 OpenGl Practice Cylinder\0-3 OpenGl Practice Cylinder.vcxproj", "{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3-5 Milestone Building a 3D Scene", "3-5 Milestone 3D Scene\3-5 Milestone 3D Scene.vcxproj", "{288A13BB-797A-44FF-9B3E-CB190EF03FF7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-3 Texturing a Pyramid", "5-3 Assignment Texturing a Pyramid\5-3 Assignment Texturing a Pyramid.vcxproj", "{DE36718E-795A-41F9-8B62-F410FCD859BF}"
@@ -24,6 +22,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-3 Assignment Basic Camera Movement", "4-3 Assignment Basic Camera Movement\4-3 Assignment Basic Camera Movement.vcxproj", "{12C17023-C020-46EF-A9A5-1669BB3CFC88}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-5 Milestone Interactivity in a 3D Scene", "4-5 Milestone Interactivity in a 3D Scene\4-5 Milestone Interactivity in a 3D Scene.vcxproj", "{2F968C03-9BFB-4A50-B20A-1F755FB9BAB4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "1-1 OpenGl Sample", "0-3 OpenGl Practice Creating A Sphere\0-3 OpenGl Practice Sphere.vcxproj", "{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +49,6 @@ Global
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x64.Build.0 = Release|x64
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.ActiveCfg = Release|Win32
 		{6F8A17C3-B75B-499A-AA62-0316168B3997}.Release|x86.Build.0 = Release|Win32
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x64.ActiveCfg = Debug|x64
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x64.Build.0 = Debug|x64
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x86.ActiveCfg = Debug|Win32
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Debug|x86.Build.0 = Debug|Win32
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x64.ActiveCfg = Release|x64
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x64.Build.0 = Release|x64
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x86.ActiveCfg = Release|Win32
-		{B98CE4CB-6255-4F12-B387-E6C56FFAD49F}.Release|x86.Build.0 = Release|Win32
 		{288A13BB-797A-44FF-9B3E-CB190EF03FF7}.Debug|x64.ActiveCfg = Debug|x64
 		{288A13BB-797A-44FF-9B3E-CB190EF03FF7}.Debug|x64.Build.0 = Debug|x64
 		{288A13BB-797A-44FF-9B3E-CB190EF03FF7}.Debug|x86.ActiveCfg = Debug|Win32
@@ -121,6 +113,14 @@ Global
 		{2F968C03-9BFB-4A50-B20A-1F755FB9BAB4}.Release|x64.Build.0 = Release|x64
 		{2F968C03-9BFB-4A50-B20A-1F755FB9BAB4}.Release|x86.ActiveCfg = Release|Win32
 		{2F968C03-9BFB-4A50-B20A-1F755FB9BAB4}.Release|x86.Build.0 = Release|Win32
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Debug|x64.ActiveCfg = Debug|x64
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Debug|x64.Build.0 = Debug|x64
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Debug|x86.ActiveCfg = Debug|Win32
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Debug|x86.Build.0 = Debug|Win32
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Release|x64.ActiveCfg = Release|x64
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Release|x64.Build.0 = Release|x64
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Release|x86.ActiveCfg = Release|Win32
+		{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

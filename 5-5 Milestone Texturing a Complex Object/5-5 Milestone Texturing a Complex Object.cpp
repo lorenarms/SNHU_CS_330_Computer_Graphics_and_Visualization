@@ -4,7 +4,7 @@
 // CS-330 Comp Graphic and Viz
 // Assignment 5-3
 //
-// TEXTURING A PYRAMID
+// TEXTURING A COMPLEX OBJECT
 //
 //---------------------------------------------------
 
@@ -27,7 +27,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
+const char* const WINDOW_TITLE = "Module 5 Milestone: Texturing a Complex Object";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;
@@ -49,7 +49,9 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+//Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+Camera gCamera(glm::vec3(-4.0f, 3.5f, -0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 10.0f, -30.0f);
+
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;

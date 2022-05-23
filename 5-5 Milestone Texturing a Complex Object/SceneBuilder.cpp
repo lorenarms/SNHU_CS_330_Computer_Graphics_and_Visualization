@@ -98,19 +98,21 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// PEN CLIP
 	GLMesh cyl_gMesh02;
 	cyl_gMesh02.p = {
-		0.0f, 0.3f, 0.5f, 1.0f,
-		1.0f, 1.0f, 1.0f,
+		1.0f, 0.843f, 0.0f, 1.0f,
+		1.5f, 0.2f, 1.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
-		-90.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.5f, 0.0f,
+		0.75f, 0.9f, -1.5f,
 		1.0f, 1.0f
 	};
-#define texture "white.bmp"
-	cyl_gMesh02.length = 1.0f;	cyl_gMesh02.radius = 0.1f;	cyl_gMesh02.number_of_sides = 12.0f;
+#define texture "pen_clip.png"
+	cyl_gMesh02.length = 1.5f;	cyl_gMesh02.radius = 0.1f;	cyl_gMesh02.number_of_sides = 8.0f;
 	cyl_gMesh02.texFilename = concat(textureFolderLocation, texture);
-	//ShapeBuilder::UBuildCylinder(cyl_gMesh02);
-	//scene.push_back(cyl_gMesh02);
+	ShapeBuilder::UBuildCylinder(cyl_gMesh02);
+	scene.push_back(cyl_gMesh02);
+
+
 
 
 
@@ -153,15 +155,15 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 	GLMesh plan_gMesh01;
 	plan_gMesh01.p = {
-		0.0f, 0.2f, 0.3f, 1.0f,				// color r, g, b a
-		4.0f, 8.0f, 4.0f,					// scale x, y, z
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		4.0f, 2.0f, 4.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-#define texture "white.bmp"
+#define texture "desk.png"
 
 	plan_gMesh01.texFilename = concat(textureFolderLocation, texture);
 	ShapeBuilder::UBuildPlane(plan_gMesh01);

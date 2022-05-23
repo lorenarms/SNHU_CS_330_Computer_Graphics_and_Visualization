@@ -36,13 +36,13 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 0.0f,
 		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.50f, 0.0f,
 
-		-0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom back
-		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
-		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
+		-0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f, 0.0f,		//bottom back
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 0.0f,
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f, 1.0f,
 
-		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,		//bottom front
-		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f,
-		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	1.0f, 1.0f
+		 0.5f, -0.0f, -0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 0.0f,		//bottom front
+		-0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.0f, 1.0f,
+		 0.5f, -0.0f,  0.5f,	c[0],	c[1],	c[2],	c[3],	0.25f, 1.0f
 	};
 
 	UTranslator(mesh);
@@ -239,25 +239,25 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.5f });		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.25f });		// center point; x, y, z, r, g, b, a, texture x, texture y
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
-			/*textureXLoc,
-			0.0f*/
-			0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
-			0.5f + (r * sin((i)*sectorStep))
-			});										// first outer point
+										/*textureXLoc,
+										0.0f*/
+										0.5f + (r * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
+										0.25f + (0.25f * sin((i)*sectorStep))
+										});												// first outer point
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
-			/*textureXLoc + textStep,
-			0.0f*/
-			0.5f + (r * cos((i + 1) * sectorStep)) ,
-			0.5f + (r * sin((i + 1) * sectorStep))
-			});						// second outer point
+										/*textureXLoc + textStep,
+										0.0f*/
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.25f + (0.25f * sin((i + 1) * sectorStep))
+										});												// second outer point
 
 
 // side triangle + point
@@ -266,13 +266,13 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc ,
-										0.0f });
+										0.5f });
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc + textStep,
-										0.0f });
+										0.5f });
 		v.insert(v.end(), { 0.5f , 0.5f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
 
 		textureXLoc += textStep;
@@ -389,43 +389,47 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
 										0.5f + r * sin(i * sectorStep) ,			// y
 										0.0f ,										// z
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], c[1], c[2], c[3],						// color data r g b a
 										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
-										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+
+
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], c[1], c[2], c[3],						// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
+
+
 	}
 
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, top
-		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], c[3], 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], c[3], 0.5f, 0.875f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.5f + r * sin(i * sectorStep) ,
 										l ,										// build this fan the 'l' value away from the other fan
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										0.5f + (r * cos((i)*sectorStep)) ,
-										0.5f + (r * sin((i)*sectorStep)) });
+										0.875f + (0.125f * sin((i)*sectorStep)) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										0.875f + (0.125f * sin((i + 1) * sectorStep)) });
 	}
 
 	// since all side triangles have the same points as the fans above, the same calculations are used
 	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
 	// the texture to clamp to the corresponding point.
-	constexpr float x = 3.0f;
+	constexpr float x = 1.0f;
 	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
 	float k = 0.0f;				// for texture clamping
 
@@ -437,38 +441,38 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 										0.0f ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k ,
-										0 });
+										0.25f });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.5f + r * sin(i * sectorStep) ,
 										l ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k ,
-										1.0f });
+										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
-										1.0f });
+										0.75f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
-										1.0f });
+										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
-										0.0f });
+										0.25f });
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k,
-										0.0f });
+										0.25f });
 		k += j;
 	}
 

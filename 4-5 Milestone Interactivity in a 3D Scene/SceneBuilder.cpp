@@ -6,15 +6,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	// macro to handle texture file locations, for .exe file
-
-	// define the folder location for all textures used
-	// make sure all textures stored in this location
-#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\3-5 Milestone 3D Scene\\textures\\"
-#define texture "white.bmp"
-
-// define a concat function that takes the above location and concatenates the texture name together
-#define concat(first, second) first second
+	
 
 // seed the rand() function once
 	srand(time(nullptr));
@@ -34,8 +26,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 ///		x translate float, y translate float, z translate float,
 ///		x texture scale float, y texture scale float
 ///		};
-///		#define texture "<texture_name.file_type>"
-///		<glmesh_name>.texFilename = concat(textureFolderLocation, texture);
+///		<glmesh_name>.texFilename = "textures\\[filename.filetype]";
 ///		<glmesh_name>.length = float;
 ///		<glmesh_name>.height = float;
 ///		<glmesh_name>.radius = float;
@@ -61,7 +52,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 12.0f;
-	cyl_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	cyl_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
 	scene.push_back(cyl_gMesh01);
 
@@ -77,7 +68,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	cyl_gMesh02.length = 1.0f;	cyl_gMesh02.radius = 0.1f;	cyl_gMesh02.number_of_sides = 12.0f;
-	cyl_gMesh02.texFilename = concat(textureFolderLocation, texture);
+	cyl_gMesh02.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh02);
 	scene.push_back(cyl_gMesh02);
 
@@ -93,7 +84,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	cyl_gMesh03.length = 0.2f;	cyl_gMesh03.radius = 0.4f;	cyl_gMesh03.number_of_sides = 12.0f;
-	cyl_gMesh03.texFilename = concat(textureFolderLocation, texture);
+	cyl_gMesh03.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh03);
 	scene.push_back(cyl_gMesh03);
 
@@ -110,7 +101,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 12.0f;
-	con_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	con_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildCone(con_gMesh01);
 	scene.push_back(con_gMesh01);
 
@@ -125,7 +116,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 
-	plan_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	plan_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildPlane(plan_gMesh01);
 	scene.push_back(plan_gMesh01);
 

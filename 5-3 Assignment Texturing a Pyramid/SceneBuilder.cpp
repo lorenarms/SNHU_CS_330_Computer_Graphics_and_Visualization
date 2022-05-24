@@ -10,7 +10,7 @@
 ///	Follow the standard shown below in the <summary> to see
 ///	how to build a shape
 ///
-///	Uncomment other shapes below to see more examples of how to build them
+
 
 
 
@@ -22,16 +22,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	// macro to handle texture file locations, for .exe file
-
-	// define the folder location for all textures used
-	// make sure all textures stored in this location
-	// CHANGE THIS to match your own location on your machine
-#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\textures\\"
-
-// define a concat function that takes the above location and concatenates the texture name together
-#define concat(first, second) first second
-
+	
 	// seed the rand() function once
 	srand(time(nullptr));
 
@@ -51,8 +42,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	///		x translate float, y translate float, z translate float,
 	///		x texture scale float, y texture scale float
 	///		};
-	///		#define texture "<texture_name.file_type>"
-	///		<glmesh_name>.texFilename = concat(textureFolderLocation, texture);
+	///		<glmesh_name>.texFilename = "textures\\[filename.filetype]";
 	///		<glmesh_name>.length = float;
 	///		<glmesh_name>.height = float;
 	///		<glmesh_name>.radius = float;
@@ -71,146 +61,76 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	/// <param name="scene"></param>
 
 
-//	GLMesh con_gMesh01;
-//	con_gMesh01.p = {
-//		1.0f, 1.0f, 1.0f, 1.0f,
-//		2.0f, 2.0f, 2.0f,
-//		-90.0f, 1.0f, 0.0f, 0.0f,
-//		0.0f, 0.0f, 1.0f, 0.0f,
-//		0.0f, 0.0f, 0.0f, 1.0f,
-//		0.0f, 0.0f, 0.0f,
-//		1.0f, 1.0f
-//
-//	};
-//#define texture "white.bmp"
-//	con_gMesh01.texFilename = concat(textureFolderLocation, texture);
-//	con_gMesh01.length = 1.0f;
-//	con_gMesh01.radius = 0.5f;
-//	con_gMesh01.number_of_sides = 12.0f;
-//	ShapeBuilder::UBuildCone(con_gMesh01);
-//	scene.push_back(con_gMesh01);
 
 
 
+	//	PYRAMID 01
+	GLMesh pyr_mesh_realBricks;
+	pyr_mesh_realBricks.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.5f, 1.5f, 1.5f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	pyr_mesh_realBricks.height = 0.8f;
+	pyr_mesh_realBricks.texFilename = "textures\\realbricks.png";
+	ShapeBuilder::UBuildPyramid(pyr_mesh_realBricks);
+	scene.push_back(pyr_mesh_realBricks);
 
 
-//
 
-//		GLMesh gMesh01;
-//	gMesh01.p = {
-//		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-//		2.0f, 2.0f, 2.0f,					// scale x, y, z
-//		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-//		-1.0f, 0.0f, -1.0f,					// translate x, y, z
-//		1.0f, 1.0f
-//	};
-//	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;
-//#define texture "smiley.png"
-//
-////#define texture "white.bmp"
-//	//#define texture "rocks.png"
-//	gMesh01.texFilename = concat(textureFolderLocation, texture);
-//	ShapeBuilder::UBuildCone(gMesh01);
-//	scene.push_back(gMesh01);
-//
-//
-//
+	//	PYRAMID 02
+	GLMesh pyr_mesh_pyramidBricks;
+	pyr_mesh_pyramidBricks.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		2.5f, 2.5f, 2.5f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		-1.0f, 0.0f, 4.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	pyr_mesh_pyramidBricks.height = 0.8f;
+	pyr_mesh_pyramidBricks.texFilename = "textures\\pyramid.png";
+	ShapeBuilder::UBuildPyramid(pyr_mesh_pyramidBricks);
+	scene.push_back(pyr_mesh_pyramidBricks);
 
-//	PYRAMID
-	GLMesh gMesh03;
-	gMesh03.p = {
+
+	// PYRAMID 03
+	GLMesh pyr_mesh_cartoonBricks;
+	pyr_mesh_cartoonBricks.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		-1.5f, 0.0f, 0.0f,					// translate x, y, z
+		4.0f, 0.0f, -1.5f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	gMesh03.height = 0.8f;
-#define texture "realbricks.png"
-	gMesh03.texFilename = concat(textureFolderLocation, texture);
-	ShapeBuilder::UBuildPyramid(gMesh03);
-	scene.push_back(gMesh03);
+	pyr_mesh_cartoonBricks.height = 0.8f;
+	pyr_mesh_cartoonBricks.texFilename = "textures\\bricks.png";
+	ShapeBuilder::UBuildPyramid(pyr_mesh_cartoonBricks);
+	scene.push_back(pyr_mesh_cartoonBricks);
 
 
+	// GROUND
+	GLMesh mesh;
+	mesh.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		5.0f, 5.0f, 5.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		2.0f, 0.0f, 2.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	mesh.texFilename = "textures\\dunes.jpg";
+	ShapeBuilder::UBuildPlane(mesh);
+	scene.push_back(mesh);
 
-
-//	// SHAPE 2: Cube
-//	GLMesh gMesh02;
-//	gMesh02.p = {
-//		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-//		1.0f, 1.0f, 1.0f,					// scale x, y, z
-//		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-//		-45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-//		1.5f, 0.0f, 0.0f,					// translate x, y, z
-//		1.0f, 1.0f							// texture scaling
-//	};
-//#define texture "rubiks.png"
-//	gMesh02.texFilename = concat(textureFolderLocation, texture);
-//	ShapeBuilder::UBuildCube(gMesh02);
-//	scene.push_back(gMesh02);
-//
-//	GLMesh gMesh01;
-//	gMesh01.p = {
-//		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-//		2.0f, 2.0f, 2.0f,					// scale x, y, z
-//		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-//		-0.5f, 0.0f, -0.5f,					// translate x, y, z
-//		1.0f, 1.0f
-//	};
-//	gMesh01.length = 1.0f;	gMesh01.radius = 0.5f;	gMesh01.number_of_sides = 12.0f;
-//#define texture "pyramid01.png"
-//	//#define texture "rocks.png"
-//	gMesh01.texFilename = concat(textureFolderLocation, texture);
-//	ShapeBuilder::UBuildCone(gMesh01);
-//	scene.push_back(gMesh01);
-//
-//
-//
-//	GLMesh cyl_gMesh;
-//	cyl_gMesh.height = 1.0f;
-//	cyl_gMesh.radius = 0.5f;
-//	cyl_gMesh.length = 1.0f;
-//	cyl_gMesh.number_of_sides = 12.0f;
-//	cyl_gMesh.p = {
-//		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
-//		2.0f, 2.0f, 2.0f,					// scale x, y, z
-//		-90.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-//		30.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-//		1.5f, 0.0f, -1.5f,					// translate x, y, z
-//		1.0f, 1.0f
-//	};
-//#define texture "rocks.png"
-//	//#define texture "white.bmp"
-//
-//	cyl_gMesh.texFilename = concat(textureFolderLocation, texture);
-//	ShapeBuilder::UBuildCylinder(cyl_gMesh);
-//	scene.push_back(cyl_gMesh);
-//
-//
-//	GLMesh plan_gMesh;
-//	plan_gMesh.p = {
-//		0.2f, 0.2f, 0.2f, 1.0f,				// color r, g, b a
-//		4.0f, 8.0f, 4.0f,					// scale x, y, z
-//		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-//		0.0f, 0.0f, 0.0f,					// translate x, y, z
-//		1.0f, 1.0f
-//	};
-//#define texture "walltexture.png"
-//
-//	plan_gMesh.texFilename = concat(textureFolderLocation, texture);
-//	ShapeBuilder::UBuildPlane(plan_gMesh);
-//	scene.push_back(plan_gMesh);
-//
 
 }
 

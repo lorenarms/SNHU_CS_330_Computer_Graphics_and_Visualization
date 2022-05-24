@@ -50,7 +50,7 @@ bool perspective = false;
 
 // camera
 //Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
-Camera gCamera(glm::vec3(-4.0f, 3.5f, -0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 10.0f, -30.0f);
+Camera gCamera(glm::vec3(-5.0f, 4.5f, -0.3f), glm::vec3(0.0f, 1.0f, 0.0f), 10.0f, -30.0f);
 
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
@@ -200,7 +200,7 @@ int main(int argc, char* argv[])
 	while (!glfwWindowShouldClose(gWindow))
 	{
 		//bg color of window
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;

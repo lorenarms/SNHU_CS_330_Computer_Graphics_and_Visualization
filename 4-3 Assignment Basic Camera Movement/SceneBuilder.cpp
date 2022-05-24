@@ -6,15 +6,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	// macro to handle texture file locations, for .exe file
-
-	// define the folder location for all textures used
-	// make sure all textures stored in this location
-#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\3-5 Milestone 3D Scene\\textures\\"
-
-// define a concat function that takes the above location and concatenates the texture name together
-#define concat(first, second) first second
-
+	
 // seed the rand() function once
 	srand(time(nullptr));
 
@@ -34,8 +26,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	pyr_gMesh01.height = 1.8f;
-	#define texture "white.bmp"
-	pyr_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	pyr_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildRainbowPyramid(pyr_gMesh01, rand() % 100 + 1);
 	scene.push_back(pyr_gMesh01);
 
@@ -53,7 +44,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.5f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f							// texture scaling
 	};
-	cub_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	cub_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildRainbowCube(cub_gMesh01, rand() % 100 + 1);
 	scene.push_back(cub_gMesh01);
 
@@ -74,8 +65,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 24.0f;
-	//#define texture "rocks.png"
-	con_gMesh01.texFilename = concat(textureFolderLocation, texture);
+	con_gMesh01.texFilename = "textures\\white.png";
 	ShapeBuilder::UBuildRainbowCone(con_gMesh01, rand() % 100 + 1);
 	scene.push_back(con_gMesh01);
 

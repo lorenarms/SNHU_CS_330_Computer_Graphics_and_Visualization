@@ -29,7 +29,8 @@ using namespace std;
 //window title
 const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
 
-//window width, height
+// window width, height
+// my resolution is 3840 X 2400 
 const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 
@@ -49,7 +50,8 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+//Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
+Camera gCamera(glm::vec3(-5.0f, 2.5f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 35.0f, -20.0f);
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;
@@ -198,7 +200,7 @@ int main(int argc, char* argv[])
 	while (!glfwWindowShouldClose(gWindow))
 	{
 		//bg color of window
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
 
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;

@@ -18,15 +18,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	// macro to handle texture file locations, for .exe file
-
-	// define the folder location for all textures used
-	// make sure all textures stored in this location
-	#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\3-5 Milestone 3D Scene\\textures\\"
-
-	// define a concat function that takes the above location and concatenates the texture name together
-	#define concat(first, second) first second
-
+	
 	// seed the rand() function once
 	srand(time(nullptr));
 
@@ -47,8 +39,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	con_mesh_01.radius = 0.5f;
 	con_mesh_01.length = 0.5f;
 	con_mesh_01.number_of_sides = 24.0f;
-#define texture "white.png"
-	con_mesh_01.texFilename = concat(textureFolderLocation, texture);
+	con_mesh_01.texFilename = "texture\\white.png";
 	ShapeBuilder::UBuildRainbowCone(con_mesh_01, rand() % 100);
 	scene.push_back(con_mesh_01);
 
@@ -68,8 +59,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	cyl_mesh_01.length = 6.0f;
 	cyl_mesh_01.radius = 0.5f;
 	cyl_mesh_01.number_of_sides = 24.0f;
-#define texture "white.png"
-	cyl_mesh_01.texFilename = concat(textureFolderLocation, texture);
+	cyl_mesh_01.texFilename = "texture\\white.png";;
 	ShapeBuilder::UBuildRainbowCylinder(cyl_mesh_01, rand() % 100);
 	scene.push_back(cyl_mesh_01);
 
@@ -88,7 +78,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	cyl_mesh_02.length = 1.0f;
 	cyl_mesh_02.radius = 0.5f;
 	cyl_mesh_02.number_of_sides = 12.0f;
-	cyl_mesh_02.texFilename = concat(textureFolderLocation, texture);
+	cyl_mesh_02.texFilename = "texture\\white.png";
 	ShapeBuilder::UBuildRainbowCylinder(cyl_mesh_02, rand() % 100);
 	scene.push_back(cyl_mesh_02);
 	
@@ -110,8 +100,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	cyl_mesh_03.length = 0.1f;
 	cyl_mesh_03.radius = 0.4f;
 	cyl_mesh_03.number_of_sides = 24.0f;
-#define texture "white.png"
-	cyl_mesh_03.texFilename = concat(textureFolderLocation, texture);
+	cyl_mesh_03.texFilename = "texture\\white.png";
 	ShapeBuilder::UBuildRainbowCylinder(cyl_mesh_03, rand() % 100);
 	scene.push_back(cyl_mesh_03);
 
@@ -131,8 +120,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	con_mesh_02.radius = 0.2f;
 	con_mesh_02.length = 0.2f;
 	con_mesh_02.number_of_sides = 24.0f;
-#define texture "white.png"
-	con_mesh_02.texFilename = concat(textureFolderLocation, texture);
+	con_mesh_02.texFilename = "texture\\white.png";
 	ShapeBuilder::UBuildRainbowCone(con_mesh_02, rand() % 100);
 	scene.push_back(con_mesh_02);
 	

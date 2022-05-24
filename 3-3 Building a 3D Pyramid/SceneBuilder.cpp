@@ -20,15 +20,7 @@ using namespace std;
 
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
-	// macro to handle texture file locations, for .exe file
-
-	// define the folder location for all textures used
-	// make sure all textures stored in this location
-	#define textureFolderLocation "C:\\Users\\Lawrence\\Git Repos\\SNHU_CS_330_Projects\\3-3 Building a 3D Pyramid\\textures\\"
-
-	// define a concat function that takes the above location and concatenates the texture name together
-	#define concat(first, second) first second
-
+	
 	// seed the rand() function once
 	srand(time(nullptr));
 	
@@ -44,9 +36,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f							// texture scaling
 	};
 	gMesh01.height = 1.7f;
-	//#define texture "white.bmp"
-	#define texture "white.bmp"
-	gMesh01.texFilename = concat(textureFolderLocation, texture);		// create the texture file location name
+	gMesh01.texFilename = "texture\\white.bmp";
 	ShapeBuilder::UBuildRainbowPyramid(gMesh01, (rand() % 100 + 1));		
 	scene.push_back(gMesh01);
 	// END SHAPE 1
@@ -64,9 +54,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f,	1.0f						// texture scaling
 	};
 	gMesh02.height = 1.7f;
-	#define texture "white.bmp"
-	gMesh02.texFilename = concat(textureFolderLocation, texture);
-	//ShapeBuilder::UBuildPyramid(gMesh02);
+	gMesh02.texFilename = "texture\\white.bmp";
 	ShapeBuilder::UBuildRainbowPyramid(gMesh02, (rand() % 100 + 1));
 	scene.push_back(gMesh02);
 	// END SHAPE 2
@@ -84,8 +72,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f,	1.0f						// texture scaling
 	};
 	gMesh03.height = 1.7f;
-	#define texture "white.bmp"
-	gMesh03.texFilename = concat(textureFolderLocation, texture);
+	gMesh03.texFilename = "texture\\white.bmp";
 	ShapeBuilder::UBuildRainbowPyramid(gMesh03, (rand() % 100 + 1));
 	scene.push_back(gMesh03);
 	// END SHAPE 3

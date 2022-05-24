@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 .ai
 .psd
+/Texture PSD and AI files/plane.ai
+*.ai
+*.psd

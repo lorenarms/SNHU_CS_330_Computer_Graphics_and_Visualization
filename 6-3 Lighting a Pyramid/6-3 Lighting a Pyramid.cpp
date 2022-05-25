@@ -33,6 +33,14 @@ const char* const WINDOW_TITLE = "Module 5 Milestone: Texturing a Complex Object
 const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 
+struct GLightMesh
+{
+	GLuint vao;         // Handle for the vertex array object
+	GLuint vbo;         // Handle for the vertex buffer object
+	GLuint nVertices;    // Number of indices of the mesh
+};
+
+
 ShapeBuilder builder;
 
 //main window
@@ -40,6 +48,7 @@ GLFWwindow* gWindow = nullptr;
 
 //shader program
 GLuint gShaderProgram;
+GLuint gLampProgramId;
 
 // scene vector for drawing shapes
 vector<GLMesh> scene;
@@ -60,6 +69,13 @@ bool gFirstMouse = true;
 // timing
 float gDeltaTime = 0.0f; // time between current frame and last frame
 float gLastFrame = 0.0f;
+
+
+// Light color, position and scale
+glm::vec3 gLightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 gLightPosition(1.5f, 0.5f, 3.0f);
+glm::vec3 gLightScale(0.3f);
+
 
 
 //initialize program
@@ -94,13 +110,17 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 bool UCreateTexture(const char* filename, GLuint& textureId);
 
 
-// Vertex Shader Source Code
+
+
+
+// Shape Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
 	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
 	layout(location = 1) in vec3 color;
 	layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
 
 	out vec3 shapeColor;
+	out vec3 vertexFragmentPos;
 	out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
 
 //uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
@@ -111,29 +131,102 @@ uniform mat4 projection;
 void main()
 {
 	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
+	vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
 	shapeColor = color;
 	vertexTextureCoordinate = textureCoordinate;
 }
 );
 
-// Fragment Shader Source Code
+
+
+// Shape Fragment Shader Source Code
 const GLchar* fragment_shader_source = GLSL(440,
 	out vec4 fragmentColor;
-	
+
+	in vec3 vertexFragmentPos;
 	in vec3 shapeColor;	
 	in vec2 vertexTextureCoordinate; // for texture coordinates, not color
 
+	uniform vec3 objectColor;
+	uniform vec3 lightColor;
+	uniform vec3 lightPos;
+	uniform vec3 viewPosition;
 	uniform sampler2D uTexture;
 	uniform vec2 uvScale;
 
 void main()
 {
-	//fragmentColor = vec4(vertexColor);
-	//fragmentColor = texture(uTexture, vertexTextureCoordinate * uvScale);
+	//Calculate Ambient lighting*/
+	float ambientStrength = 0.1f; // Set ambient or global lighting strength
+	vec3 ambient = ambientStrength * lightColor; // Generate ambient light color
+
+	//Calculate Diffuse lighting*/
+	vec3 norm = normalize(shapeColor); // Normalize vectors to 1 unit
+	vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+	float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+	vec3 diffuse = impact * lightColor; // Generate diffuse light color
+
+
+	//Calculate Specular lighting*/
+	float specularIntensity = 0.8f; // Set specular light strength
+	float highlightSize = 16.0f; // Set specular highlight size
+	vec3 viewDir = normalize(viewPosition - vertexFragmentPos); // Calculate view direction
+	vec3 reflectDir = reflect(-lightDirection, norm);// Calculate reflection vector
+
+
+	//Calculate specular component
+	float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
+	vec3 specular = specularIntensity * specularComponent * lightColor;
+
+	// Texture holds the color to be used for all three components
+	vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
+
+	// Calculate phong result
+	vec3 phong = (ambient + diffuse + specular) * textureColor.xyz;
+
 	fragmentColor = texture(uTexture, vertexTextureCoordinate) * vec4(shapeColor, 1.0);
 
 }
 );
+
+
+
+
+
+
+// Light Shader Source Code
+const GLchar* lampVertexShaderSource = GLSL(440,
+
+	layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
+
+		//Uniform / Global variables for the  transform matrices
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+void main()
+{
+	gl_Position = projection * view * model * vec4(position, 1.0f); // Transforms vertices into clip coordinates
+}
+);
+
+// Light Fragment Shader Source Code
+const GLchar* lampFragmentShaderSource = GLSL(440,
+
+	out vec4 fragmentColor; // For outgoing lamp color (smaller cube) to the GPU
+
+void main()
+{
+	fragmentColor = vec4(1.0f); // Set color to white (1.0f,1.0f,1.0f) with alpha 1.0
+}
+);
+
+
+
+
+
+
+
 
 void flipImageVertically(unsigned char* image, int width, int height, int channels)
 {
@@ -167,27 +260,25 @@ int main(int argc, char* argv[])
 	SceneBuilder::UBuildScene(scene);
 	
 	//build shader 
-	if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
-		gShaderProgram))
-		return EXIT_FAILURE;
-
 
 	for (auto& m : scene)
 	{
 		if (!UCreateTexture(m.texFilename, m.textureId))
 		{
 			cout << "Failed to load texture " << m.texFilename << endl;
-			//cin.get();
 			return EXIT_FAILURE;
 
 		}
 
 		if (!UCreateShaderProgram(vertex_shader_source, fragment_shader_source,
 			gShaderProgram))
-			//cout << "Fail 2" << endl;	cin.get();
-
 			return EXIT_FAILURE;
+
+		
 	}
+
+	if (!UCreateShaderProgram(lampVertexShaderSource, lampFragmentShaderSource, gLampProgramId))
+		return EXIT_FAILURE;
 	
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
@@ -225,6 +316,7 @@ int main(int argc, char* argv[])
 	scene.clear();
 	
 	UDestroyShaderProgram(gShaderProgram);
+	UDestroyShaderProgram(gLampProgramId);
 
 	//exit with success!
 	exit(EXIT_SUCCESS);
@@ -517,6 +609,12 @@ void URender(vector<GLMesh> scene)
 	GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
 	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
+	// Reference matrix uniforms from the Cube Shader program for the cub color, light color, light position, and camera position
+	GLint objectColorLoc = glGetUniformLocation(gShaderProgram, "objectColor");
+	GLint lightColorLoc = glGetUniformLocation(gShaderProgram, "lightColor");
+	GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
+	GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
+
 	// loop to draw each shape individually
 	for (auto i = 0; i < scene.size(); ++i)
 	{
@@ -527,6 +625,13 @@ void URender(vector<GLMesh> scene)
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Pass color, light, and camera data to the Cube Shader program's corresponding uniforms
+		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
+		glUniform3f(lightColorLoc, gLightColor.r, gLightColor.g, gLightColor.b);
+		glUniform3f(lightPositionLoc, gLightPosition.x, gLightPosition.y, gLightPosition.z);
+		const glm::vec3 cameraPosition = gCamera.Position;
+		glUniform3f(viewPositionLoc, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 
 		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
 		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
@@ -539,8 +644,7 @@ void URender(vector<GLMesh> scene)
 
 		// Draws the triangles
 		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-		glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT,
-		nullptr);
+		
 	}
 
 	
@@ -679,4 +783,92 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 void UDestroyTexture(GLuint textureId)
 {
 	glGenTextures(1, &textureId);
+}
+
+
+
+
+
+// Implements the UCreateMesh function
+void UCreateMesh(GLightMesh& lightMesh)
+{
+	// Position and Color data
+	GLfloat verts[] = {
+		//Positions          //Normals
+		// ------------------------------------------------------
+		//Back Face          //Negative Z Normal  Texture Coords.
+	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+
+	   //Front Face         //Positive Z Normal
+	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+	   0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+	  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+
+	  //Left Face          //Negative X Normal
+	 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	 -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+	 //Right Face         //Positive X Normal
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+	 //Bottom Face        //Negative Y Normal
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+
+	//Top Face           //Positive Y Normal
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+	};
+
+	const GLuint floatsPerVertex = 3;
+	const GLuint floatsPerNormal = 3;
+	const GLuint floatsPerUV = 2;
+
+	lightMesh.nVertices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerNormal + floatsPerUV));
+
+	glGenVertexArrays(1, &lightMesh.vao); // we can also generate multiple VAOs or buffers at the same time
+	glBindVertexArray(lightMesh.vao);
+
+	// Create 2 buffers: first one for the vertex data; second one for the indices
+	glGenBuffers(1, &lightMesh.vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, lightMesh.vbo); // Activates the buffer
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
+
+	// Strides between vertex coordinates is 6 (x, y, z, r, g, b, a). A tightly packed stride is 0.
+	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerNormal + floatsPerUV);// The number of floats before each
+
+	// Create Vertex Attribute Pointers
+	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, floatsPerNormal, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * (floatsPerVertex + floatsPerNormal)));
+	glEnableVertexAttribArray(2);
 }

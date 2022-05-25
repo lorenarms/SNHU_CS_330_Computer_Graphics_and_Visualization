@@ -157,6 +157,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneBuilder.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="object_shader.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

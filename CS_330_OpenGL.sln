@@ -25,7 +25,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "4-5 Milestone Interactivity
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "0-3 OpenGl Practice Sphere", "0-3 OpenGl Practice Creating A Sphere\0-3 OpenGl Practice Sphere.vcxproj", "{1B03D7B5-DDE2-4605-A2E0-7EB31661659F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-3 Texturing a Pyramid", "5-5 Milestone Texturing a Complex Object\5-5 Milestone Texturing a Complex Object.vcxproj", "{572812E2-D04E-485C-A532-B4AE2D25006E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-5 Milestone Texturing a Complex Object", "5-5 Milestone Texturing a Complex Object\5-5 Milestone Texturing a Complex Object.vcxproj", "{572812E2-D04E-485C-A532-B4AE2D25006E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-5 Milestone Texturing a Complex Object", "6-3 Lighting a Pyramid\6-3 Lighting a Pyramid.vcxproj", "{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,14 @@ Global
 		{572812E2-D04E-485C-A532-B4AE2D25006E}.Release|x64.Build.0 = Release|x64
 		{572812E2-D04E-485C-A532-B4AE2D25006E}.Release|x86.ActiveCfg = Release|Win32
 		{572812E2-D04E-485C-A532-B4AE2D25006E}.Release|x86.Build.0 = Release|Win32
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Debug|x64.ActiveCfg = Debug|x64
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Debug|x64.Build.0 = Debug|x64
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Debug|x86.ActiveCfg = Debug|Win32
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Debug|x86.Build.0 = Debug|Win32
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Release|x64.ActiveCfg = Release|x64
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Release|x64.Build.0 = Release|x64
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Release|x86.ActiveCfg = Release|Win32
+		{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

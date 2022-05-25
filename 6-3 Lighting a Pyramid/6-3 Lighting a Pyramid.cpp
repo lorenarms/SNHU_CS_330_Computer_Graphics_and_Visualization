@@ -4,7 +4,7 @@
 // CS-330 Comp Graphic and Viz
 // Assignment 5-3
 //
-// TEXTURING A PYRAMID
+// TEXTURING A COMPLEX OBJECT
 //
 //---------------------------------------------------
 
@@ -27,10 +27,9 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Assignment: Texture a Pyramid";
+const char* const WINDOW_TITLE = "Module 5 Milestone: Texturing a Complex Object";
 
-// window width, height
-// my resolution is 3840 X 2400 
+//window width, height
 const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 
@@ -50,8 +49,9 @@ bool perspective = false;
 
 
 // camera
-//Camera gCamera(glm::vec3(0.0f, 1.5f, 5.0f));
 Camera gCamera(glm::vec3(-5.0f, 2.5f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 35.0f, -20.0f);
+
+
 float gLastX = WINDOW_WIDTH / 2.0f;
 float gLastY = WINDOW_HEIGHT / 2.0f;
 bool gFirstMouse = true;
@@ -128,7 +128,8 @@ const GLchar* fragment_shader_source = GLSL(440,
 
 void main()
 {
-	
+	//fragmentColor = vec4(vertexColor);
+	//fragmentColor = texture(uTexture, vertexTextureCoordinate * uvScale);
 	fragmentColor = texture(uTexture, vertexTextureCoordinate) * vec4(shapeColor, 1.0);
 
 }
@@ -193,15 +194,14 @@ int main(int argc, char* argv[])
 	glUseProgram(gShaderProgram);
 	// We set the texture as texture unit 0
 	glUniform1i(glGetUniformLocation(gShaderProgram, "uTexture"), 0);
-
 	
-
 	//rendering loop
 	//keep checking if window has closed
 	while (!glfwWindowShouldClose(gWindow))
 	{
 		//bg color of window
-		glClearColor(1.0f, 0.5f, 0.0f, 1.0);
+		glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
+
 
 		float currentFrame = glfwGetTime();
 		gDeltaTime = currentFrame - gLastFrame;

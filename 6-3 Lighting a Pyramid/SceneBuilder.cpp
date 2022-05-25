@@ -72,7 +72,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	//	PYRAMID 01
 	GLMesh pyr_mesh_realBricks;
 	pyr_mesh_realBricks.p = {
-		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		1.5f, 1.5f, 1.5f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -90,7 +90,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	//	PYRAMID 02
 	GLMesh pyr_mesh_pyramidBricks;
 	pyr_mesh_pyramidBricks.p = {
-		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		2.5f, 2.5f, 2.5f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -107,7 +107,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// PYRAMID 03
 	GLMesh pyr_mesh_cartoonBricks;
 	pyr_mesh_cartoonBricks.p = {
-		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
@@ -124,7 +124,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// GROUND
 	GLMesh mesh;
 	mesh.p = {
-		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		5.0f, 5.0f, 5.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z

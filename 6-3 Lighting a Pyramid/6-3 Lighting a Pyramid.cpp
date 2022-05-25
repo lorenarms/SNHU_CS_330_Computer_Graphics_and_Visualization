@@ -40,6 +40,7 @@ struct GLightMesh
 	GLuint nVertices;    // Number of indices of the mesh
 };
 
+GLightMesh lightMesh;
 
 ShapeBuilder builder;
 
@@ -108,6 +109,7 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 // texture create
 bool UCreateTexture(const char* filename, GLuint& textureId);
+void UCreateLightMesh(GLightMesh& lightMesh);
 
 
 
@@ -128,29 +130,31 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-void main()
-{
-	gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
-	vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
-	shapeColor = color;
-	vertexTextureCoordinate = textureCoordinate;
-}
+	void main()
+	{
+		gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
+		vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
+		shapeColor = mat3(transpose(inverse(model))) * color;
+		vertexTextureCoordinate = textureCoordinate;
+	}
 );
 
 
 
 // Shape Fragment Shader Source Code
 const GLchar* fragment_shader_source = GLSL(440,
-	out vec4 fragmentColor;
 
 	in vec3 vertexFragmentPos;
 	in vec3 shapeColor;	
 	in vec2 vertexTextureCoordinate; // for texture coordinates, not color
 
+	out vec4 fragmentColor;
+	
 	uniform vec3 objectColor;
 	uniform vec3 lightColor;
 	uniform vec3 lightPos;
 	uniform vec3 viewPosition;
+	
 	uniform sampler2D uTexture;
 	uniform vec2 uvScale;
 
@@ -184,7 +188,9 @@ void main()
 	// Calculate phong result
 	vec3 phong = (ambient + diffuse + specular) * textureColor.xyz;
 
+
 	fragmentColor = texture(uTexture, vertexTextureCoordinate) * vec4(shapeColor, 1.0);
+	//fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 
 }
 );
@@ -200,9 +206,9 @@ const GLchar* lampVertexShaderSource = GLSL(440,
 	layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
 
 		//Uniform / Global variables for the  transform matrices
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+	uniform mat4 model;
+	uniform mat4 view;
+	uniform mat4 projection;
 
 void main()
 {
@@ -279,7 +285,9 @@ int main(int argc, char* argv[])
 
 	if (!UCreateShaderProgram(lampVertexShaderSource, lampFragmentShaderSource, gLampProgramId))
 		return EXIT_FAILURE;
-	
+
+	// Create Light Object
+	UCreateLightMesh(lightMesh);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
@@ -585,7 +593,7 @@ void URender(vector<GLMesh> scene)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
+
 	// transform the camera (x, y, z)
 	glm::mat4 view = gCamera.GetViewMatrix();
 
@@ -601,30 +609,35 @@ void URender(vector<GLMesh> scene)
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
 
-	// set shader
-	glUseProgram(gShaderProgram);
 
-	// gets and passes transform matrices to shader prgm
-	GLint modelLocation = glGetUniformLocation(gShaderProgram, "model");
-	GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
-	GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
-
-	// Reference matrix uniforms from the Cube Shader program for the cub color, light color, light position, and camera position
-	GLint objectColorLoc = glGetUniformLocation(gShaderProgram, "objectColor");
-	GLint lightColorLoc = glGetUniformLocation(gShaderProgram, "lightColor");
-	GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
-	GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
-
+	
+	
 	// loop to draw each shape individually
 	for (auto i = 0; i < scene.size(); ++i)
 	{
 		auto mesh = scene[i];
 
-		
+		// activate vbo's within mesh's vao
+		glBindVertexArray(mesh.vao);
+
+		// set shader
+		glUseProgram(gShaderProgram);
+
+		// gets and passes transform matrices to shader prgm
+		GLint modelLocation = glGetUniformLocation(gShaderProgram, "model");
+		GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
+		GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
 
 		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(mesh.model));
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Reference matrix uniforms from the Cube Shader program for the cub color, light color, light position, and camera position
+		GLint objectColorLoc = glGetUniformLocation(gShaderProgram, "objectColor");
+		GLint lightColorLoc = glGetUniformLocation(gShaderProgram, "lightColor");
+		GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
+		GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
+		
 
 		// Pass color, light, and camera data to the Cube Shader program's corresponding uniforms
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
@@ -636,20 +649,44 @@ void URender(vector<GLMesh> scene)
 		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
 		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
 
-		// activate vbo's within mesh's vao
-		glBindVertexArray(mesh.vao);
-
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
 		// Draws the triangles
 		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
 		
+		
 	}
+	
+	// LAMP: draw lamp
+//----------------
+	glUseProgram(gLampProgramId);
+
+	glBindVertexArray(lightMesh.vao);
+
+	//Transform the smaller cube used as a visual que for the light source
+	glm::mat4 model = glm::translate(gLightPosition) * glm::scale(gLightScale);
+
+	// Reference matrix uniforms from the Lamp Shader program
+	GLint modelLoc = glGetUniformLocation(gLampProgramId, "model");
+	GLint viewLoc = glGetUniformLocation(gLampProgramId, "view");
+	GLint projLoc = glGetUniformLocation(gLampProgramId, "projection");
+
+	// Pass matrix data to the Lamp Shader program's matrix uniforms
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+	glDrawArrays(GL_TRIANGLES, 0, lightMesh.nVertices);
+
+
+
 
 	
 	// deactivate vao
 	glBindVertexArray(0);
+	glUseProgram(0);
+
 
 	// swap front and back buffers
 	glfwSwapBuffers(gWindow);
@@ -665,79 +702,6 @@ void UDestroyMesh(GLMesh& mesh)
 void UDestroyShaderProgram(GLuint programId)
 {
 	glDeleteProgram(programId);
-}
-
-
-void UBuildCircle(GLMesh& mesh, vector<float> properties, float radius) {
-	vector<float> v;
-
-	const float PI = 3.14f;
-	const float STEP = 24;
-	float sectorStep = 2.0f * PI / STEP;
-
-	for (int i = 0; i < STEP; i++) {
-
-		v.push_back(0.0f); v.push_back(0.0f); v.push_back(0.0f);    // coords
-		v.push_back(0.0f); v.push_back(0.0f);   // text
-
-		v.push_back(radius * cos(i * sectorStep));    // x
-		v.push_back(radius * sin(i * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(0.0f);   // text
-
-		v.push_back(radius * cos((i + 1) * sectorStep));    // x
-		v.push_back(radius * sin((i + 1) * sectorStep));    // y
-		v.push_back(0.0f);                          // z
-		v.push_back(1.0f); v.push_back(1.0f);   // text
-	}
-
-	GLfloat verts[370];
-
-	for (int i = 0; i < v.size(); i++)
-	{
-		verts[i] = v[i];
-	}
-
-
-
-	const GLuint floatsPerVertex = 3;
-	const GLuint floatsPerUV = 2;
-
-	mesh.nIndices = sizeof(verts) / (sizeof(verts[0]) * (floatsPerVertex + floatsPerUV));
-
-	glGenVertexArrays(1, &mesh.vao); // we can also generate multiple VAOs or buffers at the same time
-	glBindVertexArray(mesh.vao);
-
-	// Create VBO
-	glGenBuffers(1, &mesh.vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo); // Activates the buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW); // Sends vertex or coordinate data to the GPU
-
-	// Strides between vertex coordinates
-	GLint stride = sizeof(float) * (floatsPerVertex + floatsPerUV);
-
-	// Create Vertex Attribute Pointers
-	glVertexAttribPointer(0, floatsPerVertex, GL_FLOAT, GL_FALSE, stride, 0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(2, floatsPerUV, GL_FLOAT, GL_FALSE, stride, (void*)(sizeof(float) * floatsPerVertex));
-	glEnableVertexAttribArray(2);
-
-	//***************************************
-
-
-		// scale the object
-	mesh.scale = glm::scale(glm::vec3(properties[4], properties[5], properties[6]));
-
-	// rotate the object (x, y, z) (0 - 6.4, to the right)
-	mesh.rotation = glm::rotate(properties[7], glm::vec3(properties[8], properties[9], properties[10]));
-
-	// move the object (x, y, z)
-	mesh.translation = glm::translate(glm::vec3(properties[11], properties[12], properties[13]));
-
-	mesh.model = mesh.translation * mesh.rotation * mesh.scale;
-
-	mesh.gUVScale = glm::vec2(1.0f, 1.0f);
 }
 
 
@@ -790,7 +754,7 @@ void UDestroyTexture(GLuint textureId)
 
 
 // Implements the UCreateMesh function
-void UCreateMesh(GLightMesh& lightMesh)
+void UCreateLightMesh(GLightMesh& lightMesh)
 {
 	// Position and Color data
 	GLfloat verts[] = {

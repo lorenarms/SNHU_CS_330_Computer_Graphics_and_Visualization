@@ -75,7 +75,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(ExecutablePath)</ExecutablePath>
     <LibraryPath>C:\OpenGL\GLFW\lib-vc2019;C:\OpenGL\GLEW\lib\Release\Win32;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\OpenGL\learnOpengl;C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lawrence\Git Repos\SNHU_CS_330_Projects\3-3 Building a 3D Pyramid;C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

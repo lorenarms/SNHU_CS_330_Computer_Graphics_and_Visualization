@@ -75,7 +75,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(ExecutablePath)</ExecutablePath>
     <LibraryPath>C:\OpenGL\GLEW\bin\Release\Win32;C:\OpenGL\GLFW\lib-vc2019;C:\OpenGL\GLEW\lib\Release\Win32;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\OpenGL\GLEW;C:\OpenGL\learnOpengl;C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Lawrence\Git Repos\SNHU_CS_330_Projects\5-5 Milestone Texturing a Complex Object\Headers;C:\OpenGL\GLEW;C:\OpenGL\glm;C:\OpenGL\GLFW\include;C:\OpenGL\GLEW\include;C:\OpenGL\GLAD;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>

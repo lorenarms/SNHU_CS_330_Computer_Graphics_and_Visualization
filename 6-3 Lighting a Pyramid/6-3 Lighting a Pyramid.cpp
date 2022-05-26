@@ -40,7 +40,8 @@ struct GLightMesh
 	GLuint nVertices;    // Number of indices of the mesh
 };
 
-GLightMesh lightMesh;
+GLightMesh ambLightMesh;
+GLightMesh fillLightMesh;
 ShapeBuilder builder;
 
 //main window
@@ -73,9 +74,14 @@ float gLastFrame = 0.0f;
 
 
 // Light color, position and scale
-glm::vec3 gLightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 gLightPosition(-1.5f, 1.0f, -1.5f);
-glm::vec3 gLightScale(0.1f);
+glm::vec3 gAmbLightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 gAmbLightPosition(-1.5f, 1.0f, -1.5f);
+glm::vec3 gAmbLightScale(0.1f);
+
+// Light color, position and scale
+glm::vec3 gFillLightColor(0.0f, 1.0f, 0.0f);
+glm::vec3 gFillLightPosition(-1.5f, 3.0f, -1.5f);
+glm::vec3 gFillLightScale(0.1f);
 
 bool gIsLampOrbiting = true;
 
@@ -154,7 +160,9 @@ const GLchar* fragment_shader_source = GLSL(440,
 	
 	uniform vec3 objectColor;
 	uniform vec3 lightColor;
+	uniform vec3 fillLightColor;
 	uniform vec3 lightPos;
+	uniform vec3 fillLightPos;
 	uniform vec3 viewPosition;
 	
 	uniform sampler2D uTexture;
@@ -167,12 +175,18 @@ void main()
 		//Calculate Ambient lighting*/
 	float ambientStrength = 0.1f; // Set ambient or global lighting strength
 	vec3 ambient = ambientStrength * lightColor; // Generate ambient light color
+	vec3 fill = ambientStrength * fillLightColor;
 
 	//Calculate Diffuse lighting*/
 	vec3 norm = normalize(vertexNormal); // Normalize vectors to 1 unit
 	vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+	vec3 fillLightDirection = normalize(fillLightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+
 	float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+	float fillImpact = max(dot(norm, fillLightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+
 	vec3 diffuse = impact * lightColor; // Generate diffuse light color
+	vec3 fillDiffuse = fillImpact * fillLightColor;
 
 	//Calculate Specular lighting*/
 	float specularIntensity = 0.4f; // Set specular light strength
@@ -182,12 +196,13 @@ void main()
 	//Calculate specular component
 	float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
 	vec3 specular = specularIntensity * specularComponent * lightColor;
+	vec3 fillSpecular = specularIntensity * specularComponent * fillLightColor;
 
 	// Texture holds the color to be used for all three components
 	vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
 
 	// Calculate phong result
-	vec3 phong = (ambient + diffuse + specular) * textureColor.xyz;
+	vec3 phong = (ambient + diffuse + fillDiffuse + specular) * textureColor.xyz;
 
 	fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 
@@ -286,7 +301,10 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 
 	// Create Light Object
-	UCreateLightMesh(lightMesh);
+	UCreateLightMesh(ambLightMesh);
+	UCreateLightMesh(fillLightMesh);
+
+
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	glUseProgram(gShaderProgram);
@@ -475,17 +493,45 @@ void UProcessInput(GLFWwindow* window)
 
 	// Modify light position
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		gLightPosition.x -= 0.01f;
+		gAmbLightPosition.x -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		gLightPosition.x += 0.01f;
+		gAmbLightPosition.x += 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-		gLightPosition.z -= 0.01f;
+		gAmbLightPosition.z -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-		gLightPosition.z += 0.01f;
+		gAmbLightPosition.z += 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-		gLightPosition.y -= 0.01f;
+		gAmbLightPosition.y -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
-		gLightPosition.y += 0.01f;
+		gAmbLightPosition.y += 0.005f;
+
+
+	// Modify light color (1, 2, 3)
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		gFillLightColor.r += 0.001f;
+		if (gFillLightColor.r > 1.0f)
+		{
+			gFillLightColor.r = 0.0f;
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+	{
+		gFillLightColor.g += 0.001f;
+		if (gFillLightColor.g > 1.0f)
+		{
+			gFillLightColor.g = 0.0f;
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+	{
+		gFillLightColor.b += 0.001f;
+		if (gFillLightColor.b > 1.0f)
+		{
+			gFillLightColor.b = 0.0f;
+		}
+	}
+
 
 
 	// Toggle perspective versus ortho view
@@ -578,10 +624,10 @@ void URender(vector<GLMesh> scene)
 	const float angularVelocity = glm::radians(45.0f);
 	if (gIsLampOrbiting)
 	{
-		glm::vec4 newPosition = glm::rotate(angularVelocity * gDeltaTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(gLightPosition, 5.0f);
-		gLightPosition.x = newPosition.x;
-		gLightPosition.y = newPosition.y;
-		gLightPosition.z = newPosition.z;
+		glm::vec4 newPosition = glm::rotate(angularVelocity * gDeltaTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(gAmbLightPosition, 5.0f);
+		gAmbLightPosition.x = newPosition.x;
+		gAmbLightPosition.y = newPosition.y;
+		gAmbLightPosition.z = newPosition.z;
 	}
 
 	// Enable z-depth
@@ -631,13 +677,23 @@ void URender(vector<GLMesh> scene)
 		// Reference matrix uniforms from the Cube Shader program for the cub color, light color, light position, and camera position
 		GLint objectColorLoc = glGetUniformLocation(gShaderProgram, "objectColor");
 		GLint lightColorLoc = glGetUniformLocation(gShaderProgram, "lightColor");
+		GLint fillLightColorLoc = glGetUniformLocation(gShaderProgram, "fillLightColor");
+
 		GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
+		GLint fillLightPositionLoc = glGetUniformLocation(gShaderProgram, "fillLightPos");
+
 		GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
-		
+
+
 		// Pass color, light, and camera data to the Cube Shader program's corresponding uniforms
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
-		glUniform3f(lightColorLoc, gLightColor.r, gLightColor.g, gLightColor.b);
-		glUniform3f(lightPositionLoc, gLightPosition.x, gLightPosition.y, gLightPosition.z);
+
+		glUniform3f(lightColorLoc, gAmbLightColor.r, gAmbLightColor.g, gAmbLightColor.b);
+		glUniform3f(lightPositionLoc, gAmbLightPosition.x, gAmbLightPosition.y, gAmbLightPosition.z);
+
+		glUniform3f(fillLightColorLoc, gFillLightColor.r, gFillLightColor.g, gFillLightColor.b);
+		glUniform3f(fillLightPositionLoc, gFillLightPosition.x, gFillLightPosition.y, gFillLightPosition.z);
+
 		const glm::vec3 cameraPosition = gCamera.Position;
 		glUniform3f(viewPositionLoc, cameraPosition.x, cameraPosition.y, cameraPosition.z);
 		
@@ -658,10 +714,10 @@ void URender(vector<GLMesh> scene)
 	// Draw the light
 	glUseProgram(gLampProgramId);
 
-	glBindVertexArray(lightMesh.vao);
+	glBindVertexArray(ambLightMesh.vao);
 
 	// Light location and Scale
-	glm::mat4 model = glm::translate(gLightPosition) * glm::scale(gLightScale);
+	glm::mat4 model = glm::translate(gAmbLightPosition) * glm::scale(gAmbLightScale);
 	
 	// Matrix uniforms from the Lamp Shader program
 	GLint modelLoc = glGetUniformLocation(gLampProgramId, "model");
@@ -673,7 +729,34 @@ void URender(vector<GLMesh> scene)
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	glDrawArrays(GL_TRIANGLES, 0, lightMesh.nVertices);
+	glDrawArrays(GL_TRIANGLES, 0, ambLightMesh.nVertices);
+
+
+
+	// Draw the light
+	glUseProgram(gLampProgramId);
+
+	glBindVertexArray(fillLightMesh.vao);
+
+	// Light location and Scale
+	model = glm::translate(gFillLightPosition) * glm::scale(gFillLightScale);
+
+	// Matrix uniforms from the Lamp Shader program
+	modelLoc = glGetUniformLocation(gLampProgramId, "model");
+	viewLoc = glGetUniformLocation(gLampProgramId, "view");
+	projLoc = glGetUniformLocation(gLampProgramId, "projection");
+
+	// Matrix data
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+	glDrawArrays(GL_TRIANGLES, 0, fillLightMesh.nVertices);
+
+
+
+
+
 		
 	// deactivate vao's
 	glBindVertexArray(0);

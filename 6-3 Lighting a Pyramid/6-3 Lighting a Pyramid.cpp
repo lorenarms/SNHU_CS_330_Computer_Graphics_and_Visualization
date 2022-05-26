@@ -2,9 +2,9 @@
 //
 // Lawrence Artl | LorenArms
 // CS-330 Comp Graphic and Viz
-// Assignment 5-3
+// Assignment 6-3
 //
-// TEXTURING A COMPLEX OBJECT
+// LIGHTING A PYRAMID
 //
 //---------------------------------------------------
 
@@ -27,7 +27,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 5 Milestone: Texturing a Complex Object";
+const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;
@@ -41,7 +41,6 @@ struct GLightMesh
 };
 
 GLightMesh lightMesh;
-
 ShapeBuilder builder;
 
 //main window
@@ -59,7 +58,8 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(-5.0f, 2.5f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 35.0f, -20.0f);
+Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -25.0f);
+
 
 
 float gLastX = WINDOW_WIDTH / 2.0f;
@@ -74,10 +74,10 @@ float gLastFrame = 0.0f;
 
 // Light color, position and scale
 glm::vec3 gLightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 gLightPosition(1.5f, 0.5f, 3.0f);
-glm::vec3 gLightScale(0.3f);
+glm::vec3 gLightPosition(-1.5f, 1.0f, -1.5f);
+glm::vec3 gLightScale(0.1f);
 
-
+bool gIsLampOrbiting = true;
 
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
@@ -117,26 +117,28 @@ void UCreateLightMesh(GLightMesh& lightMesh);
 
 // Shape Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
-	layout(location = 0) in vec3 position; // Vertex data from Vertex Attrib Pointer 0
-	layout(location = 1) in vec3 color;
-	layout(location = 2) in vec2 textureCoordinate;  // Color data from Vertex Attrib Pointer 1
+	layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
+layout(location = 1) in vec3 normal; // VAP position 1 for normals
+layout(location = 2) in vec2 textureCoordinate;
 
-	out vec3 shapeColor;
-	out vec3 vertexFragmentPos;
-	out vec2 vertexTextureCoordinate; // variable to transfer color data to the fragment shader
+out vec3 vertexNormal; // For outgoing normals to fragment shader
+out vec3 vertexFragmentPos; // For outgoing color / pixels to fragment shader
+out vec2 vertexTextureCoordinate;
 
-//uniform mat4 shaderTransform; // 4x4 matrix variable for transforming vertex data
+//Uniform / Global variables for the  transform matrices
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-	void main()
-	{
-		gl_Position = projection * view * model * vec4(position, 1.0f); // transforms vertices to clip coordinates
-		vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
-		shapeColor = mat3(transpose(inverse(model))) * color;
-		vertexTextureCoordinate = textureCoordinate;
-	}
+void main()
+{
+	gl_Position = projection * view * model * vec4(position, 1.0f); // Transforms vertices into clip coordinates
+
+	vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
+
+	vertexNormal = mat3(transpose(inverse(model))) * normal; // get normal vectors in world space only and exclude normal translation properties
+	vertexTextureCoordinate = textureCoordinate;
+}
 );
 
 
@@ -145,7 +147,7 @@ uniform mat4 projection;
 const GLchar* fragment_shader_source = GLSL(440,
 
 	in vec3 vertexFragmentPos;
-	in vec3 shapeColor;	
+	in vec3 vertexNormal;	
 	in vec2 vertexTextureCoordinate; // for texture coordinates, not color
 
 	out vec4 fragmentColor;
@@ -160,24 +162,23 @@ const GLchar* fragment_shader_source = GLSL(440,
 
 void main()
 {
-	//Calculate Ambient lighting*/
+	/*Phong lighting model calculations to generate ambient, diffuse, and specular components*/
+
+		//Calculate Ambient lighting*/
 	float ambientStrength = 0.1f; // Set ambient or global lighting strength
 	vec3 ambient = ambientStrength * lightColor; // Generate ambient light color
 
 	//Calculate Diffuse lighting*/
-	vec3 norm = normalize(shapeColor); // Normalize vectors to 1 unit
+	vec3 norm = normalize(vertexNormal); // Normalize vectors to 1 unit
 	vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
 	float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
 	vec3 diffuse = impact * lightColor; // Generate diffuse light color
 
-
 	//Calculate Specular lighting*/
-	float specularIntensity = 0.8f; // Set specular light strength
+	float specularIntensity = 0.4f; // Set specular light strength
 	float highlightSize = 16.0f; // Set specular highlight size
 	vec3 viewDir = normalize(viewPosition - vertexFragmentPos); // Calculate view direction
 	vec3 reflectDir = reflect(-lightDirection, norm);// Calculate reflection vector
-
-
 	//Calculate specular component
 	float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
 	vec3 specular = specularIntensity * specularComponent * lightColor;
@@ -188,9 +189,7 @@ void main()
 	// Calculate phong result
 	vec3 phong = (ambient + diffuse + specular) * textureColor.xyz;
 
-
-	fragmentColor = texture(uTexture, vertexTextureCoordinate) * vec4(shapeColor, 1.0);
-	//fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
+	fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 
 }
 );
@@ -460,7 +459,7 @@ void UProcessInput(GLFWwindow* window)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
-
+	// Move camera
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -474,47 +473,35 @@ void UProcessInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		gCamera.ProcessKeyboard(DOWN, gDeltaTime);
 
-
-	// I originally had this as a single key (P) toggle, but the key press registers
-	// so quickly that it took several presses to get it to land on the desired output
-	// separating the statement allowed me to toggle when I wanted
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-		perspective = false;
+	// Modify light position
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+		gLightPosition.x -= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		gLightPosition.x += 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		gLightPosition.z -= 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		gLightPosition.z += 0.01f;
+	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+		gLightPosition.y -= 0.01f;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		gLightPosition.y += 0.01f;
+
+
+	// Toggle perspective versus ortho view
+	// V / B
+	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+		perspective = false;
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		perspective = true;
 
-	// original statement below 
-	/*if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-	{
-		if (!perspective)
-		{
-			perspective = true;
-		}
-		else
-			perspective = false;
-	}*/
-
-
-	// deprecated way to change speed of camera
-	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-	{
-		if (gCamera.MovementSpeed < 10.0f)
-		{
-			gCamera.MovementSpeed += 0.01f;
-		}
-		else
-			gCamera.MovementSpeed = 10.0f;
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-	{
-		if (gCamera.MovementSpeed > 0.01f)
-		{
-			gCamera.MovementSpeed -= 0.01f;
-		}
-		else
-			gCamera.MovementSpeed = 0.01f;
-	}
+		
+	// Pause and resume lamp orbiting
+	static bool isLKeyDown = false;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS && !gIsLampOrbiting)
+		gIsLampOrbiting = true;
+	else if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS && gIsLampOrbiting)
+		gIsLampOrbiting = false;
 
 
 	
@@ -588,11 +575,22 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 // render the scene
 void URender(vector<GLMesh> scene)
 {
+	const float angularVelocity = glm::radians(45.0f);
+	if (gIsLampOrbiting)
+	{
+		glm::vec4 newPosition = glm::rotate(angularVelocity * gDeltaTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(gLightPosition, 5.0f);
+		gLightPosition.x = newPosition.x;
+		gLightPosition.y = newPosition.y;
+		gLightPosition.z = newPosition.z;
+	}
+
 	// Enable z-depth
 	glEnable(GL_DEPTH_TEST);
 
+	// Background (black)
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 
 	// transform the camera (x, y, z)
 	glm::mat4 view = gCamera.GetViewMatrix();
@@ -608,9 +606,7 @@ void URender(vector<GLMesh> scene)
 		// o for ortho
 		projection = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 100.0f);
 
-
-
-	
+			
 	
 	// loop to draw each shape individually
 	for (auto i = 0; i < scene.size(); ++i)
@@ -622,7 +618,7 @@ void URender(vector<GLMesh> scene)
 
 		// set shader
 		glUseProgram(gShaderProgram);
-
+		
 		// gets and passes transform matrices to shader prgm
 		GLint modelLocation = glGetUniformLocation(gShaderProgram, "model");
 		GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
@@ -638,13 +634,13 @@ void URender(vector<GLMesh> scene)
 		GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
 		GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
 		
-
 		// Pass color, light, and camera data to the Cube Shader program's corresponding uniforms
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
 		glUniform3f(lightColorLoc, gLightColor.r, gLightColor.g, gLightColor.b);
 		glUniform3f(lightPositionLoc, gLightPosition.x, gLightPosition.y, gLightPosition.z);
 		const glm::vec3 cameraPosition = gCamera.Position;
 		glUniform3f(viewPositionLoc, cameraPosition.x, cameraPosition.y, cameraPosition.z);
+		
 
 		GLint UVScaleLoc = glGetUniformLocation(gShaderProgram, "uvScale");
 		glUniform2fv(UVScaleLoc, 1, glm::value_ptr(mesh.gUVScale));
@@ -658,36 +654,31 @@ void URender(vector<GLMesh> scene)
 		
 	}
 	
-	// LAMP: draw lamp
-//----------------
+	
+	// Draw the light
 	glUseProgram(gLampProgramId);
 
 	glBindVertexArray(lightMesh.vao);
 
-	//Transform the smaller cube used as a visual que for the light source
+	// Light location and Scale
 	glm::mat4 model = glm::translate(gLightPosition) * glm::scale(gLightScale);
-
-	// Reference matrix uniforms from the Lamp Shader program
+	
+	// Matrix uniforms from the Lamp Shader program
 	GLint modelLoc = glGetUniformLocation(gLampProgramId, "model");
 	GLint viewLoc = glGetUniformLocation(gLampProgramId, "view");
 	GLint projLoc = glGetUniformLocation(gLampProgramId, "projection");
 
-	// Pass matrix data to the Lamp Shader program's matrix uniforms
+	// Matrix data
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 	glDrawArrays(GL_TRIANGLES, 0, lightMesh.nVertices);
-
-
-
-
-	
-	// deactivate vao
+		
+	// deactivate vao's
 	glBindVertexArray(0);
 	glUseProgram(0);
-
-
+	
 	// swap front and back buffers
 	glfwSwapBuffers(gWindow);
 

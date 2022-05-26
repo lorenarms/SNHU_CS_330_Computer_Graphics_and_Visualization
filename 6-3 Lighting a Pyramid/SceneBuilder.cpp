@@ -73,7 +73,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	GLMesh pyr_mesh_realBricks;
 	pyr_mesh_realBricks.p = {
 		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
-		1.5f, 1.5f, 1.5f,					// scale x, y, z
+		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
@@ -81,6 +81,9 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 	pyr_mesh_realBricks.height = 0.8f;
+	pyr_mesh_realBricks.length = 0.5f;
+	pyr_mesh_realBricks.radius = 0.5f;
+	pyr_mesh_realBricks.number_of_sides = 12.0f;
 	pyr_mesh_realBricks.texFilename = "textures\\realbricks.png";
 	ShapeBuilder::UBuildPyramid(pyr_mesh_realBricks);
 	scene.push_back(pyr_mesh_realBricks);
@@ -124,12 +127,12 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// GROUND
 	GLMesh mesh;
 	mesh.p = {
-		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
+		0.0f, 1.0f, 0.0f, 0.0f,				// color r, g, b a
 		5.0f, 5.0f, 5.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		2.0f, 0.0f, 2.0f,					// translate x, y, z
+		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
 	mesh.texFilename = "textures\\dunes.jpg";

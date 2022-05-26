@@ -79,8 +79,8 @@ glm::vec3 gSpotLightPosition(2.5f, 1.0f, -1.5f);
 glm::vec3 gSpotLightScale(0.1f);
 
 // Light color, position and scale
-glm::vec3 gKeyLightColor(0.0f, 1.0f, 0.0f);
-glm::vec3 gKeyLightPosition(-2.5f, 5.0f, -1.5f);
+glm::vec3 gKeyLightColor(0.0f, 0.0f, 0.0f);
+glm::vec3 gKeyLightPosition(-2.5f, 8.0f, -1.5f);
 glm::vec3 gKeyLightScale(0.1f);
 
 bool gSpotLightOrbit = true;
@@ -168,7 +168,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 	{
 		//Calculate Ambient lighting*/
 		float spotStrength = 0.1f; // Set ambient or global lighting strength
-		float keyStrength = 1.0f; // Set ambient or global lighting strength
+		float keyStrength = 0.5f; // Set ambient or global lighting strength
 		vec3 spot = spotStrength * lightColor; // Generate ambient light color
 		vec3 key = keyStrength * keyLightColor;
 
@@ -538,9 +538,9 @@ void UProcessInput(GLFWwindow* window)
 	// Turn off key light [ ]
 	if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS)
 	{
-		gKeyLightColor.r = 0.0f;
+		gKeyLightColor.r = 1.0f;
 		gKeyLightColor.g = 1.0f;
-		gKeyLightColor.b = 0.0f;
+		gKeyLightColor.b = 1.0f;
 
 	}
 

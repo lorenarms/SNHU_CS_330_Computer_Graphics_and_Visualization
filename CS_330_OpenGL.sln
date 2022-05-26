@@ -29,7 +29,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "5-5 Milestone Texturing a C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6-3 Lighting a Pyramid", "6-3 Lighting a Pyramid\6-3 Lighting a Pyramid.vcxproj", "{72B88854-FA6D-40FC-B7A3-BFB9FA512DF3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6-3 Lighting a Pyramid", "6-5 Lighting a 3D Scene\6-5 Lighting a 3D Scene.vcxproj", "{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6-5 Lighting a 3D Scene", "6-5 Lighting a 3D Scene\6-5 Lighting a 3D Scene.vcxproj", "{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "6-5 Lighting a 3D Scene", "6-6 Shadows\6-6 Shadows.vcxproj", "{3135CC7A-8041-4C61-B761-C466978886F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +153,14 @@ Global
 		{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}.Release|x64.Build.0 = Release|x64
 		{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}.Release|x86.ActiveCfg = Release|Win32
 		{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}.Release|x86.Build.0 = Release|Win32
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Debug|x64.ActiveCfg = Debug|x64
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Debug|x64.Build.0 = Debug|x64
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Debug|x86.ActiveCfg = Debug|Win32
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Debug|x86.Build.0 = Debug|Win32
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Release|x64.ActiveCfg = Release|x64
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Release|x64.Build.0 = Release|x64
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Release|x86.ActiveCfg = Release|Win32
+		{3135CC7A-8041-4C61-B761-C466978886F2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

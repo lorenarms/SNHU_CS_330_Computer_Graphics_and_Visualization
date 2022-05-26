@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{06DE1506-8298-4A8D-BF58-6C50E5BC7D55}</ProjectGuid>
+    <ProjectGuid>{3135CC7A-8041-4C61-B761-C466978886F2}</ProjectGuid>
     <RootNamespace>OpenGLPractice005HelloTriangle</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>6-5 Lighting a 3D Scene</ProjectName>
+    <ProjectName>6-6 Shadows</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -149,7 +149,7 @@
     <ClCompile Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="SceneBuilder.cpp" />
-    <ClCompile Include="6-5 Lighting a 3D Scene.cpp" />
+    <ClCompile Include="6-6 Shadows.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.h" />

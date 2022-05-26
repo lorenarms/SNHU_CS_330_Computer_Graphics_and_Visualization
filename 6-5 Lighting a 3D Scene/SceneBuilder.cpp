@@ -67,92 +67,92 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 
 
-
-
-	//	PYRAMID 01
-	GLMesh pyr_mesh_realBricks;
-	pyr_mesh_realBricks.p = {
-		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
-		2.0f, 2.0f, 2.0f,					// scale x, y, z
-		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		20.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f,					// translate x, y, z
+// PEN BODY
+	GLMesh cyl_gMesh01;
+	cyl_gMesh01.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, -2.0f,
 		1.0f, 1.0f
 	};
-	pyr_mesh_realBricks.height = 0.8f;
-	pyr_mesh_realBricks.length = 0.5f;
-	pyr_mesh_realBricks.radius = 0.5f;
-	pyr_mesh_realBricks.number_of_sides = 12.0f;
-	pyr_mesh_realBricks.texFilename = "textures\\realbricks.png";
-	ShapeBuilder::UBuildPyramid(pyr_mesh_realBricks);
-	scene.push_back(pyr_mesh_realBricks);
+	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 8.0f;
+	cyl_gMesh01.texFilename = "textures\\pen_body.png";
+	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
+	scene.push_back(cyl_gMesh01);
 
 
 
-	//	PYRAMID 02
-	GLMesh pyr_mesh_pyramidBricks;
-	pyr_mesh_pyramidBricks.p = {
-		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
-		2.5f, 2.5f, 2.5f,					// scale x, y, z
-		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		35.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		-1.0f, 0.0f, 4.0f,					// translate x, y, z
+	// PEN CLIP
+	GLMesh cyl_gMesh02;
+	cyl_gMesh02.p = {
+		1.0f, 0.843f, 0.0f, 1.0f,
+		1.5f, 0.2f, 1.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		0.75f, 0.9f, -1.5f,
 		1.0f, 1.0f
 	};
-	pyr_mesh_pyramidBricks.height = 0.8f;
-	pyr_mesh_pyramidBricks.texFilename = "textures\\pyramid.png";
-	ShapeBuilder::UBuildPyramid(pyr_mesh_pyramidBricks);
-	scene.push_back(pyr_mesh_pyramidBricks);
+	cyl_gMesh02.length = 1.5f;	cyl_gMesh02.radius = 0.1f;	cyl_gMesh02.number_of_sides = 8.0f;
+	cyl_gMesh02.texFilename = "textures\\pen_clip.png";
+	ShapeBuilder::UBuildCylinder(cyl_gMesh02);
+	scene.push_back(cyl_gMesh02);
 
 
-	// PYRAMID 03
-	GLMesh pyr_mesh_cartoonBricks;
-	pyr_mesh_cartoonBricks.p = {
-		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
-		2.0f, 2.0f, 2.0f,					// scale x, y, z
-		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		67.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		4.0f, 0.0f, -1.5f,					// translate x, y, z
+
+	// PEN BUTT
+	GLMesh cyl_gMesh03;
+	cyl_gMesh03.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, -2.1f,
 		1.0f, 1.0f
 	};
-	pyr_mesh_cartoonBricks.height = 0.8f;
-	pyr_mesh_cartoonBricks.texFilename = "textures\\bricks.png";
-	ShapeBuilder::UBuildPyramid(pyr_mesh_cartoonBricks);
-	scene.push_back(pyr_mesh_cartoonBricks);
 
-	// CUBE
-	GLMesh cube_mesh_smile;
-	cube_mesh_smile.p = {
-		1.0f,	1.0f,	1.0f,	0.0f,
-		1.0f,	0.7f,	1.0f,
-		0.0f,	1.0f,	0.0f,	0.0f,
-		45.0f,	0.0f,	1.0f,	0.0f,
-		0.0f,	0.0f,	0.0f,	1.0f,
-		-3.0f,	0.0f,	-1.0f,
-		1.0f,	1.0f
-	};
-	cube_mesh_smile.texFilename = "textures\\smiley.png";
-	ShapeBuilder::UBuildCube(cube_mesh_smile);
-	scene.push_back(cube_mesh_smile);
+	cyl_gMesh03.length = 3.0f;	cyl_gMesh03.radius = 0.4f;	cyl_gMesh03.number_of_sides = 8.0f;
+	cyl_gMesh03.texFilename = "textures\\black.png";
+	ShapeBuilder::UBuildCylinder(cyl_gMesh03);
+	scene.push_back(cyl_gMesh03);
 
 
-	// GROUND
-	GLMesh grnd_mesh_desert;
-	grnd_mesh_desert.p = {
-		0.0f, 1.0f, 0.0f, 0.0f,				// color r, g, b a
-		5.0f, 5.0f, 5.0f,					// scale x, y, z
-		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 0.0f,					// translate x, y, z
+	// PEN TIP
+	GLMesh con_gMesh01;
+	con_gMesh01.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 2.0f,
 		1.0f, 1.0f
 	};
-	grnd_mesh_desert.texFilename = "textures\\dunes.jpg";
-	ShapeBuilder::UBuildPlane(grnd_mesh_desert);
-	scene.push_back(grnd_mesh_desert);
+	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 8.0f;
+	con_gMesh01.texFilename = "textures\\pen_tip.png";
+	ShapeBuilder::UBuildCone(con_gMesh01);
+	scene.push_back(con_gMesh01);
+
+
+
+	// DESK
+	GLMesh plan_gMesh01;
+	plan_gMesh01.p = {
+		1.0f, 1.0f, 1.0f, 1.0f,				// color r, g, b a
+		4.0f, 2.0f, 4.0f,					// scale x, y, z
+		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
+		45.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
+		1.0f, 0.0f, 0.0f,					// translate x, y, z
+		1.0f, 1.0f
+	};
+	plan_gMesh01.texFilename = "textures\\desk.png";
+	ShapeBuilder::UBuildPlane(plan_gMesh01);
+	scene.push_back(plan_gMesh01);
 
 
 }

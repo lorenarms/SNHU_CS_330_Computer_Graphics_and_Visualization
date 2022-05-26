@@ -75,7 +75,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		20.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
@@ -96,7 +96,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		2.5f, 2.5f, 2.5f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		35.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		-1.0f, 0.0f, 4.0f,					// translate x, y, z
 		1.0f, 1.0f
@@ -113,7 +113,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f, 1.0f, 0.0f,				// color r, g, b a
 		2.0f, 2.0f, 2.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
-		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
+		67.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		4.0f, 0.0f, -1.5f,					// translate x, y, z
 		1.0f, 1.0f
@@ -123,10 +123,25 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildPyramid(pyr_mesh_cartoonBricks);
 	scene.push_back(pyr_mesh_cartoonBricks);
 
+	// CUBE
+	GLMesh cube_mesh_smile;
+	cube_mesh_smile.p = {
+		1.0f,	1.0f,	1.0f,	0.0f,
+		1.0f,	0.7f,	1.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		45.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-3.0f,	0.0f,	-1.0f,
+		1.0f,	1.0f
+	};
+	cube_mesh_smile.texFilename = "textures\\smiley.png";
+	ShapeBuilder::UBuildCube(cube_mesh_smile);
+	scene.push_back(cube_mesh_smile);
+
 
 	// GROUND
-	GLMesh mesh;
-	mesh.p = {
+	GLMesh grnd_mesh_desert;
+	grnd_mesh_desert.p = {
 		0.0f, 1.0f, 0.0f, 0.0f,				// color r, g, b a
 		5.0f, 5.0f, 5.0f,					// scale x, y, z
 		0.0f, 1.0f, 0.0f, 0.0f,				// x amount of rotation, rotate x, y, z
@@ -135,9 +150,9 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
 		1.0f, 1.0f
 	};
-	mesh.texFilename = "textures\\dunes.jpg";
-	ShapeBuilder::UBuildPlane(mesh);
-	scene.push_back(mesh);
+	grnd_mesh_desert.texFilename = "textures\\dunes.jpg";
+	ShapeBuilder::UBuildPlane(grnd_mesh_desert);
+	scene.push_back(grnd_mesh_desert);
 
 
 }

@@ -197,7 +197,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 		vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
 
 		// Calculate phong result
-		vec3 phong = (spot + key + diffuse + keyDiffuse + specular) * textureColor.xyz;
+		vec3 phong = (spot + key + diffuse + keyDiffuse + specular /*+ objectColor*/) * textureColor.xyz;
 
 		fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 

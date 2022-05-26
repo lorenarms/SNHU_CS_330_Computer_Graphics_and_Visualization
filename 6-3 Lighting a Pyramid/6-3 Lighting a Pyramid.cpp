@@ -41,7 +41,7 @@ struct GLightMesh
 };
 
 GLightMesh ambLightMesh;
-GLightMesh fillLightMesh;
+GLightMesh keyLightMesh;
 ShapeBuilder builder;
 
 //main window
@@ -49,7 +49,7 @@ GLFWwindow* gWindow = nullptr;
 
 //shader program
 GLuint gShaderProgram;
-GLuint gLampProgramId;
+GLuint gLightProgramId;
 
 // scene vector for drawing shapes
 vector<GLMesh> scene;
@@ -74,16 +74,16 @@ float gLastFrame = 0.0f;
 
 
 // Light color, position and scale
-glm::vec3 gAmbLightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 gAmbLightPosition(-1.5f, 1.0f, -1.5f);
-glm::vec3 gAmbLightScale(0.1f);
+glm::vec3 gSpotLightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 gSpotLightPosition(2.5f, 1.0f, -1.5f);
+glm::vec3 gSpotLightScale(0.1f);
 
 // Light color, position and scale
-glm::vec3 gFillLightColor(0.0f, 1.0f, 0.0f);
-glm::vec3 gFillLightPosition(-1.5f, 3.0f, -1.5f);
-glm::vec3 gFillLightScale(0.1f);
+glm::vec3 gKeyLightColor(0.0f, 1.0f, 0.0f);
+glm::vec3 gKeyLightPosition(-2.5f, 3.0f, -1.5f);
+glm::vec3 gKeyLightScale(0.1f);
 
-bool gIsLampOrbiting = true;
+bool gSpotLightOrbit = true;
 
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
@@ -124,30 +124,26 @@ void UCreateLightMesh(GLightMesh& lightMesh);
 // Shape Vertex Shader Source Code
 const GLchar* vertex_shader_source = GLSL(440,
 	layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
-layout(location = 1) in vec3 normal; // VAP position 1 for normals
-layout(location = 2) in vec2 textureCoordinate;
+	layout(location = 1) in vec3 normal; // VAP position 1 for normals
+	layout(location = 2) in vec2 textureCoordinate;
 
-out vec3 vertexNormal; // For outgoing normals to fragment shader
-out vec3 vertexFragmentPos; // For outgoing color / pixels to fragment shader
-out vec2 vertexTextureCoordinate;
+	out vec3 vertexNormal; // For outgoing normals to fragment shader
+	out vec3 vertexFragmentPos; // For outgoing color / pixels to fragment shader
+	out vec2 vertexTextureCoordinate;
 
-//Uniform / Global variables for the  transform matrices
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+	//Uniform / Global variables for the  transform matrices
+	uniform mat4 model;
+	uniform mat4 view;
+	uniform mat4 projection;
 
-void main()
-{
-	gl_Position = projection * view * model * vec4(position, 1.0f); // Transforms vertices into clip coordinates
-
-	vertexFragmentPos = vec3(model * vec4(position, 1.0f)); // Gets fragment / pixel position in world space only (exclude view and projection)
-
-	vertexNormal = mat3(transpose(inverse(model))) * normal; // get normal vectors in world space only and exclude normal translation properties
-	vertexTextureCoordinate = textureCoordinate;
-}
+	void main()
+	{
+		gl_Position = projection * view * model * vec4(position, 1.0f);
+		vertexFragmentPos = vec3(model * vec4(position, 1.0f)); 
+		vertexNormal = mat3(transpose(inverse(model))) * normal;
+		vertexTextureCoordinate = textureCoordinate;
+	}
 );
-
-
 
 // Shape Fragment Shader Source Code
 const GLchar* fragment_shader_source = GLSL(440,
@@ -160,53 +156,52 @@ const GLchar* fragment_shader_source = GLSL(440,
 	
 	uniform vec3 objectColor;
 	uniform vec3 lightColor;
-	uniform vec3 fillLightColor;
+	uniform vec3 keyLightColor;
 	uniform vec3 lightPos;
-	uniform vec3 fillLightPos;
+	uniform vec3 keyLightPos;
 	uniform vec3 viewPosition;
 	
 	uniform sampler2D uTexture;
 	uniform vec2 uvScale;
 
-void main()
-{
-	/*Phong lighting model calculations to generate ambient, diffuse, and specular components*/
-
+	void main()
+	{
 		//Calculate Ambient lighting*/
-	float ambientStrength = 0.1f; // Set ambient or global lighting strength
-	vec3 ambient = ambientStrength * lightColor; // Generate ambient light color
-	vec3 fill = ambientStrength * fillLightColor;
+		float spotStrength = 0.1f; // Set ambient or global lighting strength
+		float keyStrength = 1.0f; // Set ambient or global lighting strength
+		vec3 spot = spotStrength * lightColor; // Generate ambient light color
+		vec3 key = keyStrength * keyLightColor;
 
-	//Calculate Diffuse lighting*/
-	vec3 norm = normalize(vertexNormal); // Normalize vectors to 1 unit
-	vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
-	vec3 fillLightDirection = normalize(fillLightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+		//Calculate Diffuse lighting*/
+		vec3 norm = normalize(vertexNormal); // Normalize vectors to 1 unit
+		vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+		vec3 keyLightDirection = normalize(keyLightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
 
-	float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
-	float fillImpact = max(dot(norm, fillLightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+		float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+		float keyImpact = max(dot(norm, keyLightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
 
-	vec3 diffuse = impact * lightColor; // Generate diffuse light color
-	vec3 fillDiffuse = fillImpact * fillLightColor;
+		vec3 diffuse = impact * lightColor; // Generate diffuse light color
+		vec3 keyDiffuse = keyImpact * keyLightColor;
 
-	//Calculate Specular lighting*/
-	float specularIntensity = 0.4f; // Set specular light strength
-	float highlightSize = 16.0f; // Set specular highlight size
-	vec3 viewDir = normalize(viewPosition - vertexFragmentPos); // Calculate view direction
-	vec3 reflectDir = reflect(-lightDirection, norm);// Calculate reflection vector
-	//Calculate specular component
-	float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
-	vec3 specular = specularIntensity * specularComponent * lightColor;
-	vec3 fillSpecular = specularIntensity * specularComponent * fillLightColor;
+		//Calculate Specular lighting*/
+		float specularIntensity = 0.4f; // Set specular light strength
+		float highlightSize = 16.0f; // Set specular highlight size
+		vec3 viewDir = normalize(viewPosition - vertexFragmentPos); // Calculate view direction
+		vec3 reflectDir = reflect(-lightDirection, norm);// Calculate reflection vector
+		//Calculate specular component
+		float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
+		vec3 specular = specularIntensity * specularComponent * lightColor;
+		vec3 keySpecular = specularIntensity * specularComponent * keyLightColor;
 
-	// Texture holds the color to be used for all three components
-	vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
+		// Texture holds the color to be used for all three components
+		vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
 
-	// Calculate phong result
-	vec3 phong = (ambient + diffuse + fillDiffuse + specular) * textureColor.xyz;
+		// Calculate phong result
+		vec3 phong = (spot + key + diffuse + keyDiffuse + specular) * textureColor.xyz;
 
-	fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
+		fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 
-}
+	}
 );
 
 
@@ -219,7 +214,6 @@ const GLchar* lampVertexShaderSource = GLSL(440,
 
 	layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
 
-		//Uniform / Global variables for the  transform matrices
 	uniform mat4 model;
 	uniform mat4 view;
 	uniform mat4 projection;
@@ -233,7 +227,7 @@ void main()
 // Light Fragment Shader Source Code
 const GLchar* lampFragmentShaderSource = GLSL(440,
 
-	out vec4 fragmentColor; // For outgoing lamp color (smaller cube) to the GPU
+	out vec4 fragmentColor; // For outgoing light color to the GPU
 
 void main()
 {
@@ -297,12 +291,12 @@ int main(int argc, char* argv[])
 		
 	}
 
-	if (!UCreateShaderProgram(lampVertexShaderSource, lampFragmentShaderSource, gLampProgramId))
+	if (!UCreateShaderProgram(lampVertexShaderSource, lampFragmentShaderSource, gLightProgramId))
 		return EXIT_FAILURE;
 
 	// Create Light Object
 	UCreateLightMesh(ambLightMesh);
-	UCreateLightMesh(fillLightMesh);
+	UCreateLightMesh(keyLightMesh);
 
 
 
@@ -341,7 +335,7 @@ int main(int argc, char* argv[])
 	scene.clear();
 	
 	UDestroyShaderProgram(gShaderProgram);
-	UDestroyShaderProgram(gLampProgramId);
+	UDestroyShaderProgram(gLightProgramId);
 
 	//exit with success!
 	exit(EXIT_SUCCESS);
@@ -493,43 +487,61 @@ void UProcessInput(GLFWwindow* window)
 
 	// Modify light position
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		gAmbLightPosition.x -= 0.005f;
+		gSpotLightPosition.x -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		gAmbLightPosition.x += 0.005f;
+		gSpotLightPosition.x += 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-		gAmbLightPosition.z -= 0.005f;
+		gSpotLightPosition.z -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-		gAmbLightPosition.z += 0.005f;
+		gSpotLightPosition.z += 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-		gAmbLightPosition.y -= 0.005f;
+		gSpotLightPosition.y -= 0.005f;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
-		gAmbLightPosition.y += 0.005f;
+		gSpotLightPosition.y += 0.005f;
 
 
 	// Modify light color (1, 2, 3)
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 	{
-		gFillLightColor.r += 0.001f;
-		if (gFillLightColor.r > 1.0f)
+		gKeyLightColor.r += 0.001f;
+		if (gKeyLightColor.r > 1.0f)
 		{
-			gFillLightColor.r = 0.0f;
+			gKeyLightColor.r = 0.0f;
 		}
 	}
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
 	{
-		gFillLightColor.g += 0.001f;
-		if (gFillLightColor.g > 1.0f)
+		gKeyLightColor.g += 0.001f;
+		if (gKeyLightColor.g > 1.0f)
 		{
-			gFillLightColor.g = 0.0f;
+			gKeyLightColor.g = 0.0f;
 		}
 	}
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
 	{
-		gFillLightColor.b += 0.001f;
-		if (gFillLightColor.b > 1.0f)
+		gKeyLightColor.b += 0.001f;
+		if (gKeyLightColor.b > 1.0f)
 		{
-			gFillLightColor.b = 0.0f;
+			gKeyLightColor.b = 0.0f;
 		}
+	}
+
+	// Turn off key light [ ]
+	if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS)
+	{
+		gKeyLightColor.r = 0.0f;
+		gKeyLightColor.g = 0.0f;
+		gKeyLightColor.b = 0.0f;
+		
+	}
+
+	// Turn off key light [ ]
+	if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS)
+	{
+		gKeyLightColor.r = 0.0f;
+		gKeyLightColor.g = 1.0f;
+		gKeyLightColor.b = 0.0f;
+
 	}
 
 
@@ -544,10 +556,10 @@ void UProcessInput(GLFWwindow* window)
 		
 	// Pause and resume lamp orbiting
 	static bool isLKeyDown = false;
-	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS && !gIsLampOrbiting)
-		gIsLampOrbiting = true;
-	else if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS && gIsLampOrbiting)
-		gIsLampOrbiting = false;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS && !gSpotLightOrbit)
+		gSpotLightOrbit = true;
+	else if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS && gSpotLightOrbit)
+		gSpotLightOrbit = false;
 
 
 	
@@ -621,13 +633,14 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 // render the scene
 void URender(vector<GLMesh> scene)
 {
-	const float angularVelocity = glm::radians(45.0f);
-	if (gIsLampOrbiting)
+	// Borrowed from the Tutorial; animates the Spot Light to circle around the scene
+	constexpr float angularVelocity = glm::radians(45.0f);
+	if (gSpotLightOrbit)
 	{
-		glm::vec4 newPosition = glm::rotate(angularVelocity * gDeltaTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(gAmbLightPosition, 5.0f);
-		gAmbLightPosition.x = newPosition.x;
-		gAmbLightPosition.y = newPosition.y;
-		gAmbLightPosition.z = newPosition.z;
+		glm::vec4 newPosition = glm::rotate(angularVelocity * gDeltaTime, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(gSpotLightPosition, 1.0f);
+		gSpotLightPosition.x = newPosition.x;
+		gSpotLightPosition.y = newPosition.y;
+		gSpotLightPosition.z = newPosition.z;
 	}
 
 	// Enable z-depth
@@ -665,7 +678,7 @@ void URender(vector<GLMesh> scene)
 		// set shader
 		glUseProgram(gShaderProgram);
 		
-		// gets and passes transform matrices to shader prgm
+		// gets and passes transform matrices to shader prgm for shapes
 		GLint modelLocation = glGetUniformLocation(gShaderProgram, "model");
 		GLint viewLocation = glGetUniformLocation(gShaderProgram, "view");
 		GLint projLocation = glGetUniformLocation(gShaderProgram, "projection");
@@ -674,25 +687,31 @@ void URender(vector<GLMesh> scene)
 		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-		// Reference matrix uniforms from the Cube Shader program for the cub color, light color, light position, and camera position
+		// Reference matrix uniforms from the shape shader program for the shape color, light color, light position, and camera position
 		GLint objectColorLoc = glGetUniformLocation(gShaderProgram, "objectColor");
+
+		// Spotlight
 		GLint lightColorLoc = glGetUniformLocation(gShaderProgram, "lightColor");
-		GLint fillLightColorLoc = glGetUniformLocation(gShaderProgram, "fillLightColor");
-
 		GLint lightPositionLoc = glGetUniformLocation(gShaderProgram, "lightPos");
-		GLint fillLightPositionLoc = glGetUniformLocation(gShaderProgram, "fillLightPos");
 
+		// Key light
+		GLint keyLightColorLoc = glGetUniformLocation(gShaderProgram, "keyLightColor");
+		GLint keyLightPositionLoc = glGetUniformLocation(gShaderProgram, "keyLightPos");
+
+		// Camera view
 		GLint viewPositionLoc = glGetUniformLocation(gShaderProgram, "viewPosition");
 
-
-		// Pass color, light, and camera data to the Cube Shader program's corresponding uniforms
+		// Pass color, light, and camera data to the shape shader 
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
 
-		glUniform3f(lightColorLoc, gAmbLightColor.r, gAmbLightColor.g, gAmbLightColor.b);
-		glUniform3f(lightPositionLoc, gAmbLightPosition.x, gAmbLightPosition.y, gAmbLightPosition.z);
+		// Spot Light
+		glUniform3f(lightColorLoc, gSpotLightColor.r, gSpotLightColor.g, gSpotLightColor.b);
+		glUniform3f(lightPositionLoc, gSpotLightPosition.x, gSpotLightPosition.y, gSpotLightPosition.z);
 
-		glUniform3f(fillLightColorLoc, gFillLightColor.r, gFillLightColor.g, gFillLightColor.b);
-		glUniform3f(fillLightPositionLoc, gFillLightPosition.x, gFillLightPosition.y, gFillLightPosition.z);
+		// Key Light
+		glUniform3f(keyLightColorLoc, gKeyLightColor.r, gKeyLightColor.g, gKeyLightColor.b);
+		glUniform3f(keyLightPositionLoc, gKeyLightPosition.x, gKeyLightPosition.y, gKeyLightPosition.z);
+
 
 		const glm::vec3 cameraPosition = gCamera.Position;
 		glUniform3f(viewPositionLoc, cameraPosition.x, cameraPosition.y, cameraPosition.z);
@@ -704,67 +723,60 @@ void URender(vector<GLMesh> scene)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, mesh.textureId);
 
-		// Draws the triangles
+		// Draws the shape
 		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
 		
 		
 	}
-	
-	
-	// Draw the light
-	glUseProgram(gLampProgramId);
-
+		
+	// Draw the Spot Light
+	glUseProgram(gLightProgramId);
 	glBindVertexArray(ambLightMesh.vao);
 
 	// Light location and Scale
-	glm::mat4 model = glm::translate(gAmbLightPosition) * glm::scale(gAmbLightScale);
+	glm::mat4 model = glm::translate(gSpotLightPosition) * glm::scale(gSpotLightScale);
 	
-	// Matrix uniforms from the Lamp Shader program
-	GLint modelLoc = glGetUniformLocation(gLampProgramId, "model");
-	GLint viewLoc = glGetUniformLocation(gLampProgramId, "view");
-	GLint projLoc = glGetUniformLocation(gLampProgramId, "projection");
+	// Matrix uniforms from the Light Shader program
+	GLint modelLoc = glGetUniformLocation(gLightProgramId, "model");
+	GLint viewLoc = glGetUniformLocation(gLightProgramId, "view");
+	GLint projLoc = glGetUniformLocation(gLightProgramId, "projection");
 
 	// Matrix data
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+	// Draw the light
 	glDrawArrays(GL_TRIANGLES, 0, ambLightMesh.nVertices);
 
 
 
-	// Draw the light
-	glUseProgram(gLampProgramId);
-
-	glBindVertexArray(fillLightMesh.vao);
+	// Draw the Key Light
+	glUseProgram(gLightProgramId);
+	glBindVertexArray(keyLightMesh.vao);
 
 	// Light location and Scale
-	model = glm::translate(gFillLightPosition) * glm::scale(gFillLightScale);
+	model = glm::translate(gKeyLightPosition) * glm::scale(gKeyLightScale);
 
-	// Matrix uniforms from the Lamp Shader program
-	modelLoc = glGetUniformLocation(gLampProgramId, "model");
-	viewLoc = glGetUniformLocation(gLampProgramId, "view");
-	projLoc = glGetUniformLocation(gLampProgramId, "projection");
+	// Matrix uniforms from the Light Shader program
+	modelLoc = glGetUniformLocation(gLightProgramId, "model");
+	viewLoc = glGetUniformLocation(gLightProgramId, "view");
+	projLoc = glGetUniformLocation(gLightProgramId, "projection");
 
 	// Matrix data
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	glDrawArrays(GL_TRIANGLES, 0, fillLightMesh.nVertices);
-
-
-
-
-
-		
+	// Draw the light
+	glDrawArrays(GL_TRIANGLES, 0, keyLightMesh.nVertices);
+			
 	// deactivate vao's
 	glBindVertexArray(0);
 	glUseProgram(0);
 	
 	// swap front and back buffers
 	glfwSwapBuffers(gWindow);
-
 }
 
 // clean-up methods
@@ -827,60 +839,60 @@ void UDestroyTexture(GLuint textureId)
 
 
 
-// Implements the UCreateMesh function
+// Template for creating a cube light
 void UCreateLightMesh(GLightMesh& lightMesh)
 {
 	// Position and Color data
 	GLfloat verts[] = {
-		//Positions          //Normals
-		// ------------------------------------------------------
-		//Back Face          //Negative Z Normal  Texture Coords.
-	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-	   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-	   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+			//Positions          //Normals
+			// ------------------------------------------------------
+			//Back Face          //Negative Z Normal  Texture Coords.
+		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-	   //Front Face         //Positive Z Normal
-	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-	   0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-	   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-	  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
-	  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+		   //Front Face         //Positive Z Normal
+		  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+		   0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+		   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+		   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+		  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+		  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
 
-	  //Left Face          //Negative X Normal
-	 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-	 -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-	 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-	 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-	 -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-	 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		  //Left Face          //Negative X Normal
+		 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		 -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	 //Right Face         //Positive X Normal
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		 //Right Face         //Positive X Normal
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-	 //Bottom Face        //Negative Y Normal
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		 //Bottom Face        //Negative Y Normal
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-	//Top Face           //Positive Y Normal
-   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-	0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-	0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+		//Top Face           //Positive Y Normal
+	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
 	const GLuint floatsPerVertex = 3;

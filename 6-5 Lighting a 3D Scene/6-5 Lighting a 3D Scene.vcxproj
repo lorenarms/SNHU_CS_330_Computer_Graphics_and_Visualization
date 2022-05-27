@@ -146,10 +146,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="SceneBuilder.cpp" />
     <ClCompile Include="6-5 Lighting a 3D Scene.cpp" />
+    <ClCompile Include="ShapeBuilder_1.2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.h" />

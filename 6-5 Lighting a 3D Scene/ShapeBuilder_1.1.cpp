@@ -16,7 +16,7 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 	// build a pyramid
 
 	float h = mesh.height;
-	
+
 	mesh.v = {
 		// Vertex Positions    // color coords					// Texture coords
 		 0.0f,	h,		0.0f,	0.0f,	1.0f,	-1.0f,	1.0f,	0.625f, 1.0f,		//back side
@@ -105,9 +105,9 @@ void ShapeBuilder::UBuildCube(GLMesh& mesh)
 		-0.5f,	0.0f,	-0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.0f,	0.5f,	// bottom right
 		0.5f,	0.0f,	0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.25f,	0.0f,
 		0.5f,	0.0f,	-0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.25f,	0.5f,
-	
+
 	};
-	
+
 	UTranslator(mesh);
 }
 
@@ -135,20 +135,20 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
-										/*textureXLoc,
-										0.0f*/
-										0.5f + (r * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
-										0.25f + (0.25f * sin((i)*sectorStep))
-										});												// first outer point
+			/*textureXLoc,
+			0.0f*/
+			0.5f + (r * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
+			0.25f + (0.25f * sin((i)*sectorStep))
+			});												// first outer point
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
 										c[0], c[1], c[2], c[3],
-										/*textureXLoc + textStep,
-										0.0f*/
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.25f + (0.25f * sin((i + 1) * sectorStep))
-										});												// second outer point
+			/*textureXLoc + textStep,
+			0.0f*/
+			0.5f + (r * cos((i + 1) * sectorStep)) ,
+			0.25f + (0.25f * sin((i + 1) * sectorStep))
+			});												// second outer point
 
 
 // side triangle + point

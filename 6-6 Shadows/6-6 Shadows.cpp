@@ -50,6 +50,7 @@ GLFWwindow* gWindow = nullptr;
 //shader program
 GLuint gShaderProgram;
 GLuint gLightProgramId;
+GLuint gShadowProgramId;
 
 // scene vector for drawing shapes
 vector<GLMesh> scene;
@@ -60,6 +61,8 @@ bool perspective = false;
 
 // camera
 Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -25.0f);
+
+
 
 
 
@@ -237,6 +240,30 @@ void main()
 
 
 
+// Shadow Vertex Shader
+const GLchar* shadowVertexShaderSource = GLSL(440,
+
+	
+	layout(location = 0) in vec3 aPos;
+
+	uniform mat4 lightSpaceMatrix;
+	uniform mat4 model;
+
+	void main()
+	{
+		gl_Position = lightSpaceMatrix * model * vec4(aPos, 1.0);
+	}
+);
+ // Shadow Fragment Shader
+const GLchar* shadowFragShaderSource = GLSL(400,
+	void main()
+	{
+		// gl_FragDepth = gl_FragCoord.z;
+	}
+);
+
+
+
 
 
 
@@ -265,6 +292,8 @@ void flipImageVertically(unsigned char* image, int width, int height, int channe
 //main
 int main(int argc, char* argv[])
 {
+	
+
 
 	//check if initialized correctly
 	if (!UInitialize(argc, argv, &gWindow))
@@ -292,6 +321,9 @@ int main(int argc, char* argv[])
 	}
 
 	if (!UCreateShaderProgram(lampVertexShaderSource, lampFragmentShaderSource, gLightProgramId))
+		return EXIT_FAILURE;
+
+	if (!UCreateShaderProgram(shadowVertexShaderSource, shadowFragShaderSource, gShadowProgramId))
 		return EXIT_FAILURE;
 
 	// Create Light Object
@@ -633,6 +665,51 @@ void UMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 // render the scene
 void URender(vector<GLMesh> scene)
 {
+	// SHADOW STUFFS
+	//unsigned int depthMapFBO;
+	//glGenFramebuffers(1, &depthMapFBO);
+	//const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
+	//unsigned int depthMap;
+	//glGenTextures(1, &depthMap);
+	//glBindTexture(GL_TEXTURE_2D, depthMap);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+	//	SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	//glDrawBuffer(GL_NONE);
+	//glReadBuffer(GL_NONE);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	////glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	////glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glBindTexture(GL_TEXTURE_2D, depthMap);
+
+	//float near_plane = 1.0f, far_plane = 7.5f;
+	////glm::mat4 lightProjection = glm::perspective(glm::radians(gCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
+
+	//glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
+	//	glm::vec3(0.0f, 0.0f, 0.0f),
+	//	glm::vec3(0.0f, 1.0f, 0.0f));
+
+	////glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+	////glUniformMatrix4fv(gShadowProgramId, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	////glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
 	// Borrowed from the Tutorial; animates the Spot Light to circle around the scene
 	constexpr float angularVelocity = glm::radians(45.0f);
 	if (gSpotLightOrbit)

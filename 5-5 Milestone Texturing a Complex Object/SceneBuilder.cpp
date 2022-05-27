@@ -10,7 +10,7 @@
 ///	Follow the standard shown below in the <summary> to see
 ///	how to build a shape
 ///
-///	Uncomment other shapes below to see more examples of how to build them
+
 
 
 
@@ -20,8 +20,12 @@
 
 using namespace std;
 
+
 void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 {
+
+
+
 
 	// seed the rand() function once
 	srand(time(nullptr));
@@ -54,15 +58,16 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	///
 	///
 	///
+	///		See below for an example using the UBuildCone() method
+	///
+	///
 	/// </summary>
 	/// <param name="scene"></param>
 
 
 
 
-	// Start Scene:
-
-	// PEN BODY
+// PEN BODY
 	GLMesh cyl_gMesh01;
 	cyl_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,
@@ -101,7 +106,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	// PEN BUTT
 	GLMesh cyl_gMesh03;
 	cyl_gMesh03.p = {
-		0.1f, 0.1f, 0.1f, 1.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
@@ -111,7 +116,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	};
 
 	cyl_gMesh03.length = 3.0f;	cyl_gMesh03.radius = 0.4f;	cyl_gMesh03.number_of_sides = 8.0f;
-	cyl_gMesh03.texFilename = "textures\\white.png";
+	cyl_gMesh03.texFilename = "textures\\black.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh03);
 	scene.push_back(cyl_gMesh03);
 

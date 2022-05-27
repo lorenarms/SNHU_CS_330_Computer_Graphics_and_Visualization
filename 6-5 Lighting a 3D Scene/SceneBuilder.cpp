@@ -71,14 +71,14 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	GLMesh cyl_gMesh01;
 	cyl_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
+		0.25f, 1.0f, 0.25f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, -2.0f,
+		0.0f, 0.0f, 0.0f,
 		1.0f, 1.0f
 	};
-	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 8.0f;
+	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 128.0f;
 	cyl_gMesh01.texFilename = "textures\\pen_body.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
 	scene.push_back(cyl_gMesh01);
@@ -98,8 +98,8 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	};
 	cyl_gMesh02.length = 1.5f;	cyl_gMesh02.radius = 0.1f;	cyl_gMesh02.number_of_sides = 8.0f;
 	cyl_gMesh02.texFilename = "textures\\pen_clip.png";
-	ShapeBuilder::UBuildCylinder(cyl_gMesh02);
-	scene.push_back(cyl_gMesh02);
+	//ShapeBuilder::UBuildCylinder(cyl_gMesh02);
+	//scene.push_back(cyl_gMesh02);
 
 
 
@@ -117,8 +117,8 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 
 	cyl_gMesh03.length = 3.0f;	cyl_gMesh03.radius = 0.4f;	cyl_gMesh03.number_of_sides = 8.0f;
 	cyl_gMesh03.texFilename = "textures\\black.png";
-	ShapeBuilder::UBuildCylinder(cyl_gMesh03);
-	scene.push_back(cyl_gMesh03);
+	//ShapeBuilder::UBuildCylinder(cyl_gMesh03);
+	//scene.push_back(cyl_gMesh03);
 
 
 	// PEN TIP
@@ -126,7 +126,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	con_gMesh01.p = {
 		1.0f, 1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
+		-90.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 2.0f,
@@ -134,8 +134,8 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	};
 	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 8.0f;
 	con_gMesh01.texFilename = "textures\\pen_tip.png";
-	ShapeBuilder::UBuildCone(con_gMesh01);
-	scene.push_back(con_gMesh01);
+	//ShapeBuilder::UBuildCone(con_gMesh01);
+	//scene.push_back(con_gMesh01);
 
 
 

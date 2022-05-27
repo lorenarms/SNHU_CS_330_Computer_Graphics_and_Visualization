@@ -16,7 +16,7 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 	// build a pyramid
 
 	float h = mesh.height;
-	
+
 	mesh.v = {
 		// Vertex Positions    // color coords					// Texture coords
 		 0.0f,	h,		0.0f,	0.0f,	1.0f,	-1.0f,	1.0f,	0.625f, 1.0f,		//back side
@@ -105,9 +105,9 @@ void ShapeBuilder::UBuildCube(GLMesh& mesh)
 		-0.5f,	0.0f,	-0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.0f,	0.5f,	// bottom right
 		0.5f,	0.0f,	0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.25f,	0.0f,
 		0.5f,	0.0f,	-0.5f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.25f,	0.5f,
-	
+
 	};
-	
+
 	UTranslator(mesh);
 }
 
@@ -130,41 +130,41 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0], c[1], c[2], c[3], 0.5f, 0.25f });		// center point; x, y, z, r, g, b, a, texture x, texture y
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
-										0.5f + r * sin(i * sectorStep) ,
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, c[0], c[1], c[2], c[3], 0.5f, 0.25f });		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,				// first outer point
 										0.0f ,
+										0.5f + r * sin(i * sectorStep) ,
 										c[0], c[1], c[2], c[3],
 										/*textureXLoc,
 										0.0f*/
 										0.5f + (r * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
 										0.25f + (0.25f * sin((i)*sectorStep))
-										});												// first outer point
-		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) ,
+										});												
+		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,		// second outer point
 										0.0f ,
+										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										c[0], c[1], c[2], c[3],
 										/*textureXLoc + textStep,
 										0.0f*/
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.25f + (0.25f * sin((i + 1) * sectorStep))
-										});												// second outer point
+										});												
 
 
-// side triangle + point
+		// side triangle + point
 		v.insert(v.end(), { 0.5f + (r * cos(i * sectorStep)) ,
-										0.5f + (r * sin(i * sectorStep)) ,
 										0.0f ,
+										0.5f + (r * sin(i * sectorStep)) ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc ,
 										0.5f });
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										0.0f ,
+										0.5f + (r * sin((i + 1) * sectorStep)) ,
 										c[0], c[1], c[2], c[3],
 										textureXLoc + textStep,
 										0.5f });
-		v.insert(v.end(), { 0.5f , 0.5f , l , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
+		v.insert(v.end(), { 0.5f , l , 0.5f , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
 
 		textureXLoc += textStep;
 
@@ -192,22 +192,35 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 
 	vector<float> v;
 
-	for (auto i = 1; i < s + 1; i++)
+	for (auto i = 0; i < s; i++)
 	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
-										0.5f + r * sin(i * sectorStep) ,			// y
-										0.0f ,										// z
-										c[0], c[1], c[2], c[3],						// color data r g b a
+										0.0f ,										// y
+										0.5f + r * sin(i * sectorStep) ,			// z
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
 										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
 										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
 
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
-										c[0], c[1], c[2], c[3],						// color data r g b a
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
 										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
 
@@ -217,17 +230,17 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	for (auto i = 1; i < s + 1; i++)
 	{
 		// triangle fan, top
-		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], c[3], 0.5f, 0.875f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f, l, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f, 0.875f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
-										0.5f + r * sin(i * sectorStep) ,
 										l ,										// build this fan the 'l' value away from the other fan
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f, 1.0f, 0.0f, 1.0f,					// color data r g b a
 										0.5f + (r * cos((i)*sectorStep)) ,
 										0.875f + (0.125f * sin((i)*sectorStep)) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f, 1.0f, 0.0f, 1.0f,					// color data r g b a
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.875f + (0.125f * sin((i + 1) * sectorStep)) });
 	}
@@ -240,43 +253,60 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	float k = 0.0f;				// for texture clamping
 
 	// sides
-	for (auto i = 1; i < s + 1; i++)
+	for (auto i = 0; i < s; i++)
 	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
-										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
 										k ,
 										0.25f });
+
+		std::cout << i << ": x: " << 0.5f + r * cos(i * sectorStep) << ", y: 0.0f, z: " << 0.5f + r * sin(i * sectorStep) << endl;
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
-										0.5f + r * sin(i * sectorStep) ,
 										l ,
+										0.5f + r * sin(i * sectorStep) ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										l ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.25f });
+		std::cout << i << ": x: " << 0.5f + r * cos((i + 1) * sectorStep) << ", y: 0.0f, z: " << 0.5f + 0.5f + r * sin((i + 1) * sectorStep) << endl;
+
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
-										0.5f + r * sin(i * sectorStep) ,
 										0.0f ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
 										k,
 										0.25f });
 		k += j;
@@ -292,27 +322,7 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 void ShapeBuilder::UBuildPlane(GLMesh& mesh)
 {
 	// Use this to build the ground, for proper lighting
-	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
-	//mesh.v = {
-	//	-1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
-	//	 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 1
-	//	-1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.0f, 0.0f,	// 2
-
-	//	-1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.0f, 1.0f,	// 0
-	//	 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
-	//	 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
-
-	//	 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
-	//	 0.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 0.5f, 0.0f,	// 2
-	//	 1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
-
-	//	 0.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 0.5f, 1.0f,	// 3
-	//	 1.0f, 0.0f, 1.0f, c[0], c[1], c[2], c[3], 1.0f, 0.0f,	// 5
-	//	 1.0f, 0.0f, -1.0f, c[0], c[1], c[2], c[3], 1.0f, 1.0f,	// 4
-
-	//};
-
-
+	
 	mesh.v = {
 		-1.0f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	// 0
 		 0.0f,	0.0f,	 1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	0.5f,	0.0f,	// 1

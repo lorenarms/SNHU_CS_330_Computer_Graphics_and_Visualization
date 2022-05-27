@@ -73,7 +73,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.0f, 1.0f, 0.0f,				// y amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f, 1.0f,				// z amount of rotation, rotate x, y, z
 		0.0f, 0.0f, 0.0f,					// translate x, y, z
-		1.0f, 1.0f
+		2.0f, 2.0f
 	};
 	pyr_mesh_realBricks.height = 0.8f;
 	pyr_mesh_realBricks.texFilename = "textures\\realbricks.png";

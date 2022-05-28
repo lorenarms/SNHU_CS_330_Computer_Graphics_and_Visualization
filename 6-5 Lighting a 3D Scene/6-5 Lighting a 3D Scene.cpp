@@ -59,8 +59,8 @@ bool perspective = false;
 
 
 // camera
-//Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -25.0f);
-Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
+Camera gCamera(glm::vec3(-4.0f, 4.0f, -4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -25.0f);
+//Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
 
 
 
@@ -81,7 +81,7 @@ glm::vec3 gSpotLightPosition(2.5f, 1.0f, -1.5f);
 glm::vec3 gSpotLightScale(0.1f);
 
 // Light color, position and scale
-glm::vec3 gKeyLightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 gKeyLightColor(0.0f, 0.0f, 0.0f);
 glm::vec3 gKeyLightPosition(-2.5f, 4.0f, -1.5f);
 glm::vec3 gKeyLightScale(0.1f);
 

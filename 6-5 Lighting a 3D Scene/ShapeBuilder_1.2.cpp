@@ -128,13 +128,25 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 	for (auto i = 1; i < s + 1; i++) {
 
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
 
 		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, c[0], c[1], c[2], c[3], 0.5f, 0.25f });		// center point; x, y, z, r, g, b, a, texture x, texture y
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, c[0], -1.0f, c[2], c[3], 0.5f, 0.25f });		// center point; x, y, z, r, g, b, a, texture x, texture y
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,				// first outer point
 										0.0f ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], c[1], c[2], c[3],
+										c[0], -1.0f, c[2], c[3],
 										/*textureXLoc,
 										0.0f*/
 										0.5f + (r * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
@@ -143,7 +155,7 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,		// second outer point
 										0.0f ,
 										0.5f + (r * sin((i + 1) * sectorStep)) ,
-										c[0], c[1], c[2], c[3],
+										c[0], -1.0f, c[2], c[3],
 										/*textureXLoc + textStep,
 										0.0f*/
 										0.5f + (r * cos((i + 1) * sectorStep)) ,
@@ -155,16 +167,16 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 		v.insert(v.end(), { 0.5f + (r * cos(i * sectorStep)) ,
 										0.0f ,
 										0.5f + (r * sin(i * sectorStep)) ,
-										c[0], c[1], c[2], c[3],
+										c[0], 1.0f, c[2], c[3],
 										textureXLoc ,
 										0.5f });
 		v.insert(v.end(), { 0.5f + (r * cos((i + 1) * sectorStep)) ,
 										0.0f ,
 										0.5f + (r * sin((i + 1) * sectorStep)) ,
-										c[0], c[1], c[2], c[3],
+										c[0], 1.0f, c[2], c[3],
 										textureXLoc + textStep,
 										0.5f });
-		v.insert(v.end(), { 0.5f , l , 0.5f , c[0], c[1], c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
+		v.insert(v.end(), { 0.5f , l , 0.5f , c[0], 1.0f, c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
 
 		textureXLoc += textStep;
 
@@ -275,7 +287,6 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 										k ,
 										0.25f });
 
-		std::cout << i << ": x: " << 0.5f + r * cos(i * sectorStep) << ", y: 0.0f, z: " << 0.5f + r * sin(i * sectorStep) << endl;
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										l ,
 										0.5f + r * sin(i * sectorStep) ,
@@ -301,7 +312,6 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 										c[0], -1.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.25f });
-		std::cout << i << ": x: " << 0.5f + r * cos((i + 1) * sectorStep) << ", y: 0.0f, z: " << 0.5f + 0.5f + r * sin((i + 1) * sectorStep) << endl;
 
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.0f ,

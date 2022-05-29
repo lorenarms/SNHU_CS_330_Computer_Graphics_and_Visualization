@@ -59,7 +59,7 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(-4.0f, 4.0f, -4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -25.0f);
+Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -35.0f);
 //Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
 
 
@@ -81,9 +81,9 @@ glm::vec3 gSpotLightPosition(2.5f, 1.0f, -1.5f);
 glm::vec3 gSpotLightScale(0.1f);
 
 // Light color, position and scale
-glm::vec3 gKeyLightColor(0.0f, 0.0f, 0.0f);
+glm::vec3 gKeyLightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 gKeyLightPosition(-2.5f, 4.0f, -1.5f);
-glm::vec3 gKeyLightScale(0.1f);
+glm::vec3 gKeyLightScale(0.0f);
 
 bool gSpotLightOrbit = true;
 
@@ -170,7 +170,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 	{
 		//Calculate Ambient lighting*/
 		float spotStrength = 0.1f; // Set ambient or global lighting strength
-		float keyStrength = 0.5f; // Set ambient or global lighting strength
+		float keyStrength = 0.2f; // Set ambient or global lighting strength
 		vec3 spot = spotStrength * lightColor; // Generate ambient light color
 		vec3 key = keyStrength * keyLightColor;
 
@@ -649,7 +649,7 @@ void URender(vector<GLMesh> scene)
 	glEnable(GL_DEPTH_TEST);
 
 	// Background (black)
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.035f, 0.144f, 0.220f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 
@@ -707,8 +707,8 @@ void URender(vector<GLMesh> scene)
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
 
 		// Spot Light
-		glUniform3f(lightColorLoc, gSpotLightColor.r, gSpotLightColor.g, gSpotLightColor.b);
-		glUniform3f(lightPositionLoc, gSpotLightPosition.x, gSpotLightPosition.y, gSpotLightPosition.z);
+		/*glUniform3f(lightColorLoc, gSpotLightColor.r, gSpotLightColor.g, gSpotLightColor.b);
+		glUniform3f(lightPositionLoc, gSpotLightPosition.x, gSpotLightPosition.y, gSpotLightPosition.z);*/
 
 		// Key Light
 		glUniform3f(keyLightColorLoc, gKeyLightColor.r, gKeyLightColor.g, gKeyLightColor.b);
@@ -730,29 +730,36 @@ void URender(vector<GLMesh> scene)
 		
 		
 	}
-		
-	// Draw the Spot Light
-	glUseProgram(gLightProgramId);
-	glBindVertexArray(spotLightMesh.vao);
+	// Vars for lights
+	glm::mat4 model;
+	GLint modelLoc;
+	GLint viewLoc;
+	GLint projLoc;
 
-	// Light location and Scale
-	glm::mat4 model = glm::translate(gSpotLightPosition) * glm::scale(gSpotLightScale);
-	
-	// Matrix uniforms from the Light Shader program
-	GLint modelLoc = glGetUniformLocation(gLightProgramId, "model");
-	GLint viewLoc = glGetUniformLocation(gLightProgramId, "view");
-	GLint projLoc = glGetUniformLocation(gLightProgramId, "projection");
+	//// --------------------
+	//// Draw the Spot Light
+	//glUseProgram(gLightProgramId);
+	//glBindVertexArray(spotLightMesh.vao);
 
-	// Matrix data
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	//// Light location and Scale
+	//model = glm::translate(gSpotLightPosition) * glm::scale(gSpotLightScale);
+	//
+	//// Matrix uniforms from the Light Shader program
+	//modelLoc = glGetUniformLocation(gLightProgramId, "model");
+	//viewLoc = glGetUniformLocation(gLightProgramId, "view");
+	//projLoc = glGetUniformLocation(gLightProgramId, "projection");
 
-	// Draw the light
-	glDrawArrays(GL_TRIANGLES, 0, spotLightMesh.nVertices);
+	//// Matrix data
+	//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+	//// Draw the light
+	//glDrawArrays(GL_TRIANGLES, 0, spotLightMesh.nVertices);
+	//// --------------------
 
 
-
+	// --------------------
 	// Draw the Key Light
 	glUseProgram(gLightProgramId);
 	glBindVertexArray(keyLightMesh.vao);
@@ -772,7 +779,10 @@ void URender(vector<GLMesh> scene)
 
 	// Draw the light
 	glDrawArrays(GL_TRIANGLES, 0, keyLightMesh.nVertices);
-			
+	// --------------------
+
+
+
 	// deactivate vao's
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -846,55 +856,55 @@ void UCreateLightMesh(GLightMesh& lightMesh)
 {
 	// Position and Color data
 	GLfloat verts[] = {
-			//Positions          //Normals
-			// ------------------------------------------------------
-			//Back Face          //Negative Z Normal  Texture Coords.
-		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-		   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		//Positions          //Normals
+		// ------------------------------------------------------
+		//Back Face          //Negative Z Normal  Texture Coords.
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-		   //Front Face         //Positive Z Normal
-		  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
-		   0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
-		   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-		   0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
-		  -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
-		  -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+		//Front Face         //Positive Z Normal
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
 
-		  //Left Face          //Negative X Normal
-		 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		 -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		 -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		 -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		 -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		//Left Face          //Negative X Normal
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-		 //Right Face         //Positive X Normal
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		//Right Face         //Positive X Normal
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-		 //Bottom Face        //Negative Y Normal
+		//Bottom Face        //Negative Y Normal
 		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
 		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
 		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
 		//Top Face           //Positive Y Normal
-	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
 		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
 		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-	   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
 	const GLuint floatsPerVertex = 3;

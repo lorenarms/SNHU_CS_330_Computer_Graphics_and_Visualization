@@ -59,8 +59,8 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -35.0f);
-//Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
+//Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -35.0f);
+Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
 
 
 
@@ -707,8 +707,8 @@ void URender(vector<GLMesh> scene)
 		glUniform3f(objectColorLoc, mesh.p[0], mesh.p[1], mesh.p[2]);
 
 		// Spot Light
-		/*glUniform3f(lightColorLoc, gSpotLightColor.r, gSpotLightColor.g, gSpotLightColor.b);
-		glUniform3f(lightPositionLoc, gSpotLightPosition.x, gSpotLightPosition.y, gSpotLightPosition.z);*/
+		glUniform3f(lightColorLoc, gSpotLightColor.r, gSpotLightColor.g, gSpotLightColor.b);
+		glUniform3f(lightPositionLoc, gSpotLightPosition.x, gSpotLightPosition.y, gSpotLightPosition.z);
 
 		// Key Light
 		glUniform3f(keyLightColorLoc, gKeyLightColor.r, gKeyLightColor.g, gKeyLightColor.b);
@@ -736,27 +736,27 @@ void URender(vector<GLMesh> scene)
 	GLint viewLoc;
 	GLint projLoc;
 
-	//// --------------------
-	//// Draw the Spot Light
-	//glUseProgram(gLightProgramId);
-	//glBindVertexArray(spotLightMesh.vao);
+	// --------------------
+	// Draw the Spot Light
+	glUseProgram(gLightProgramId);
+	glBindVertexArray(spotLightMesh.vao);
 
-	//// Light location and Scale
-	//model = glm::translate(gSpotLightPosition) * glm::scale(gSpotLightScale);
-	//
-	//// Matrix uniforms from the Light Shader program
-	//modelLoc = glGetUniformLocation(gLightProgramId, "model");
-	//viewLoc = glGetUniformLocation(gLightProgramId, "view");
-	//projLoc = glGetUniformLocation(gLightProgramId, "projection");
+	// Light location and Scale
+	model = glm::translate(gSpotLightPosition) * glm::scale(gSpotLightScale);
+	
+	// Matrix uniforms from the Light Shader program
+	modelLoc = glGetUniformLocation(gLightProgramId, "model");
+	viewLoc = glGetUniformLocation(gLightProgramId, "view");
+	projLoc = glGetUniformLocation(gLightProgramId, "projection");
 
-	//// Matrix data
-	//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	// Matrix data
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-	//// Draw the light
-	//glDrawArrays(GL_TRIANGLES, 0, spotLightMesh.nVertices);
-	//// --------------------
+	// Draw the light
+	glDrawArrays(GL_TRIANGLES, 0, spotLightMesh.nVertices);
+	// --------------------
 
 
 	// --------------------

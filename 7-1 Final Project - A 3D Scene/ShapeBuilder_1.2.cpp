@@ -191,7 +191,7 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
 
 	float r = mesh.radius;
-	float h = mesh.length;
+	float h = mesh.height;
 	float s = mesh.number_of_sides;
 
 
@@ -202,6 +202,42 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 
 	for (auto i = 0; i < s; i++)
 	{
+		float one = 0.5f + /*0.5f + r * */cos(i * sectorStep);
+		float two = 0.5f + /*0.5f + r * */sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+		
+
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
+										0.0f ,										// y
+										0.5f + r * sin(i * sectorStep) ,			// z
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
+
+
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+
 		float one = 0.5f + r * cos(i * sectorStep);
 		float two = 0.5f + r * sin(i * sectorStep);
 
@@ -213,43 +249,19 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 
 		c[0] = one;
 		c[2] = two;
-
-
-		// triangle fan, bottom
-		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
-										0.0f ,										// y
-										0.5f + r * sin(i * sectorStep) ,			// z
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
-										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
-
-
-		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.0f ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
-
-
-	}
-
-	for (auto i = 1; i < s + 1; i++)
-	{
 		// triangle fan, top
 		v.insert(v.end(), { 0.5f, h, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f, 0.875f });			// origin (0.5, 0.5) works best for textures
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										h ,										// build this fan the 'l' value away from the other fan
 										0.5f + r * sin(i * sectorStep) ,
-										0.0f, 1.0f, 0.0f, 1.0f,					// color data r g b a
-										0.5f + (r * cos((i)*sectorStep)) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,
 										0.875f + (0.125f * sin((i)*sectorStep)) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										h ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										0.0f, 1.0f, 0.0f, 1.0f,					// color data r g b a
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
 										0.875f + (0.125f * sin((i + 1) * sectorStep)) });
 	}
 
@@ -352,53 +364,180 @@ void ShapeBuilder::UBuildHollowCylinder(GLMesh& mesh)
 		c[0] = one;
 		c[2] = two;
 
-		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,			// x
-										0.0f ,										// y
-										0.5f + ir * sin(i * sectorStep) ,			// z
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
 
-										0.5f + (ir * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
-										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+		// FOR TEXTURE COORDS
+		// use distance formula
+		// x2 = x1 + d * cos(theta)
+		// y2 = y1 + d * sin(theta)
+		//
+		// x1 = 0.5, d = 0.5 for outer radius, always; d = (inner radius / outer radius * 0.5)
+		// theta = i * sectorStep
+		//
+		// y1 = 0.125, d = 0.125 for outer radius, always; d = (inner radius / outer radius * 0.125)
+		// theta = i * sectorStep
+		//
 
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
-										0.0f ,										// y
-										0.5f + r * sin(i * sectorStep) ,			// z
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
 
-										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
-										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+		//BOTTOM OF HOLLOW CYLINDER
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,				
+										0.0f ,												
+										0.5f + ir * sin(i * sectorStep) ,				
+										-c[0], -1.0f, -c[2], 1.0f,							
+										0.5f + ((ir / r * 0.5f) * cos((i)*sectorStep)) ,	
+										(0.125f + ((ir / r * 0.125f) * sin((i)*sectorStep))) });
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,					// x
+										0.0f ,												// y
+										0.5f + r * sin(i * sectorStep) ,					// z
+										c[0], -1.0f, c[2], 1.0f,							// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
+										(0.125f + 0.125f * sin((i)*sectorStep)) });		// texture y
 
 		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
 										0.0f ,
 										0.5f + ir * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-
-										0.5f + (ir * cos((i + 1) * sectorStep)) ,
-										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
-
-
+										-c[0], -1.0f, -c[2], 1.0f,							
+										0.5f + ((ir / r * 0.5f) * cos((i + 1) * sectorStep)) ,
+										(0.125f + ((ir / r * 0.125f) * sin((i + 1) * sectorStep))) });
 		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
 										0.0f ,
 										0.5f + ir * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-										0.5f + (ir * cos((i + 1) * sectorStep)) ,
-										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
-
+										-c[0], -1.0f, -c[2], 1.0f,						
+										0.5f + ((ir / r * 0.5f) * cos((i + 1) * sectorStep)) ,
+										(0.125f + ((ir / r * 0.125f) * sin((i + 1) * sectorStep))) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
-
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
-										0.0f ,										// y
-										0.5f + r * sin(i * sectorStep) ,			// z
-										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
-										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
-										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+										c[0], -1.0f, c[2], 1.0f,						
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										(0.125f + 0.125f * sin((i + 1) * sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,						
+										0.0f ,										
+										0.5f + r * sin(i * sectorStep) ,			
+										c[0], -1.0f, c[2], 1.0f,						
+										0.5f + (0.5f * cos((i)*sectorStep)) ,		
+										(0.125f + (0.125f * sin((i)*sectorStep))) });
 
 	}
+
+	for (auto i = 0; i < s; i++)
+	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+		//TOP OF HOLLOW CYLINDER
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										h ,
+										0.5f + ir * sin(i * sectorStep) ,
+										-c[0], 1.0f, -c[2], 1.0f,
+										0.5f + ((ir / r * 0.5f) * cos((i)*sectorStep)) ,
+										(0.125f + ((ir / r * 0.125f) * sin((i)*sectorStep))) });
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,					// x
+										h ,												// y
+										0.5f + r * sin(i * sectorStep) ,					// z
+										c[0], 1.0f, c[2], 1.0f,							// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,			// texture x; adding the origin for proper alignment
+										(0.125f + 0.125f * sin((i)*sectorStep)) });		// texture y
+
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										-c[0], 1.0f, -c[2], 1.0f,
+										0.5f + ((ir / r * 0.5f) * cos((i + 1) * sectorStep)) ,
+										(0.125f + ((ir / r * 0.125f) * sin((i + 1) * sectorStep))) });
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										-c[0], 1.0f, -c[2], 1.0f,
+										0.5f + ((ir / r * 0.5f) * cos((i + 1) * sectorStep)) ,
+										(0.125f + ((ir / r * 0.125f) * sin((i + 1) * sectorStep))) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										(0.125f + 0.125f * sin((i + 1) * sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										h ,
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,
+										0.5f + (0.5f * cos((i)*sectorStep)) ,
+										(0.125f + (0.125f * sin((i)*sectorStep))) });
+
+	}
+
+	constexpr float x = 1.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
+	for (auto i = 0; i < s; i++)
+	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										k ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										h ,
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], c[1], c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										k + j ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										k,
+										0.25f });
+		k += j;
+	}
+
+
 
 	mesh.v = v;
 

@@ -81,7 +81,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 128.0f;
 	cyl_gMesh01.texFilename = "textures\\pen_body.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
-	//scene.push_back(cyl_gMesh01);
+	scene.push_back(cyl_gMesh01);
 
 
 
@@ -202,9 +202,29 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	hollow_cyl.innerRadius = 0.25f;
 	hollow_cyl.radius = 0.5f;
 	hollow_cyl.height = 1.0f;
-	hollow_cyl.number_of_sides = 24.0f;
+	hollow_cyl.number_of_sides = 144.0f;
 	ShapeBuilder::UBuildHollowCylinder(hollow_cyl);
 	scene.push_back(hollow_cyl);
+
+
+	//HOLLOW CYLINDER
+	GLMesh cyl;
+	cyl.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		2.0f,	2.0f,	2.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-2.0f,	3.0f,	0.0f,
+		1.0f,	1.0f
+	};
+	cyl.texFilename = "textures\\smiley_cyl.png";
+	cyl.innerRadius = 0.25f;
+	cyl.radius = 0.5f;
+	cyl.height = 1.0f;
+	cyl.number_of_sides = 144.0f;
+	ShapeBuilder::UBuildCylinder(cyl);
+	scene.push_back(cyl);
 
 
 

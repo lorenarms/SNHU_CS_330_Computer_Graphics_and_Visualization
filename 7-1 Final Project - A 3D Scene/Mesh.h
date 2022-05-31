@@ -37,6 +37,7 @@ struct GLMesh
 	float height;
 	float length;
 	float radius;
+	float innerRadius;
 	float number_of_sides;
 	
 	// each shape gets a matrix object

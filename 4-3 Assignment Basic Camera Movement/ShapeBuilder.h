@@ -8,24 +8,17 @@ class ShapeBuilder
 {
 public:
 	static void UBuildPyramid(GLMesh& mesh);
-	static void UBuildRainbowPyramid(GLMesh& mesh, float seed);
 
 	static void UBuildCube(GLMesh& mesh);
-	static void UBuildRainbowCube(GLMesh&, float seed);
 
 	static void UBuildCone(GLMesh& mesh);
-	static void UBuildRainbowCone(GLMesh& mesh, float seed);
 
 	static void UBuildCylinder(GLMesh& mesh);
-	static void UBuildRainbowCylinder(GLMesh& mesh, float seed);
 
 	static void UBuildPlane(GLMesh& mesh);
-	static void UBuildRainbowPlane(GLMesh& mesh, float seed);
-
-
+	
 	static void UBuildCircle(GLMesh& mesh);
-
-
+	
 	static void UTranslator(GLMesh& mesh);
 
 };

@@ -152,10 +152,10 @@
     <ClCompile Include="ShapeBuilder_1.2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\4-3 Assignment Basic Camera Movement\ShapeBuilder.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneBuilder.h" />
+    <ClInclude Include="ShapeBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="object_shader.vs" />

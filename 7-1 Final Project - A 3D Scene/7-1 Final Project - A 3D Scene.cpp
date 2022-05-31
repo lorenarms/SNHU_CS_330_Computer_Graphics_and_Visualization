@@ -59,8 +59,8 @@ bool perspective = false;
 
 
 // camera
-//Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -35.0f);
-Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
+Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 45.0f, -35.0f);
+//Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
 
 
 

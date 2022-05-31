@@ -291,40 +291,40 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k ,
 										0.25f });
 
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										h ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										h ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										h ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.25f });
 
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k,
 										0.25f });
 		k += j;
@@ -480,6 +480,8 @@ void ShapeBuilder::UBuildHollowCylinder(GLMesh& mesh)
 	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
 	float k = 0.0f;				// for texture clamping
 
+
+	// OUTSIDE SIDES OF HOLLOW CYLINDER
 	for (auto i = 0; i < s; i++)
 	{
 		float one = 0.5f + r * cos(i * sectorStep);
@@ -498,44 +500,103 @@ void ShapeBuilder::UBuildHollowCylinder(GLMesh& mesh)
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k ,
 										0.25f });
 
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										h ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										h ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										h ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], c[1], c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.75f });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin((i + 1) * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k + j ,
 										0.25f });
 
 		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
 										0.0f ,
 										0.5f + r * sin(i * sectorStep) ,
-										c[0], -1.0f, c[2], c[3],					// color data r g b a
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
 										k,
 										0.25f });
 		k += j;
 	}
+
+	// INSIDE SIDES OF HOLLOW CYLINDER
+	for (auto i = 0; i < s; i++)
+	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin(i * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										h ,
+										0.5f + ir * sin(i * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k + j ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin(i * sectorStep) ,
+										-c[0], 0.0f, -c[2], c[3],					// color data r g b a
+										k,
+										0.25f });
+		k += j;
+	}
+
 
 
 

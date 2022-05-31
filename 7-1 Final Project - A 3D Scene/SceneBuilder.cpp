@@ -78,7 +78,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.10f, 3.0f,
 		1.0f, 1.0f
 	};
-	cyl_gMesh01.length = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 128.0f;
+	cyl_gMesh01.height = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 128.0f;
 	cyl_gMesh01.texFilename = "textures\\pen_body.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
 	scene.push_back(cyl_gMesh01);
@@ -96,10 +96,10 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		-0.063f, 0.22f, 2.5f,
 		1.0f, 1.0f
 	};
-	cyl_gMesh02.length = 1.5f;	cyl_gMesh02.radius = 0.4f;	cyl_gMesh02.number_of_sides = 16.0f;
+	cyl_gMesh02.height = 1.5f;	cyl_gMesh02.radius = 0.4f;	cyl_gMesh02.number_of_sides = 16.0f;
 	cyl_gMesh02.texFilename = "textures\\goldmetal.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh02);
-	//scene.push_back(cyl_gMesh02);
+	scene.push_back(cyl_gMesh02);
 
 
 
@@ -115,10 +115,10 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f, 1.0f
 	};
 
-	cyl_gMesh03.length = 3.0f;	cyl_gMesh03.radius = 0.45f;	cyl_gMesh03.number_of_sides = 128.0f;
+	cyl_gMesh03.height = 3.0f;	cyl_gMesh03.radius = 0.45f;	cyl_gMesh03.number_of_sides = 128.0f;
 	cyl_gMesh03.texFilename = "textures\\grey.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh03);
-	//scene.push_back(cyl_gMesh03);
+	scene.push_back(cyl_gMesh03);
 
 
 	// PEN TIP
@@ -135,7 +135,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 128.0f;
 	con_gMesh01.texFilename = "textures\\pen_tip.png";
 	ShapeBuilder::UBuildCone(con_gMesh01);
-	//scene.push_back(con_gMesh01);
+	scene.push_back(con_gMesh01);
 
 
 
@@ -168,7 +168,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	};
 	tablet_gMesh01.texFilename = "textures\\tablet.png";
 	ShapeBuilder::UBuildCube(tablet_gMesh01);
-	//scene.push_back(tablet_gMesh01);
+	scene.push_back(tablet_gMesh01);
 
 
 	//RUBIK'S CUBE
@@ -184,7 +184,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	};
 	rubiks_gMesh01.texFilename = "textures\\rubiks.png";
 	ShapeBuilder::UBuildCube(rubiks_gMesh01);
-	//scene.push_back(rubiks_gMesh01);
+	scene.push_back(rubiks_gMesh01);
 
 
 	//HOLLOW CYLINDER
@@ -193,13 +193,13 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		1.0f,	1.0f,	1.0f,	1.0f,
 		2.0f,	2.0f,	2.0f,
 		0.0f,	1.0f,	0.0f,	0.0f,
-		0.0f,	0.0f,	1.0f,	0.0f,
+		-90.0f,	0.0f,	1.0f,	0.0f,
 		0.0f,	0.0f,	0.0f,	1.0f,
-		0.0f,	1.0f,	0.0f,
+		-4.0f,	0.0f,	3.0f,
 		1.0f,	1.0f
 	};
-	hollow_cyl.texFilename = "textures\\smiley_cyl.png";
-	hollow_cyl.innerRadius = 0.25f;
+	hollow_cyl.texFilename = "textures\\coffee_cup.png";
+	hollow_cyl.innerRadius = 0.45f;
 	hollow_cyl.radius = 0.5f;
 	hollow_cyl.height = 1.0f;
 	hollow_cyl.number_of_sides = 144.0f;
@@ -207,28 +207,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	scene.push_back(hollow_cyl);
 
 
-	//HOLLOW CYLINDER
-	GLMesh cyl;
-	cyl.p = {
-		1.0f,	1.0f,	1.0f,	1.0f,
-		2.0f,	2.0f,	2.0f,
-		0.0f,	1.0f,	0.0f,	0.0f,
-		0.0f,	0.0f,	1.0f,	0.0f,
-		0.0f,	0.0f,	0.0f,	1.0f,
-		-2.0f,	3.0f,	0.0f,
-		1.0f,	1.0f
-	};
-	cyl.texFilename = "textures\\smiley_cyl.png";
-	cyl.innerRadius = 0.25f;
-	cyl.radius = 0.5f;
-	cyl.height = 1.0f;
-	cyl.number_of_sides = 144.0f;
-	ShapeBuilder::UBuildCylinder(cyl);
-	scene.push_back(cyl);
-
-
-
-
+	
 
 }
 

@@ -132,7 +132,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.10f, -1.0f,
 		1.0f, 1.0f
 	};
-	con_gMesh01.length = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 128.0f;
+	con_gMesh01.height = 1.0f;	con_gMesh01.radius = 0.5f;	con_gMesh01.number_of_sides = 128.0f;
 	con_gMesh01.texFilename = "textures\\pen_tip.png";
 	ShapeBuilder::UBuildCone(con_gMesh01);
 	scene.push_back(con_gMesh01);
@@ -175,7 +175,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	GLMesh rubiks_gMesh01;
 	rubiks_gMesh01.p = {
 		1.0f,	1.0f,	1.0f,	1.0f,
-		1.0f,	1.0f,	1.0f,
+		1.4f,	1.4f,	1.4f,
 		0.0f,	1.0f,	0.0f,	0.0f,
 		-110.0f,	0.0f,	1.0f,	0.0f,
 		0.0f,	0.0f,	0.0f,	1.0f,
@@ -206,8 +206,197 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildHollowCylinder(hollow_cyl);
 	scene.push_back(hollow_cyl);
 
+	// COFFEE
+	GLMesh coffee;
+	coffee.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		2.0f,	2.0f,	2.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		180.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-4.0f,	1.9f,	5.0f,
+		1.0f,	1.0f
+	};
+	coffee.radius = 0.45f;
+	coffee.number_of_sides = 144.0f;
+	coffee.texFilename = "textures\\coffee.png";
+	ShapeBuilder::UBuildCircle(coffee);
+	scene.push_back(coffee);
 
-	
+
+	// HANDLE
+	GLMesh handle;
+	handle.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		2.0f,	2.0f,	2.0f,
+		90.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-5.0f,	2.0f,	4.0f,
+		1.0f,	1.0f
+	};
+	handle.texFilename = "textures\\white.png";
+	handle.innerRadius = 0.3f;
+	handle.radius = 0.4f;
+	handle.height = 0.1f;
+	handle.number_of_sides = 144.0f;
+	ShapeBuilder::UBuildHollowCylinder(handle);
+	scene.push_back(handle);
+
+
+	// KISS 1
+	GLMesh kissTop_01;
+	kissTop_01.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-2.0f,	0.18f,	1.0f,
+		1.0f,	1.0f
+	};
+	kissTop_01.height = 0.8f;
+	kissTop_01.radius = 0.5;
+	kissTop_01.number_of_sides = 144.0f;
+	kissTop_01.texFilename = "textures\\kiss.png";
+	ShapeBuilder::UBuildCone(kissTop_01);
+	scene.push_back(kissTop_01);
+
+	// KISS 1
+	GLMesh kissBottom_01;
+	kissBottom_01.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-2.0f,	0.1f,	1.0f,
+		1.0f,	1.0f
+	};
+	kissBottom_01.height = 0.1f;
+	kissBottom_01.radius = 0.5;
+	kissBottom_01.number_of_sides = 144.0f;
+	kissBottom_01.texFilename = "textures\\kiss_sides.png";
+	ShapeBuilder::UBuildCylinder(kissBottom_01);
+	scene.push_back(kissBottom_01);
+
+	// KISS 1 FLAG
+	GLMesh kissFlag_01;
+	kissFlag_01.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.7f,	0.7f,	0.05f,
+		90.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		180.0f,	0.0f,	0.0f,	1.0f,
+		-1.6f,	1.0f,	1.4f,
+		1.0f,	1.0f
+	};
+	kissFlag_01.texFilename = "textures\\kiss_flag.png";
+	ShapeBuilder::UBuildPlane(kissFlag_01);
+	scene.push_back(kissFlag_01);
+
+
+	// KISS 2
+	GLMesh kissTop_02;
+	kissTop_02.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-2.0f,	0.18f,	-1.0f,
+		1.0f,	1.0f
+	};
+	kissTop_02.height = 0.8f;
+	kissTop_02.radius = 0.5;
+	kissTop_02.number_of_sides = 144.0f;
+	kissTop_02.texFilename = "textures\\kiss.png";
+	ShapeBuilder::UBuildCone(kissTop_02);
+	scene.push_back(kissTop_02);
+
+	// KISS 2
+	GLMesh kissBottom_02;
+	kissBottom_02.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-2.0f,	0.1f,	-1.0f,
+		1.0f,	1.0f
+	};
+	kissBottom_02.height = 0.1f;
+	kissBottom_02.radius = 0.5;
+	kissBottom_02.number_of_sides = 144.0f;
+	kissBottom_02.texFilename = "textures\\kiss_sides.png";
+	ShapeBuilder::UBuildCylinder(kissBottom_02);
+	scene.push_back(kissBottom_02);
+
+	// KISS 2 FLAG
+	GLMesh kissFlag_02;
+	kissFlag_02.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.7f,	0.7f,	0.05f,
+		90.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		180.0f,	0.0f,	0.0f,	1.0f,
+		-1.6f,	1.0f,	-0.6f,
+		1.0f,	1.0f
+	};
+	kissFlag_02.texFilename = "textures\\kiss_flag.png";
+	ShapeBuilder::UBuildPlane(kissFlag_02);
+	scene.push_back(kissFlag_02);
+
+	// KISS 3
+	GLMesh kissTop_03;
+	kissTop_03.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-3.0f,	0.18f,	0.0f,
+		1.0f,	1.0f
+	};
+	kissTop_03.height = 0.8f;
+	kissTop_03.radius = 0.5;
+	kissTop_03.number_of_sides = 144.0f;
+	kissTop_03.texFilename = "textures\\kiss.png";
+	ShapeBuilder::UBuildCone(kissTop_03);
+	scene.push_back(kissTop_03);
+
+	// KISS 3
+	GLMesh kissBottom_03;
+	kissBottom_03.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.8f,	0.8f,	0.8f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		0.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		-3.0f,	0.1f,	0.0f,
+		1.0f,	1.0f
+	};
+	kissBottom_03.height = 0.1f;
+	kissBottom_03.radius = 0.5;
+	kissBottom_03.number_of_sides = 144.0f;
+	kissBottom_03.texFilename = "textures\\kiss_sides.png";
+	ShapeBuilder::UBuildCylinder(kissBottom_03);
+	scene.push_back(kissBottom_03);
+
+	// KISS 3 FLAG
+	GLMesh kissFlag_03;
+	kissFlag_03.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.7f,	0.7f,	0.05f,
+		90.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		180.0f,	0.0f,	0.0f,	1.0f,
+		-2.6f,	1.0f,	0.4f,
+		1.0f,	1.0f
+	};
+	kissFlag_03.texFilename = "textures\\kiss_flag.png";
+	ShapeBuilder::UBuildPlane(kissFlag_03);
+	scene.push_back(kissFlag_03);
 
 }
 

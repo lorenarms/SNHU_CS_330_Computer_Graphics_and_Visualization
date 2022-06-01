@@ -115,7 +115,7 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
 
 	float r = mesh.radius;
-	float l = mesh.length;
+	float h = mesh.height;
 	float s = mesh.number_of_sides;
 
 	constexpr float PI = 3.14f;
@@ -175,7 +175,7 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 										c[0], 1.0f, c[2], c[3],
 										textureXLoc + textStep,
 										0.5f });
-		v.insert(v.end(), { 0.5f , l , 0.5f , c[0], 1.0f, c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
+		v.insert(v.end(), { 0.5f , h , 0.5f , c[0], 1.0f, c[2], c[3], textureXLoc + (textStep / 2), 1.0f });		// origin, peak
 
 		textureXLoc += textStep;
 
@@ -202,8 +202,8 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 
 	for (auto i = 0; i < s; i++)
 	{
-		float one = 0.5f + /*0.5f + r * */cos(i * sectorStep);
-		float two = 0.5f + /*0.5f + r * */sin(i * sectorStep);
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
 
 		one -= 0.5f;
 		one *= 2.0f;
@@ -610,6 +610,7 @@ void ShapeBuilder::UBuildPlane(GLMesh& mesh)
 	// Use this to build the ground, for proper lighting
 	
 	mesh.v = {
+
 		-1.0f,	0.0f,	-1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	// 0
 		 0.0f,	0.0f,	 1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	0.5f,	0.0f,	// 1
 		-1.0f,	0.0f,	 1.0f,	0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	0.0f,	// 2
@@ -646,22 +647,36 @@ void ShapeBuilder::UBuildCircle(GLMesh& mesh)
 
 	vector<float> v;
 
+	
+
 	for (auto i = 1; i < s + 1; i++)
 	{
-		// triangle fan
-		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	c[3], 0.5f, 0.5f });		// origin (0.5, 0.5) works best for textures
-		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,		// x
-										0.5f + r * sin(i * sectorStep) ,		// y
-										0.0f ,									// z
-										c[0],	c[1], 1.0f,	c[3],				// color data r g b a
-										0.5f + (r * cos((i)*sectorStep)) ,	// texture x; adding the origin for proper alignment
-										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.0f ,										// build this fan the 'l' value away from the other fan
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,
+										0.5f + (0.5f * sin((i)*sectorStep)) });
 		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
-										0.5f + r * sin((i + 1) * sectorStep) ,
 										0.0f ,
-										c[0],	c[1], 1.0f,	c[3],				// color data r g b a
-										0.5f + (r * cos((i + 1) * sectorStep)) ,
-										0.5f + (r * sin((i + 1) * sectorStep)) });
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										0.5f + (0.5f * sin((i + 1) * sectorStep)) });
 	}
 	mesh.v = v;
 	v.clear();

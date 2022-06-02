@@ -398,5 +398,119 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildPlane(kissFlag_03);
 	scene.push_back(kissFlag_03);
 
+	// PLANT
+	GLMesh pot;
+	pot.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	1.0f,	1.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		6.0f,	0.0f,	0.0f,
+		1.0f,	1.0f
+	};
+	pot.radius = 2.0f;
+	pot.height = 2.0f;
+	pot.number_of_sides = 48.0f;
+	pot.texFilename = "textures\\pot_sides.png";
+	ShapeBuilder::UBuildPotBottom(pot);
+	scene.push_back(pot);
+
+
+	// PLANT
+	GLMesh plant_top;
+	plant_top.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	1.0f,	1.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		6.0f,	2.0f,	0.0f,
+		1.0f,	1.0f
+	};
+	plant_top.radius = 2.2f;
+	plant_top.innerRadius = 1.8f;
+	plant_top.height = 0.5f;
+	plant_top.number_of_sides = 48.0f;
+	plant_top.texFilename = "textures\\pot_sides.png";
+	ShapeBuilder::UBuildHollowCylinder(plant_top);
+	scene.push_back(plant_top);
+
+	// DIRT
+	GLMesh dirt;
+	dirt.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	1.0f,	1.0f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		6.0f,	2.2f,	0.0f,
+		1.0f,	1.0f
+	};
+	dirt.radius = 2.2f;
+	dirt.innerRadius = 1.8f;
+	dirt.height = 0.5f;
+	dirt.number_of_sides = 24.0f;
+	dirt.texFilename = "textures\\dirt.png";
+	ShapeBuilder::UBuildCircle(dirt);
+	scene.push_back(dirt);
+
+	// DIRT
+	GLMesh plant_01;
+	plant_01.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	3.0f,	0.1f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		6.0f,	2.0f,	0.0f,
+		1.0f,	1.0f
+	};
+	plant_01.radius = 2.2f;
+	plant_01.innerRadius = 1.8f;
+	plant_01.height = 0.5f;
+	plant_01.number_of_sides = 24.0f;
+	plant_01.texFilename = "textures\\leaf.png";
+	ShapeBuilder::UBuildLeaves(plant_01);
+	scene.push_back(plant_01);
+
+	// DIRT
+	GLMesh plant_02;
+	plant_02.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	2.0f,	0.1f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		40.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		5.0f,	2.0f,	0.0f,
+		1.0f,	1.0f
+	};
+	plant_02.radius = 2.2f;
+	plant_02.innerRadius = 1.8f;
+	plant_02.height = 0.5f;
+	plant_02.number_of_sides = 24.0f;
+	plant_02.texFilename = "textures\\leaf.png";
+	ShapeBuilder::UBuildLeaves(plant_02);
+	scene.push_back(plant_02);
+
+	// DIRT
+	GLMesh plant_03;
+	plant_03.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		0.5f,	1.5f,	0.1f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		-90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		5.6f,	2.0f,	-1.7f,
+		1.0f,	1.0f
+	};
+	plant_03.radius = 2.2f;
+	plant_03.innerRadius = 1.8f;
+	plant_03.height = 0.5f;
+	plant_03.number_of_sides = 24.0f;
+	plant_03.texFilename = "textures\\leaf.png";
+	ShapeBuilder::UBuildLeaves(plant_03);
+	scene.push_back(plant_03);
+
 }
 

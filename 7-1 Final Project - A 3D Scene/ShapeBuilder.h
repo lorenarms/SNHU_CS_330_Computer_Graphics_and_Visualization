@@ -20,6 +20,9 @@ public:
 
 	static void UBuildCircle(GLMesh& mesh);
 
+	static void UBuildPotBottom(GLMesh& mesh);
+	static void UBuildLeaves(GLMesh& mesh);
+
 	static void UTranslator(GLMesh& mesh);
 
 };

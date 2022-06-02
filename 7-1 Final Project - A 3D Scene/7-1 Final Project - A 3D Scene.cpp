@@ -814,6 +814,8 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
 
+		
+
 		// set the texture wrapping parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -830,6 +832,9 @@ bool UCreateTexture(const char* filename, GLuint& textureId)
 			cout << "Not implemented to handle image with " << channels << " channels" << endl;
 			return false;
 		}
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 

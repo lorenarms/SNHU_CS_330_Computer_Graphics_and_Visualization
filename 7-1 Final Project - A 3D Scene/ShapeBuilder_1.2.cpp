@@ -683,6 +683,206 @@ void ShapeBuilder::UBuildCircle(GLMesh& mesh)
 	UTranslator(mesh);
 }
 
+void ShapeBuilder::UBuildPotBottom(GLMesh& mesh)
+{
+	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
+
+	float r = mesh.radius;
+	float ir = mesh.radius * 0.75f;
+	float h = mesh.height;
+	float s = mesh.number_of_sides;
+
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 0; i < s; i++)
+	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.5f, 0.125f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,			// x
+										0.0f ,										// y
+										0.5f + ir * sin(i * sectorStep) ,			// z
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										(0.125f + (0.125f * sin((i)*sectorStep))) });		// texture y
+
+
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										c[0], -1.0f, c[2], 1.0f,						// color data r g b a
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										(0.125f + (0.125f * sin((i + 1) * sectorStep))) });
+
+
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, h, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f, 0.875f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										h ,										// build this fan the 'l' value away from the other fan
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i)*sectorStep)) ,
+										0.875f + (0.125f * sin((i)*sectorStep)) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], 1.0f, c[2], 1.0f,					// color data r g b a
+										0.5f + (0.5f * cos((i + 1) * sectorStep)) ,
+										0.875f + (0.125f * sin((i + 1) * sectorStep)) });
+	}
+
+	// since all side triangles have the same points as the fans above, the same calculations are used
+	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
+	// the texture to clamp to the corresponding point.
+	constexpr float x = 1.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
+	// sides
+	for (auto i = 0; i < s; i++)
+	{
+		float one = 0.5f + r * cos(i * sectorStep);
+		float two = 0.5f + r * sin(i * sectorStep);
+
+		one -= 0.5f;
+		one *= 2.0f;
+
+		two -= 0.5f;
+		two *= 2.0f;
+
+		c[0] = one;
+		c[2] = two;
+
+
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin(i * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										h ,
+										0.5f + r * sin(i * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										h ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k + j ,
+										0.75f });
+		v.insert(v.end(), { 0.5f + ir * cos((i + 1) * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin((i + 1) * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k + j ,
+										0.25f });
+
+		v.insert(v.end(), { 0.5f + ir * cos(i * sectorStep) ,
+										0.0f ,
+										0.5f + ir * sin(i * sectorStep) ,
+										c[0], 0.0f, c[2], c[3],					// color data r g b a
+										k,
+										0.25f });
+		k += j;
+	}
+
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+}
+
+void ShapeBuilder::UBuildLeaves(GLMesh& mesh)
+{
+	mesh.v = {
+		0.5f,	0.0f,	0.5f,	0.0f,	0.0f,	1.0f,	1.0f,	0.25f,	0.5f,	// front right
+		0.5f,	1.0f,	0.5f,	0.0f,	0.0f,	1.0f,	1.0f,	0.25f,	1.0f,
+		-0.5f,	1.0f,	0.5f,	0.0f,	0.0f,	1.0f,	1.0f,	0.0f,	1.0f,
+
+
+		0.5f,	0.0f,	0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.25f,	0.5f,	// right front
+		0.5f,	1.0f,	0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.25f,	1.0f,
+		0.5f,	1.0f,	-0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.5f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.25f,	0.5f,	// right back
+		0.5f,	0.0f,	-0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.5f,	0.5f,
+		0.5f,	1.0f,	-0.5f,	1.0f,	0.0f,	0.0f,	1.0f,	0.5f,	1.0f,
+
+
+		
+		0.5f,	0.0f,	-0.5f,	0.0f,	0.0f,	-1.0f,	1.0f,	0.5f,	0.5f,	// back right
+		0.5f,	1.0f,	-0.5f,	0.0f,	0.0f,	-1.0f,	1.0f,	0.5f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	0.0f,	0.0f,	-1.0f,	1.0f,	0.75f,	1.0f,
+
+
+		0.5f,	0.0f,	0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	1.0f,	0.5f,	// left back
+		-0.5f,	1.0f,	0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	0.75f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	1.0f,	0.5f,	// left front
+		0.5f,	0.0f,	-0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	0.75f,	0.5f,
+		-0.5f,	1.0f,	-0.5f,	-1.0f,	0.0f,	0.0f,	1.0f,	0.75f,	1.0f,
+
+
+
+
+		-0.5f,	1.0f,	0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	0.0f,	// top left
+		-0.5f,	1.0f,	-0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	0.5f,
+		0.5f,	1.0f,	0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.25f,	0.0f,
+
+		-0.5f,	1.0f,	-0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.0f,	0.5f,	// top right
+		0.5f,	1.0f,	0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.25f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	-0.0f,	1.0f,	0.0f,	1.0f,	0.25f,	0.5f,
+
+		
+	};
+
+	
+
+	UTranslator(mesh);
+}
+
 
 
 // Standard translate method to move, rotate, and resize the shape

@@ -455,7 +455,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildCircle(dirt);
 	scene.push_back(dirt);
 
-	// DIRT
+	// LEAVES
 	GLMesh plant_01;
 	plant_01.p = {
 		1.0f,	1.0f,	1.0f,	1.0f,
@@ -474,7 +474,26 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildLeaves(plant_01);
 	scene.push_back(plant_01);
 
-	// DIRT
+	// LEAVES
+	GLMesh plant_011;
+	plant_011.p = {
+		1.0f,	1.0f,	1.0f,	1.0f,
+		1.0f,	2.0f,	0.1f,
+		0.0f,	1.0f,	0.0f,	0.0f,
+		90.0f,	0.0f,	1.0f,	0.0f,
+		0.0f,	0.0f,	0.0f,	1.0f,
+		6.0f,	4.5f,	0.0f,
+		1.0f,	1.0f
+	};
+	plant_011.radius = 2.2f;
+	plant_011.innerRadius = 1.8f;
+	plant_011.height = 0.5f;
+	plant_011.number_of_sides = 24.0f;
+	plant_011.texFilename = "textures\\leaf.png";
+	ShapeBuilder::UBuildLeaves(plant_011);
+	scene.push_back(plant_011);
+
+	// LEAVES
 	GLMesh plant_02;
 	plant_02.p = {
 		1.0f,	1.0f,	1.0f,	1.0f,
@@ -493,7 +512,7 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 	ShapeBuilder::UBuildLeaves(plant_02);
 	scene.push_back(plant_02);
 
-	// DIRT
+	// LEAVES
 	GLMesh plant_03;
 	plant_03.p = {
 		1.0f,	1.0f,	1.0f,	1.0f,

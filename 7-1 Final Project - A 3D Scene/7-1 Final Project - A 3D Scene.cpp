@@ -59,7 +59,7 @@ bool perspective = false;
 
 
 // camera
-Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 60.0f, -35.0f);
+Camera gCamera(glm::vec3(-6.0f, 6.0f, -7.0f), glm::vec3(0.0f, 1.0f, 0.0f), 53.0f, -23.0f);
 //Camera gCamera(glm::vec3(0.0f, 4.0f, 8.0f));
 
 
@@ -85,7 +85,7 @@ glm::vec3 gKeyLightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 gKeyLightPosition(-2.5f, 4.0f, -1.5f);
 glm::vec3 gKeyLightScale(0.0f);
 
-bool gSpotLightOrbit = true;
+bool gSpotLightOrbit = false;
 
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
@@ -170,7 +170,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 	{
 		//Calculate Ambient lighting*/
 		float spotStrength = 0.1f; // Set ambient or global lighting strength
-		float keyStrength = 0.2f; // Set ambient or global lighting strength
+		float keyStrength = 0.1f; // Set ambient or global lighting strength
 		vec3 spot = spotStrength * lightColor; // Generate ambient light color
 		vec3 key = keyStrength * keyLightColor;
 

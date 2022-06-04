@@ -47,6 +47,51 @@ void ShapeBuilder::UBuildPyramid(GLMesh& mesh)
 	UTranslator(mesh);
 
 }
+void ShapeBuilder::UBuildRainbowPyramid(GLMesh& mesh, float seed)
+{
+	// build a multi-colored pyramid with random colors
+	// use the seed that is passed in to re-seed rand()
+
+	// seed the srand function
+	srand(seed);
+
+
+	float h = mesh.height;
+
+	// generate a random value for each color coordinate;
+	// find a random value between 0.1 and 1.0
+	mesh.v = {
+		// Vertex Positions		// color coords																				// Texture coords
+		 0.0f,	h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//back side
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 -0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//left side
+		-0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//front
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		 0.0f,  h,		0.0f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.5f, 1.0f,		//right side
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,
+
+		-0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 0.0f,		//bottom back
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+
+		 0.5f, -0.0f, -0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f, 1.0f,		//bottom front
+		-0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 0.0f,
+		 0.5f, -0.0f,  0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f, 1.0f
+	};
+
+	UTranslator(mesh);
+
+
+}
+
 void ShapeBuilder::UBuildCube(GLMesh& mesh)
 {
 	vector<float> c = { mesh.p[0], mesh.p[1], mesh.p[2], mesh.p[3] };
@@ -108,6 +153,66 @@ void ShapeBuilder::UBuildCube(GLMesh& mesh)
 	
 	};
 	
+	UTranslator(mesh);
+}
+void ShapeBuilder::UBuildRainbowCube(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	mesh.v = {
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front left
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front right
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// right front
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// right back
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// left front
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// left back
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front left
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,	// front right
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+
+		-0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// top left
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+
+		-0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,	// top right
+		0.5f,	1.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	1.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+		-0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	0.0f,	// bottom left
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+
+		-0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	0.0f,	1.0f,	// bottom right
+		0.5f,	0.0f,	0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	0.0f,
+		0.5f,	0.0f,	-0.5f,	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	1.0f,	1.0f,	1.0f,
+
+
+
+
+	};
+
 	UTranslator(mesh);
 }
 
@@ -172,6 +277,92 @@ void ShapeBuilder::UBuildCone(GLMesh& mesh)
 
 	mesh.v = v;
 	v.clear();	// clear the local vector
+
+	UTranslator(mesh);
+}
+void ShapeBuilder::UBuildRainbowCone(GLMesh& mesh, float seed)
+{
+	srand(seed);
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+	const float textStep = 1.0f / s;
+	float textureXLoc = 0.0f;
+
+
+
+	vector<float> c;
+	c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++) {
+
+
+		// triangle fan, bottom
+		// center point
+		v.insert(v.end(), { 0.5f,	0.5f,	0.0f,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	0.5f });
+
+		// first outer point
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+			// generate random colors for vertex
+			c[0],	c[1],	c[2],	1.0f,
+			0.5f + (r * cos((i)*sectorStep)) ,
+			0.5f + (r * sin((i)*sectorStep))
+			});
+
+		// second outer point
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2], 1.0f,
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep))
+			});
+
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+
+		// side triangle + point
+		// center of bottom
+		v.insert(v.end(), { 0.5f,	0.5f,	l,	0.3f,	0.7f,	1.0f,	1.0f,	0.5f,	1.0f });		// origin, peak
+
+		// outer point
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc ,
+										0.0f });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		// outer point
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0],	c[1],	c[2],	1.0f,
+										textureXLoc + textStep,
+										0.0f });
+
+		textureXLoc += textStep;
+
+	}
+
+
+	mesh.v = v;
+	v.clear();	// clear the local vector
+	c.clear();	// clear color vector
 
 	UTranslator(mesh);
 }
@@ -279,6 +470,130 @@ void ShapeBuilder::UBuildCylinder(GLMesh& mesh)
 										c[0], c[1], c[2], c[3],					// color data r g b a
 										k,
 										0.25f });
+		k += j;
+	}
+
+	mesh.v = v;
+	v.clear();
+	UTranslator(mesh);
+
+}
+void ShapeBuilder::UBuildRainbowCylinder(GLMesh& mesh, float seed)
+{
+	srand(seed);
+	vector<float> c;
+	c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+
+	float r = mesh.radius;
+	float l = mesh.length;
+	float s = mesh.number_of_sides;
+	float h = mesh.height;
+
+
+	constexpr float PI = 3.14f;
+	const float sectorStep = 2.0f * PI / s;
+
+	vector<float> v;
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, bottom
+		v.insert(v.end(), { 0.5f, 0.5f, 0.0f, c[0],	c[1], c[2],	1.0f, 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,			// x
+										0.5f + r * sin(i * sectorStep) ,			// y
+										0.0f ,										// z
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,		// texture x; adding the origin for proper alignment
+										0.5f + (r * sin((i)*sectorStep)) });	// texture y
+
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	for (auto i = 1; i < s + 1; i++)
+	{
+		// triangle fan, top
+		v.insert(v.end(), { 0.5f, 0.5f, l, c[0], c[1], c[2], 1.0f, 0.5f, 0.5f });			// origin (0.5, 0.5) works best for textures
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,										// build this fan the 'l' value away from the other fan
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i)*sectorStep)) ,
+										0.5f + (r * sin((i)*sectorStep)) });
+
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										0.5f + (r * cos((i + 1) * sectorStep)) ,
+										0.5f + (r * sin((i + 1) * sectorStep)) });
+	}
+
+	// since all side triangles have the same points as the fans above, the same calculations are used
+	// to wrap the texture around the cylinder, the calculated points are used to determine which section of
+	// the texture to clamp to the corresponding point.
+	constexpr float x = 3.0f;
+	float j = 1.0f / (s / x);	// for calculating texture location; change 'x' to increase or decrease how many times the texture wraps around the cylinder
+	float k = 0.0f;				// for texture clamping
+
+	// sides
+	for (auto i = 1; i < s + 1; i++)
+	{
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k ,
+										0 });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k ,
+										1.0f });
+
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										1.0f });
+
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										l ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										1.0f });
+		c.clear();
+		c.insert(c.end(), { ((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f),	((rand() % 10 + 1) * 0.1f) });
+		v.insert(v.end(), { 0.5f + r * cos((i + 1) * sectorStep) ,
+										0.5f + r * sin((i + 1) * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k + j ,
+										0.0f });
+
+
+		v.insert(v.end(), { 0.5f + r * cos(i * sectorStep) ,
+										0.5f + r * sin(i * sectorStep) ,
+										0.0f ,
+										c[0], c[1], c[2], 1.0f,					// color data r g b a
+										k,
+										0.0f });
 		k += j;
 	}
 

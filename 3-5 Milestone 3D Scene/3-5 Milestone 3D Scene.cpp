@@ -541,8 +541,8 @@ void URender(vector<GLMesh> scene)
 
 		// Draws the triangles
 		glDrawArrays(GL_TRIANGLES, 0, mesh.nIndices);
-		glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT,
-			nullptr);
+		//glDrawElements(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_SHORT,
+		//	nullptr);
 	}
 
 

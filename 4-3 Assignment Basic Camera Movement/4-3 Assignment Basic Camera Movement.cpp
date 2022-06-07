@@ -352,22 +352,43 @@ void UProcessInput(GLFWwindow* window)
 
 	// fill shapes
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
+	}
 
 
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(FORWARD, gDeltaTime);
+		std::cout << "Forward" << endl;
+	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(BACKWARD, gDeltaTime);
+		std::cout << "Back" << endl;
+	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(LEFT, gDeltaTime);
+		std::cout << "Left" << endl;
+	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(RIGHT, gDeltaTime);
+		std::cout << "Right" << endl;
+	}
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(UP, gDeltaTime);
+		std::cout << "Up" << endl;
+	}
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	{
 		gCamera.ProcessKeyboard(DOWN, gDeltaTime);
+		std::cout << "Down" << endl;
+	}
 
 
 	// I originally had this as a single key (P) toggle, but the key press registers

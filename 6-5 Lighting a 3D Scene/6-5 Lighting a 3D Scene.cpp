@@ -2,9 +2,9 @@
 //
 // Lawrence Artl | LorenArms
 // CS-330 Comp Graphic and Viz
-// Assignment 6-3
+// Assignment 6-5
 //
-// LIGHTING A PYRAMID
+// LIGHTING A 3D OBJECT / SCENE
 //
 //---------------------------------------------------
 
@@ -27,7 +27,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting";
+const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting a 3D Object / Scene";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;

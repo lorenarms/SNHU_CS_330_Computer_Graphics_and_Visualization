@@ -27,7 +27,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting";
+const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting a Pyramid";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;
@@ -487,17 +487,17 @@ void UProcessInput(GLFWwindow* window)
 
 	// Modify light position
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		gSpotLightPosition.x -= 0.005f;
+		gSpotLightPosition.x -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		gSpotLightPosition.x += 0.005f;
+		gSpotLightPosition.x += 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-		gSpotLightPosition.z -= 0.005f;
+		gSpotLightPosition.z -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-		gSpotLightPosition.z += 0.005f;
+		gSpotLightPosition.z += 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-		gSpotLightPosition.y -= 0.005f;
+		gSpotLightPosition.y -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
-		gSpotLightPosition.y += 0.005f;
+		gSpotLightPosition.y += 0.05f;
 
 
 	// Modify light color (1, 2, 3)

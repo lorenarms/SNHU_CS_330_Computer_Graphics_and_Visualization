@@ -2,7 +2,7 @@
 //
 // Lawrence Artl | LorenArms
 // CS-330-T5623 Comp Graphic and Visualization 22EW5
-// 4-5 Milestone: Interactivity in a 3D scene
+// 6-3 Assignment: Lighting a Pyramid
 //
 //--------------------------------------------------
 
@@ -25,7 +25,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 4 Milestone: Interactivity in a 3D Scene";
+const char* const WINDOW_TITLE = "Module 6-3 Assignment: Lighting a Pyramid | Lorenarms";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;

@@ -78,7 +78,9 @@ void SceneBuilder::UBuildScene(vector<GLMesh>& scene)
 		0.0f, 0.10f, 3.0f,
 		1.0f, 1.0f
 	};
-	cyl_gMesh01.height = 4.0f;	cyl_gMesh01.radius = 0.5f;	cyl_gMesh01.number_of_sides = 128.0f;
+	cyl_gMesh01.height = 4.0f;
+	cyl_gMesh01.radius = 0.5f;
+	cyl_gMesh01.number_of_sides = 128.0f;
 	cyl_gMesh01.texFilename = "textures\\pen_body.png";
 	ShapeBuilder::UBuildCylinder(cyl_gMesh01);
 	scene.push_back(cyl_gMesh01);

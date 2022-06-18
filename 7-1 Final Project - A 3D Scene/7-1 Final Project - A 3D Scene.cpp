@@ -2,9 +2,9 @@
 //
 // Lawrence Artl | LorenArms
 // CS-330 Comp Graphic and Viz
-// Assignment 6-3
+// Assignment 7-1
 //
-// LIGHTING A PYRAMID
+// FINAL PROJECT
 //
 //---------------------------------------------------
 
@@ -27,7 +27,7 @@
 using namespace std;
 
 //window title
-const char* const WINDOW_TITLE = "Module 6 Assignment: Lighting";
+const char* const WINDOW_TITLE = "Module 7 Final Project | lorenarms";
 
 //window width, height
 const int WINDOW_WIDTH = 1920;
@@ -77,15 +77,15 @@ float gLastFrame = 0.0f;
 
 // Light color, position and scale
 glm::vec3 gSpotLightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 gSpotLightPosition(2.5f, 4.0f, -1.5f);
+glm::vec3 gSpotLightPosition(2.5f, 6.0f, -1.5f);
 glm::vec3 gSpotLightScale(0.1f);
 
 // Light color, position and scale
-glm::vec3 gKeyLightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 gKeyLightColor(1.0f, 0.0f, 1.0f);
 glm::vec3 gKeyLightPosition(-2.5f, 4.0f, -1.5f);
 glm::vec3 gKeyLightScale(0.0f);
 
-bool gSpotLightOrbit = false;
+bool gSpotLightOrbit = true;
 
 //initialize program
 bool UInitialize(int, char* [], GLFWwindow** window);
@@ -169,7 +169,7 @@ const GLchar* fragment_shader_source = GLSL(440,
 	void main()
 	{
 		//Calculate Ambient lighting*/
-		float spotStrength = 0.1f; // Set ambient or global lighting strength
+		float spotStrength = 0.2f; // Set ambient or global lighting strength
 		float keyStrength = 0.1f; // Set ambient or global lighting strength
 		vec3 spot = spotStrength * lightColor; // Generate ambient light color
 		vec3 key = keyStrength * keyLightColor;
@@ -489,17 +489,17 @@ void UProcessInput(GLFWwindow* window)
 
 	// Modify light position
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-		gSpotLightPosition.x -= 0.005f;
+		gSpotLightPosition.x -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		gSpotLightPosition.x += 0.005f;
+		gSpotLightPosition.x += 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-		gSpotLightPosition.z -= 0.005f;
+		gSpotLightPosition.z -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-		gSpotLightPosition.z += 0.005f;
+		gSpotLightPosition.z += 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-		gSpotLightPosition.y -= 0.005f;
+		gSpotLightPosition.y -= 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
-		gSpotLightPosition.y += 0.005f;
+		gSpotLightPosition.y += 0.05f;
 
 
 	// Modify light color (1, 2, 3)
@@ -541,7 +541,7 @@ void UProcessInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS)
 	{
 		gKeyLightColor.r = 1.0f;
-		gKeyLightColor.g = 1.0f;
+		gKeyLightColor.g = 0.0f;
 		gKeyLightColor.b = 1.0f;
 
 	}

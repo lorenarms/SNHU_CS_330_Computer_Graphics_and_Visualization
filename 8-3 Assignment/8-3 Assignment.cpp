@@ -14,8 +14,10 @@ const float DEG2RAD = 3.14159 / 180;
 
 void processInput(GLFWwindow* window);
 
-enum BRICKTYPE { REFLECTIVE, DESTRUCTABLE };
+enum BRICKTYPE { REFLECTIVE, DESTRUCTABLE, PADDLE };
 enum ONOFF { ON, OFF };
+
+
 
 class Brick
 {
@@ -50,6 +52,8 @@ public:
 	}
 };
 
+Brick paddle(PADDLE, -0.0, -1.0, 0.2, 1, 0, 0);
+
 
 class Circle
 {
@@ -82,13 +86,32 @@ public:
 				direction = GetRandomDirection();
 				x = x + 0.03;
 				y = y + 0.04;
+								
+				brk->blue = GetRandomDirection() * 0.1;
+				brk->red = GetRandomDirection() * 0.1;
+				brk->green = GetRandomDirection() * 0.1;
 			}
 		}
+		if (brk->brick_type == PADDLE)
+		{
+			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
+			{
+				direction = GetRandomDirection();
+				x = x + 0.03;
+				y = y + 0.04;
+				
+			}
+		}
+
 		else if (brk->brick_type == DESTRUCTABLE)
 		{
 			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
 			{
 				brk->onoff = OFF;
+
+				direction = GetRandomDirection();
+				x = x + 0.03;
+				y = y + 0.04;
 			}
 		}
 	}
@@ -179,10 +202,20 @@ int main(void) {
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
-	Brick brick(REFLECTIVE, -0.0, -0.0, 0.2, 1, 0, 0);
-	Brick brick2(DESTRUCTABLE, -0.5, 0.33, 0.2, 0, 1, 0);
-	Brick brick3(DESTRUCTABLE, -0.5, -0.33, 0.2, 0, 1, 1);
-	Brick brick4(REFLECTIVE, 0, 0, 0.2, 1, 0.5, 0.5);
+	Brick brick2(DESTRUCTABLE, -1.0, 0.33, 0.2, 1, 0, 0);
+	Brick brick3(DESTRUCTABLE, -0.8, 0.33, 0.2, 1, 0, 0);
+	Brick brick4(DESTRUCTABLE, -0.6, 0.33, 0.2, 1, 0, 0);
+	Brick brick5(DESTRUCTABLE, -0.4, 0.33, 0.2, 1, 0, 0);
+	Brick brick6(DESTRUCTABLE, -0.2, 0.33, 0.2, 1, 0, 0);
+	Brick brick7(DESTRUCTABLE, -0.0, 0.33, 0.2, 1, 0, 0);
+	Brick brick8(DESTRUCTABLE, 0.2, 0.33, 0.2, 1, 0, 0);
+	Brick brick9(DESTRUCTABLE, 0.4, 0.33, 0.2, 1, 0, 0);
+	Brick brick10(DESTRUCTABLE, 0.6, 0.33, 0.2, 1, 0, 0);
+	Brick brick11(DESTRUCTABLE, 0.8, 0.33, 0.2, 1, 0, 0);
+	Brick brick12(DESTRUCTABLE, 1.0, 0.33, 0.2, 1, 0, 0);
+
+
+
 
 	while (!glfwWindowShouldClose(window)) {
 		//Setup View
@@ -198,19 +231,38 @@ int main(void) {
 		//Movement
 		for (int i = 0; i < world.size(); i++)
 		{
-			world[i].CheckCollision(&brick);
-			//world[i].CheckCollision(&brick2);
-			//world[i].CheckCollision(&brick3);
-			//world[i].CheckCollision(&brick4);
+			world[i].CheckCollision(&paddle);
+			world[i].CheckCollision(&brick2);
+			world[i].CheckCollision(&brick3);
+			world[i].CheckCollision(&brick4);
+			world[i].CheckCollision(&brick5);
+			world[i].CheckCollision(&brick6);
+			world[i].CheckCollision(&brick7);
+			world[i].CheckCollision(&brick8);
+			world[i].CheckCollision(&brick9);
+			world[i].CheckCollision(&brick10);
+			world[i].CheckCollision(&brick11);
+			world[i].CheckCollision(&brick12);
+
+
 			world[i].MoveOneStep();
 			world[i].DrawCircle();
 
 		}
 
-		brick.drawBrick();
-		//brick2.drawBrick();
-		//brick3.drawBrick();
-		//brick4.drawBrick();
+		paddle.drawBrick();
+		brick2.drawBrick();
+		brick3.drawBrick();
+		brick4.drawBrick();
+		brick5.drawBrick();
+		brick6.drawBrick();
+		brick7.drawBrick();
+		brick8.drawBrick();
+		brick9.drawBrick();
+		brick10.drawBrick();
+		brick11.drawBrick();
+		brick12.drawBrick();
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -236,4 +288,10 @@ void processInput(GLFWwindow* window)
 		Circle B(0, 0, 02, 2, 0.05, r, g, b);
 		world.push_back(B);
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && paddle.x > -1.0f)
+		paddle.x-=0.05;
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && paddle.x < 1.0f)
+		paddle.x+=0.05;
 }

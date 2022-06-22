@@ -7,6 +7,7 @@
 #include <vector>
 #include <windows.h>
 #include <time.h>
+#include <random>
 
 using namespace std;
 
@@ -19,11 +20,13 @@ enum ONOFF { ON, OFF };
 
 
 
+
 class Brick
 {
 public:
 	float red, green, blue;
 	float x, y, width;
+	int health;		// track the brick's health
 	BRICKTYPE brick_type;
 	ONOFF onoff;
 
@@ -31,6 +34,7 @@ public:
 	{
 		brick_type = bt; x = xx; y = yy, width = ww; red = rr, green = gg, blue = bb;
 		onoff = ON;
+		health = 6;
 	};
 
 	void drawBrick()
@@ -64,6 +68,8 @@ public:
 	float y;
 	float speed = 0.03;
 	int direction; // 1=up 2=right 3=down 4=left 5 = up right   6 = up left  7 = down right  8= down left
+	ONOFF onoff;
+
 
 	Circle(double xx, double yy, double rr, int dir, float rad, float r, float g, float b)
 	{
@@ -75,11 +81,13 @@ public:
 		blue = b;
 		radius = rad;
 		direction = dir;
+		onoff = ON;
 	}
 
 	void CheckCollision(Brick* brk)
 	{
-		if (brk->brick_type == REFLECTIVE)
+
+		if (brk->brick_type == REFLECTIVE && onoff == ON)
 		{
 			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
 			{
@@ -87,31 +95,40 @@ public:
 				x = x + 0.03;
 				y = y + 0.04;
 								
-				brk->blue = GetRandomDirection() * 0.1;
-				brk->red = GetRandomDirection() * 0.1;
-				brk->green = GetRandomDirection() * 0.1;
+				
 			}
 		}
-		if (brk->brick_type == PADDLE)
+		else if (brk->brick_type == PADDLE && onoff == ON)
 		{
 			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
 			{
 				direction = GetRandomDirection();
+				
 				x = x + 0.03;
 				y = y + 0.04;
 				
 			}
 		}
 
-		else if (brk->brick_type == DESTRUCTABLE)
+		else if (brk->brick_type == DESTRUCTABLE && brk->onoff == ON 
+			&& brk->health > 0 && onoff == ON)	// added check for "ON" to prevent destroyed bricks causing collisions
 		{
 			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
 			{
-				brk->onoff = OFF;
+				brk->health--;
+				if (brk->health <= 0)	// check brk health, if 0 or less, turn brick off
+				{
+					brk->onoff = OFF;
+					
+				}
+				brk->green = 1.0;	// brk was hit but still has health, change color
 
+				
 				direction = GetRandomDirection();
+				
 				x = x + 0.03;
 				y = y + 0.04;
+
 			}
 		}
 	}
@@ -123,6 +140,11 @@ public:
 
 	void MoveOneStep()
 	{
+		if (y <= -1 + radius)
+		{
+			onoff = OFF;
+		}
+
 		if (direction == 1 || direction == 5 || direction == 6)  // up
 		{
 			if (y > -1 + radius)
@@ -131,9 +153,15 @@ public:
 			}
 			else
 			{
+				std::random_device rd; // obtain a random number from hardware
+				std::mt19937 gen(rd()); // seed the generator
+				std::uniform_int_distribution<> distr(1, 3); // define the range
+				distr(gen);
+
 				direction = GetRandomDirection();
 			}
 		}
+
 
 		if (direction == 2 || direction == 5 || direction == 7)  // right
 		{
@@ -152,6 +180,7 @@ public:
 			if (y < 1 - radius) {
 				y += speed;
 			}
+			
 			else
 			{
 				direction = GetRandomDirection();
@@ -172,13 +201,17 @@ public:
 
 	void DrawCircle()
 	{
-		glColor3f(red, green, blue);
-		glBegin(GL_POLYGON);
-		for (int i = 0; i < 360; i++) {
-			float degInRad = i * DEG2RAD;
-			glVertex2f((cos(degInRad) * radius) + x, (sin(degInRad) * radius) + y);
+		if (onoff == ON)
+		{
+			glColor3f(red, green, blue);
+			glBegin(GL_POLYGON);
+			for (int i = 0; i < 360; i++) {
+				float degInRad = i * DEG2RAD;
+				glVertex2f((cos(degInRad) * radius) + x, (sin(degInRad) * radius) + y);
+			}
+			glEnd();
 		}
-		glEnd();
+		
 	}
 };
 
@@ -285,8 +318,9 @@ void processInput(GLFWwindow* window)
 		r = rand() / 10000;
 		g = rand() / 10000;
 		b = rand() / 10000;
-		Circle B(0, 0, 02, 2, 0.05, r, g, b);
+		Circle B(0, 0, 02, 1, 0.05, r, g, b);
 		world.push_back(B);
+
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && paddle.x > -1.0f)

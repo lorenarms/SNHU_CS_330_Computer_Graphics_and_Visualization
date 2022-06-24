@@ -277,9 +277,37 @@ int main(void) {
 			world[i].CheckCollision(&brick11);
 			world[i].CheckCollision(&brick12);
 
-
 			world[i].MoveOneStep();
 			world[i].DrawCircle();
+			
+
+			
+
+			for (int j = 0; j < world.size(); j++)
+			{
+				
+				Circle* ptrA = &world[i];
+				Circle* ptrB = &world[j];
+
+				if(ptrA != ptrB)
+				{
+					if (((world[i].x > world[j].x - world[j].radius && world[i].x <= world[j].x + world[j].radius) 
+						&& (world[i].y > world[j].y - world[j].radius && world[i].y <= world[j].y + world[j].radius)))
+					{
+						world[i].direction = world[i].GetRandomDirection();
+						world[j].direction = world[j].GetRandomDirection();
+
+
+					}
+				}
+				
+
+				
+			}
+
+			
+
+
 
 		}
 
@@ -319,6 +347,7 @@ void processInput(GLFWwindow* window)
 		g = rand() / 10000;
 		b = rand() / 10000;
 		Circle B(0, 0, 02, 1, 0.05, r, g, b);
+		B.direction = B.GetRandomDirection();
 		world.push_back(B);
 
 	}

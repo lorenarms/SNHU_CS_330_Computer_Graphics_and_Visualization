@@ -5,8 +5,10 @@
   Welcome to the repository for the various projects from my CS 330 Computer Graphics and Visualization class at SNHU Online! 
   This class focused on creating 3-dimensional objects in space using the OpenGl libraries for C++. The base program originated from various tutorials, but the URender method for rendering shapes to the screen was refactored by me. Additionally, the separate classes for ShapeBuild(er)ing and SceneBuild(er)ing were developed from scratch by me. The final project showcases how these classes and their methods work together to create a module, user-friendly program that anyone can use to create a simple 3D scene.
   
-  Feel free to browse my code and check out the various applications that I developed during the semester. The culmination of my learning can be found in the Final Project <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1%20Final%20Project%20-%20A%203D%20Scene" target="_blank">here</a>. For more information about the project, see the documentation
-  <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1 Final Project - A 3D Scene/Documentation" target="_blank">here</a>.
+  Feel free to browse my code and check out the various applications that I developed during the semester. The culmination of my learning can be found in the  <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1%20Final%20Project%20-%20A%203D%20Scene" target="_blank">Final Project folder</a>. For more information about the project, see the 
+  <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1 Final Project - A 3D Scene/Documentation" target="_blank">documentation</a>. Also check out my <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/blob/master/7-1%20Final%20Project%20-%20A%203D%20Scene/Final%20Project%20Reflection.docx.pdf" target="_blank">summary report</a> of the project.<br>
+  <h4>Final Proeject Image</h4>
+  <img src="https://github.com/lorenarms/SNHU_CS_330_Projects/blob/master/7-1%20Final%20Project%20-%20A%203D%20Scene/final%20project.png?raw=true" atl="[picture of final project]" style="width:100px;height:100px;">
                                                                                                                                
   </p>
  <hr>

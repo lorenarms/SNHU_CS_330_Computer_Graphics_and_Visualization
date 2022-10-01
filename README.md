@@ -34,7 +34,7 @@
  </table>
  
  <h4>The Final Product: The Scene</h4><p>There were several requirements of the final project (as can be seein the documentation above). In this animation the multiple light sources can be seen, including one that is colored. The colored light can be turned on and off with the '[' and ']' keys, and the revolving white light can be made stationary with the left or right 'alt' keys. The white light can also be repositioned with the letter keys on the right of the keyboard.</p>
- <p>The camera can be moved using the WASD keys, as well as QE for altitude changes. The speed of the camera can be changed with the mouse wheel, and the view is changed through mouse movement. Wireframe models are viewable with left and right arrow keys.</p><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/finalproject_1.gif" atl="[final_scene]" style="width:900px;">
+ <p>The camera can be moved using the WASD keys, as well as QE for altitude changes. The speed of the camera can be changed with the mouse wheel, and the view is changed through mouse movement. Wireframe models are viewable with left and right arrow keys.</p><p>***Please be patient as the gif loads below...</p><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/finalproject_1.gif" atl="[final_scene]" style="width:900px;">
  
   <p>If you're interested, you can see more about my process in <a href="https://youtu.be/MT1Gq8X0DtM" target="_blank">this video</a> about the final project, and for more details about the structure of the program, algorithms developed, and texture design, you can watch this <a href="https://youtu.be/lYsdwIlpkqA" target="_blank">much longer video</a>.
   <hr>

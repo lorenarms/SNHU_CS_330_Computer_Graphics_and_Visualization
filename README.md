@@ -7,11 +7,34 @@
   
   Feel free to browse my code and check out the various applications that I developed during the semester. The culmination of my learning can be found in the  <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1%20Final%20Project%20-%20A%203D%20Scene" target="_blank">Final Project folder</a>. For more information about the project, see the 
   <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/tree/master/7-1 Final Project - A 3D Scene/Documentation" target="_blank">documentation</a>. Also check out my <a href="https://github.com/lorenarms/SNHU_CS_330_Projects/blob/master/7-1%20Final%20Project%20-%20A%203D%20Scene/Final%20Project%20Reflection.docx.pdf" target="_blank">summary report</a> of the project.<br>
-  <h4>Final Proeject Image</h4>
-  <img src="https://github.com/lorenarms/SNHU_CS_330_Projects/blob/master/7-1%20Final%20Project%20-%20A%203D%20Scene/final%20project.png?raw=true" atl="[picture of final project]" style="width:100px;height:100px;">
-                                                                                                                               
+                                                                                                                              
+  </p>
+  <p>You are welcome to clone any files and use them for your own projects as you see fit. I've included commenting in the "Scenebuilder.cpp" file to explain how to use it properly. If all you want to do is render shapes in an environement, then that file is all you'll need to modify!
   </p>
  <hr>
+ <h3>Final Project: A 3D Scene</h3>
+ <p>Below are some sample images from the Final Project, as well as a brief animation showing the project's interactivity.</p>
+ 
+ <table>
+    <tr>
+      <td><h4>Coffee</h4><p></p></td>
+      <td><h4>Pen</h4><p></p></td>
+      <td><h4>Scene</h4><p></p></td>
+      <td><h4>Tablet</h4><p></p></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/coffee.png" atl="[coffee]" style="width:200px;"></td>
+      <td><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/pen.png" atl="[pen]" style="width:200px;"></td>
+      <td><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/scene.png" atl="[Scene]" style="width:200px;"></td>
+      <td><img src="https://github.com/lorenarms/SNHU_CS_330_Computer_Graphics_and_Visualization/blob/master/images/tablet.png" atl="[table]" style="width:200px;"></td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
+ </table>
   <p>If you're interested, you can see more about my process in <a href="https://youtu.be/MT1Gq8X0DtM" target="_blank">this video</a> about the final project, and for more details about the structure of the program, algorithms developed, and texture design, you can watch this <a href="https://youtu.be/lYsdwIlpkqA" target="_blank">much longer video</a>.
   <hr>
   <p>

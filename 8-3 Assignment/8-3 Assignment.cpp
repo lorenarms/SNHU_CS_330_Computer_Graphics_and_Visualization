@@ -98,6 +98,8 @@ public:
 				
 			}
 		}
+
+		// make a brick into a paddle that reflects balls and can move
 		else if (brk->brick_type == PADDLE && onoff == ON)
 		{
 			if ((x > brk->x - brk->width && x <= brk->x + brk->width) && (y > brk->y - brk->width && y <= brk->y + brk->width))
@@ -153,11 +155,6 @@ public:
 			}
 			else
 			{
-				std::random_device rd; // obtain a random number from hardware
-				std::mt19937 gen(rd()); // seed the generator
-				std::uniform_int_distribution<> distr(1, 3); // define the range
-				distr(gen);
-
 				direction = GetRandomDirection();
 			}
 		}
@@ -201,6 +198,7 @@ public:
 
 	void DrawCircle()
 	{
+		//
 		if (onoff == ON)
 		{
 			glColor3f(red, green, blue);
@@ -235,6 +233,8 @@ int main(void) {
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
+
+	// row of brick accross the middle
 	Brick brick2(DESTRUCTABLE, -1.0, 0.33, 0.2, 1, 0, 0);
 	Brick brick3(DESTRUCTABLE, -0.8, 0.33, 0.2, 1, 0, 0);
 	Brick brick4(DESTRUCTABLE, -0.6, 0.33, 0.2, 1, 0, 0);
@@ -351,6 +351,8 @@ void processInput(GLFWwindow* window)
 		world.push_back(B);
 
 	}
+
+	// use arrow keys to move paddle left and right
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && paddle.x > -1.0f)
 		paddle.x-=0.05;
